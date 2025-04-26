@@ -1,3 +1,4 @@
+
 :root {
     --background: #141517;
     --foreground: #ffffff;
@@ -42,8 +43,7 @@ body {
     backdrop-filter: blur(10px);
     z-index: 1000;
     padding: 1rem 0;
-    transition: all 0.3s;
-    border-bottom: 1px solid var(--dark-100);
+    transition: background-color 0.3s;
 }
 
 .nav-links {
@@ -55,25 +55,11 @@ body {
 .nav-links a {
     color: var(--foreground);
     text-decoration: none;
-    transition: all 0.3s;
-    position: relative;
-    padding: 0.5rem 0;
+    transition: color 0.3s;
 }
 
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: var(--blue);
-    transform: scaleX(0);
-    transition: transform 0.3s;
-}
-
-.nav-links a:hover::after {
-    transform: scaleX(1);
+.nav-links a:hover {
+    color: var(--blue);
 }
 
 .mobile-menu {
@@ -252,18 +238,16 @@ body {
 .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    gap: 3rem;
+    margin-top: 3rem;
 }
 
-.skill-category {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 2rem;
-    border-radius: 1rem;
-    transition: transform 0.3s;
+.skill-category h3 {
+    margin-bottom: 2rem;
 }
 
-.skill-category:hover {
-    transform: translateY(-5px);
+.skill-item {
+    margin-bottom: 1.5rem;
 }
 
 .progress-bar {
@@ -272,16 +256,13 @@ body {
     border-radius: 3px;
     margin-top: 0.5rem;
     overflow: hidden;
-    position: relative;
 }
 
 .progress-bar::after {
     content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
+    display: block;
     height: 100%;
-    background: linear-gradient(90deg, var(--blue), var(--blue-light));
+    background: var(--blue);
     border-radius: 3px;
     width: 0;
     transition: width 1s ease-in-out;
@@ -330,37 +311,19 @@ body {
 }
 
 .timeline-item {
-    position: relative;
     padding: 2rem;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 1rem;
     margin-bottom: 2rem;
-    transition: all 0.3s;
-    border-left: 4px solid transparent;
-}
-
-.timeline-item.active {
-    border-left-color: var(--blue);
+    transition: transform 0.3s;
 }
 
 .timeline-item:hover {
     transform: translateX(10px);
-    background: rgba(255, 255, 255, 0.08);
 }
 
-.tech-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
-
-.tech-tags span {
-    padding: 0.25rem 0.75rem;
-    background: rgba(59, 130, 246, 0.1);
-    border-radius: 1rem;
-    font-size: 0.875rem;
-    color: var(--blue-light);
+.timeline-item.active {
+    border-left: 4px solid var(--blue);
 }
 
 /* Contact Section */
@@ -436,30 +399,6 @@ footer {
 }
 
 /* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-.floating {
-    animation: float 3s ease-in-out infinite;
-}
-
 .reveal {
     opacity: 0;
     transform: translateY(30px);
@@ -480,18 +419,10 @@ footer {
 
     .nav-links {
         display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: var(--dark-400);
-        flex-direction: column;
-        padding: 1rem 0;
-        text-align: center;
     }
 
-    .nav-links.active {
-        display: flex;
+    .mobile-menu {
+        display: block;
     }
 
     .hero h1 {
@@ -525,33 +456,19 @@ footer {
 
 /* Mobile Menu */
 .mobile-menu {
-    display: none;
     background: none;
     border: none;
     cursor: pointer;
     padding: 0.5rem;
 }
 
-@media (max-width: 768px) {
-    .mobile-menu {
-        display: block;
-    }
-
-    .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: var(--dark-400);
-        flex-direction: column;
-        padding: 1rem 0;
-        text-align: center;
-    }
-
-    .nav-links.active {
-        display: flex;
-    }
+.mobile-menu span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background: var(--foreground);
+    margin: 5px 0;
+    transition: 0.3s;
 }
 
 /* Toast Notifications */
@@ -566,7 +483,6 @@ footer {
     transform: translateY(100px);
     opacity: 0;
     transition: all 0.3s;
-    z-index: 1000;
 }
 
 .toast.show {
