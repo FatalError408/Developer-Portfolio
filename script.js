@@ -1,5 +1,46 @@
 
-// Particle Background
+// Initialize Lucide icons
+lucide.createIcons();
+
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+        navbar.classList.add('glass');
+    } else {
+        navbar.classList.remove('glass');
+    }
+});
+
+// Mobile menu toggle
+const mobileMenuButton = document.getElementById('mobile-menu-button');
+const mobileMenu = document.getElementById('mobile-menu');
+mobileMenuButton.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    const icon = mobileMenuButton.querySelector('i');
+    icon.setAttribute('data-lucide', 
+        icon.getAttribute('data-lucide') === 'menu' ? 'x' : 'menu'
+    );
+    lucide.createIcons();
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const revealOnScroll = () => {
+    reveals.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const triggerPoint = window.innerHeight * 0.8;
+        
+        if (elementTop < triggerPoint) {
+            element.classList.add('active');
+        }
+    });
+};
+
+window.addEventListener('scroll', revealOnScroll);
+window.addEventListener('load', revealOnScroll);
+
+// Particle background
 class Particle {
     constructor(canvas) {
         this.canvas = canvas;
@@ -29,21 +70,8 @@ class Particle {
     }
 }
 
-// Scroll Reveal
-function scrollReveal() {
-    const reveals = document.querySelectorAll('.reveal');
-    reveals.forEach(element => {
-        const elementTop = element.getBoundingClientRect().top;
-        const triggerPoint = window.innerHeight * 0.8;
-        
-        if (elementTop < triggerPoint) {
-            element.classList.add('active');
-        }
-    });
-}
-
-// Particle Background Initialization
-function initParticles() {
+// Initialize particle background
+const initParticles = () => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const particlesContainer = document.getElementById('particles-bg');
@@ -64,55 +92,33 @@ function initParticles() {
     };
 
     animate();
-}
+};
 
-// Navbar Scroll Effect
-function navbarScrollEffect() {
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-        navbar.style.background = window.scrollY > 20 
-            ? 'rgba(20, 21, 23, 0.8)' 
-            : 'transparent';
-    });
-}
-
-// Smooth Scrolling
-function smoothScroll() {
+// Initialize everything when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initParticles();
+    
+    // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
+                });
+                // Close mobile menu if open
+                mobileMenu.classList.add('hidden');
+            }
         });
     });
-}
+});
 
-// Form Submission (Basic Example)
-function setupContactForm() {
-    const form = document.getElementById('contact-form');
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('Thank you for your message! I will get back to you soon.');
-        form.reset();
-    });
-}
-
-// Initialize Everything
-document.addEventListener('DOMContentLoaded', () => {
-    initParticles();
-    navbarScrollEffect();
-    smoothScroll();
-    setupContactForm();
-    
-    // Initial scroll reveal
-    scrollReveal();
-    window.addEventListener('scroll', scrollReveal);
-    window.addEventListener('resize', () => {
-        const canvas = document.querySelector('canvas');
-        if (canvas) {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-    });
+// Handle window resize
+window.addEventListener('resize', () => {
+    const canvas = document.querySelector('canvas');
+    if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
 });
