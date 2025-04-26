@@ -1,11 +1,12 @@
+
 import { motion } from "framer-motion";
-import { Code, Database, Cog, Paintbrush, Globe, ChevronRight } from "lucide-react";
+import { CodeBracket, Database, Cog, PaintBrush, Globe, ChevronRight } from "lucide-react";
 import ScrollRevealWrapper from "./ScrollRevealWrapper";
 
 const SKILL_CATEGORIES = [
   {
     name: "Frontend",
-    icon: <Code className="w-5 h-5 text-blue" />,
+    icon: <CodeBracket className="w-5 h-5 text-blue" />,
     skills: [
       { name: "HTML5/CSS3", level: 95 },
       { name: "JavaScript (ES6+)", level: 90 },
@@ -106,13 +107,13 @@ const Skills = () => {
             <h3 className="text-2xl font-semibold mb-6">Languages & Frameworks I Love</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {[
-                { name: "JavaScript", icon: <Code className="w-4 h-4" /> },
-                { name: "TypeScript", icon: <Code className="w-4 h-4" /> },
-                { name: "React", icon: <Code className="w-4 h-4" /> },
-                { name: "Node.js", icon: <Code className="w-4 h-4" /> },
+                { name: "JavaScript", icon: <CodeBracket className="w-4 h-4" /> },
+                { name: "TypeScript", icon: <CodeBracket className="w-4 h-4" /> },
+                { name: "React", icon: <CodeBracket className="w-4 h-4" /> },
+                { name: "Node.js", icon: <CodeBracket className="w-4 h-4" /> },
                 { name: "Next.js", icon: <Globe className="w-4 h-4" /> },
-                { name: "Python", icon: <Code className="w-4 h-4" /> },
-                { name: "Tailwind CSS", icon: <Paintbrush className="w-4 h-4" /> },
+                { name: "Python", icon: <CodeBracket className="w-4 h-4" /> },
+                { name: "Tailwind CSS", icon: <PaintBrush className="w-4 h-4" /> },
                 { name: "Express", icon: <Database className="w-4 h-4" /> },
                 { name: "GraphQL", icon: <Database className="w-4 h-4" /> },
                 { name: "MongoDB", icon: <Database className="w-4 h-4" /> },
