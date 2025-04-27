@@ -1,7 +1,7 @@
-
 import { motion } from "framer-motion";
 import { ArrowRight, ChevronDown, Code, Terminal, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const Hero = () => {
   // Animation variants
@@ -34,10 +34,10 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center pt-16 overflow-hidden bg-dark-500">
-      {/* Background elements */}
+      {/* Background elements with enhanced gradients */}
       <div className="absolute inset-0 opacity-20 bg-noise mix-blend-overlay pointer-events-none"></div>
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue/30 rounded-full filter blur-3xl opacity-20 animate-pulse-glow"></div>
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-yellow/20 rounded-full filter blur-3xl opacity-20 animate-pulse-glow animation-delay-1000"></div>
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-full filter blur-3xl opacity-20 animate-pulse-glow"></div>
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-gradient-to-l from-yellow-500/20 to-orange-500/20 rounded-full filter blur-3xl opacity-20 animate-pulse-glow animation-delay-1000"></div>
       
       <div className="container mx-auto px-4 sm:px-6 z-10 pt-10 md:pt-0">
         <motion.div 
@@ -57,7 +57,7 @@ const Hero = () => {
               className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-4"
               variants={itemVariants}
             >
-              Hi, I'm <span className="text-gradient-blue">John Doe</span>
+              Hi, I'm <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Brendon Lightfoot</span>
               <span className="block mt-2">I build things for the web</span>
             </motion.h1>
             
@@ -65,7 +65,8 @@ const Hero = () => {
               className="text-lg text-muted-foreground max-w-xl mb-8"
               variants={itemVariants}
             >
-              I specialize in creating modern, responsive websites and applications with cutting-edge technologies. Performance, accessibility, and user experience are my top priorities.
+              A passionate 28-year-old software engineer specializing in creating modern, responsive websites and applications. 
+              I transform complex challenges into elegant, user-friendly solutions.
             </motion.p>
             
             <motion.div 
@@ -121,7 +122,7 @@ const Hero = () => {
           >
             <div className="relative">
               <motion.div 
-                className="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-dark-200 mx-auto"
+                className="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-dark-200 mx-auto relative"
                 animate={{
                   boxShadow: [
                     "0 0 0 rgba(59, 130, 246, 0)",
@@ -140,16 +141,21 @@ const Hero = () => {
                   repeatType: "reverse"
                 }}
               >
-                <div className="w-full h-full bg-gradient-to-br from-dark-300 to-dark-400 flex items-center justify-center relative overflow-hidden group">
-                  <span className="text-6xl font-bold text-dark-100">JD</span>
-                  
-                  {/* Code floating effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300">
-                    <div className="absolute top-1/4 left-1/4 text-xs font-mono text-blue-light">const developer = true;</div>
-                    <div className="absolute top-1/3 right-1/4 text-xs font-mono text-yellow">function createCode() {}</div>
-                    <div className="absolute bottom-1/3 left-1/3 text-xs font-mono text-blue-light">let passion = infinite;</div>
-                    <div className="absolute bottom-1/4 right-1/3 text-xs font-mono text-yellow">return excellence;</div>
-                  </div>
+                <Avatar className="w-full h-full">
+                  <AvatarImage 
+                    src="https://photos.fife.usercontent.google.com/pw/AP1GczPTT_VDcpVuXnzu3rVB6vBbCmBrZCVu2HnrYDN-C7-p6PDF76KY9MWfYTZyW7bmCK3Yis1UuxeajDxm2ikkrn9gAjXPHw=w697-h930-s-no-gm" 
+                    alt="Brendon Lightfoot"
+                    className="w-full h-full object-cover"
+                  />
+                  <AvatarFallback className="text-6xl font-bold">BL</AvatarFallback>
+                </Avatar>
+                
+                {/* Code floating effect */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300">
+                  <div className="absolute top-1/4 left-1/4 text-xs font-mono text-blue-light">const developer = true;</div>
+                  <div className="absolute top-1/3 right-1/4 text-xs font-mono text-yellow">function createCode() {}</div>
+                  <div className="absolute bottom-1/3 left-1/3 text-xs font-mono text-blue-light">let passion = infinite;</div>
+                  <div className="absolute bottom-1/4 right-1/3 text-xs font-mono text-yellow">return excellence;</div>
                 </div>
               </motion.div>
               
@@ -159,7 +165,7 @@ const Hero = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
               >
-                <span className="text-blue">const</span> <span className="text-yellow">developer</span> = <span className="text-blue">true</span>;
+                <span className="text-blue">const</span> <span className="text-yellow">engineer</span> = <span className="text-blue">true</span>;
               </motion.div>
               
               {/* Floating icons */}
