@@ -36,20 +36,10 @@ const PROJECTS = [
         title: "E-Commerce Platform",
         description: "A full-featured e-commerce platform with product management, cart functionality, and payment processing.",
         image: "https://placehold.co/600x400/1e1e1e/cccccc?text=E-Commerce+Project",
-        tags: ["React", "Node.js", "MongoDB", "Frontend", "Backend"],
+        tags: ["React", "Node.js", "MongoDB"],
         githubUrl: "https://github.com",
         liveUrl: "https://example.com",
         category: "fullstack"
-    },
-    {
-        id: 2,
-        title: "Task Management App",
-        description: "A Kanban-style task management application with drag-and-drop functionality.",
-        image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Task+Management",
-        tags: ["React", "Firebase", "Frontend"],
-        githubUrl: "https://github.com",
-        liveUrl: "https://example.com",
-        category: "frontend"
     },
     // Add more projects as needed
 ];
@@ -66,11 +56,25 @@ const EXPERIENCE = [
             "Implemented CI/CD pipelines"
         ]
     },
-    // Add more experience items as needed
+    // Add more experience items
 ];
 
-// Initialize Particles
-function initParticles() {
+// Initialize Everything
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Typed.js
+    new Typed('.typing', {
+        strings: [
+            'build web applications',
+            'solve complex problems',
+            'create user experiences',
+            'love what I do'
+        ],
+        typeSpeed: 50,
+        backSpeed: 30,
+        loop: true
+    });
+
+    // Initialize Particles
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const particlesContainer = document.getElementById('particles-bg');
@@ -92,46 +96,47 @@ function initParticles() {
 
     animate();
 
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    // Initialize VanillaTilt
+    VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
+        max: 25,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.5
     });
-}
 
-// Scroll Reveal
-function scrollReveal() {
+    // Custom Cursor
+    const cursor = document.querySelector('.custom-cursor');
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    });
+
+    // Scroll Reveal
     const reveals = document.querySelectorAll('.reveal');
-    reveals.forEach(element => {
-        const elementTop = element.getBoundingClientRect().top;
-        const triggerPoint = window.innerHeight * 0.8;
-        
-        if (elementTop < triggerPoint) {
-            element.classList.add('active');
-        }
-    });
-}
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.1 });
 
-// Mobile Menu
-function setupMobileMenu() {
-    const menuButton = document.querySelector('.mobile-menu');
-    const nav = document.querySelector('.nav-links');
-    
-    menuButton?.addEventListener('click', () => {
-        nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
-    });
-}
+    reveals.forEach(reveal => observer.observe(reveal));
 
-// Progress Bars Animation
-function animateProgressBars() {
-    const progressBars = document.querySelectorAll('.progress-bar');
-    progressBars.forEach(bar => {
-        const progress = bar.getAttribute('data-progress');
-        bar.style.width = `${progress}%`;
-    });
-}
+    // Skill Bars Animation
+    const skillBars = document.querySelectorAll('.progress-bar');
+    const skillObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const progress = entry.target.getAttribute('data-progress');
+                entry.target.querySelector('.progress').style.width = `${progress}%`;
+            }
+        });
+    }, { threshold: 0.1 });
 
-// Project Filtering
-function setupProjectFilters() {
+    skillBars.forEach(bar => skillObserver.observe(bar));
+
+    // Project Filtering
     const filters = document.querySelectorAll('.project-filters button');
     const projectsGrid = document.querySelector('.projects-grid');
 
@@ -139,20 +144,22 @@ function setupProjectFilters() {
         return `
             <div class="project-card" data-category="${project.category}">
                 <img src="${project.image}" alt="${project.title}">
-                <h3>${project.title}</h3>
-                <p>${project.description}</p>
-                <div class="project-tags">
-                    ${project.tags.map(tag => `<span>${tag}</span>`).join('')}
-                </div>
-                <div class="project-links">
-                    <a href="${project.githubUrl}" target="_blank">GitHub</a>
-                    <a href="${project.liveUrl}" target="_blank">Live Demo</a>
+                <div class="project-content">
+                    <h3>${project.title}</h3>
+                    <p>${project.description}</p>
+                    <div class="project-tags">
+                        ${project.tags.map(tag => `<span>${tag}</span>`).join('')}
+                    </div>
+                    <div class="project-links">
+                        <a href="${project.githubUrl}" target="_blank">GitHub</a>
+                        <a href="${project.liveUrl}" target="_blank">Live Demo</a>
+                    </div>
                 </div>
             </div>
         `;
     }
 
-    // Initial project load
+    // Initialize projects
     projectsGrid.innerHTML = PROJECTS.map(createProjectCard).join('');
 
     // Filter functionality
@@ -170,63 +177,69 @@ function setupProjectFilters() {
             projectsGrid.innerHTML = filteredProjects.map(createProjectCard).join('');
         });
     });
-}
 
-// Contact Form
-function setupContactForm() {
+    // Contact Form
     const form = document.getElementById('contact-form');
     form?.addEventListener('submit', (e) => {
         e.preventDefault();
         showToast('Message sent successfully!');
         form.reset();
     });
-}
 
-// Toast Notification
-function showToast(message, duration = 3000) {
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-
-    setTimeout(() => toast.classList.add('show'), 100);
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-    }, duration);
-}
-
-// Navigation Scroll Effect
-function setupNavScroll() {
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navbar.style.background = 'rgba(20, 21, 23, 0.9)';
-        } else {
-            navbar.style.background = 'rgba(20, 21, 23, 0.8)';
-        }
+    // Theme Toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        themeToggle.querySelector('.theme-icon').textContent = 
+            document.body.classList.contains('light-theme') ? '🌙' : '☀️';
     });
-}
 
-// Initialize Everything
-document.addEventListener('DOMContentLoaded', () => {
-    initParticles();
-    setupMobileMenu();
-    setupProjectFilters();
-    setupContactForm();
-    setupNavScroll();
-    
-    // Initial scroll reveal
-    scrollReveal();
-    window.addEventListener('scroll', scrollReveal);
-    
-    // Animate progress bars when skills section is in view
-    const skillsSection = document.querySelector('#skills');
-    const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-            animateProgressBars();
-            observer.unobserve(skillsSection);
-        }
+    // Mobile Menu
+    const menuButton = document.querySelector('.mobile-menu');
+    const nav = document.querySelector('.nav-links');
+    menuButton?.addEventListener('click', () => {
+        nav.classList.toggle('active');
     });
-    observer.observe(skillsSection);
+
+    // Toast Notification
+    window.showToast = function(message, duration = 3000) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, duration);
+    };
+
+    // GSAP Animations
+    gsap.from('.hero-text', {
+        duration: 1,
+        y: 50,
+        opacity: 0,
+        ease: 'power3.out',
+        delay: 0.2
+    });
+
+    gsap.from('.hero-image', {
+        duration: 1,
+        x: 50,
+        opacity: 0,
+        ease: 'power3.out',
+        delay: 0.4
+    });
+
+    // Smooth Scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
 });
