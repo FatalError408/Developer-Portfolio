@@ -1,14 +1,14 @@
 
-// Particle Background
+// Particle Background with enhanced visualization
 class Particle {
     constructor(canvas) {
         this.canvas = canvas;
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 1;
-        this.speedX = Math.random() * 1.5 - 0.75;
-        this.speedY = Math.random() * 1.5 - 0.75;
-        this.color = Math.random() > 0.5 ? '#3B82F6' : '#EAB308';
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = Math.random() * 1 - 0.5;
+        this.speedY = Math.random() * 1 - 0.5;
+        this.color = Math.random() > 0.5 ? '#9b87f5' : '#0fa0ce';
         this.alpha = Math.random() * 0.5 + 0.1;
         this.connectedParticles = [];
     }
@@ -17,7 +17,7 @@ class Particle {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        // Handle edge cases
+        // Handle edge cases with smooth wrapping
         if (this.x > this.canvas.width) this.x = 0;
         if (this.x < 0) this.x = this.canvas.width;
         if (this.y > this.canvas.height) this.y = 0;
@@ -33,7 +33,7 @@ class Particle {
             const dy = this.y - particle.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
             
-            if (distance < 100) {
+            if (distance < 120) {
                 this.connectedParticles.push({
                     particle,
                     distance
@@ -53,7 +53,7 @@ class Particle {
         for (const connection of this.connectedParticles) {
             ctx.beginPath();
             ctx.strokeStyle = this.color;
-            ctx.globalAlpha = 0.1 * (1 - connection.distance / 100);
+            ctx.globalAlpha = 0.1 * (1 - connection.distance / 120);
             ctx.lineWidth = 0.5;
             ctx.moveTo(this.x, this.y);
             ctx.lineTo(connection.particle.x, connection.particle.y);
@@ -64,71 +64,71 @@ class Particle {
     }
 }
 
-// Project Data
+// Project Data with enhanced descriptions and images
 const PROJECTS = [
     {
         id: 1,
         title: "E-Commerce Platform",
-        description: "A full-featured e-commerce platform with product management, cart functionality, and payment processing.",
-        image: "https://placehold.co/600x400/1e1e1e/cccccc?text=E-Commerce+Project",
-        tags: ["React", "Node.js", "MongoDB"],
+        description: "A scalable e-commerce platform with product management, user authentication, cart functionality, and Stripe payment integration.",
+        image: "https://placehold.co/600x400/1e1e1e/cccccc?text=E-Commerce+Platform",
+        tags: ["React", "Node.js", "MongoDB", "Stripe"],
         githubUrl: "https://github.com",
         liveUrl: "https://example.com",
         category: "fullstack"
     },
     {
         id: 2,
-        title: "Portfolio Website",
-        description: "Modern, responsive portfolio website built with React and TailwindCSS.",
-        image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Portfolio+Project",
-        tags: ["React", "TailwindCSS", "Framer Motion"],
+        title: "Task Management App",
+        description: "A Kanban-style task management application with drag-and-drop functionality, real-time updates, and team collaboration features.",
+        image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Task+Management",
+        tags: ["React", "Firebase", "Tailwind CSS", "Redux"],
         githubUrl: "https://github.com",
         liveUrl: "https://example.com",
         category: "frontend"
     },
     {
         id: 3,
-        title: "Task Management API",
-        description: "RESTful API for task management with authentication and permission system.",
-        image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Task+API+Project",
-        tags: ["Node.js", "Express", "MongoDB", "JWT"],
+        title: "API Gateway Service",
+        description: "A microservice gateway that handles authentication, rate limiting, and routing for a complex distributed system.",
+        image: "https://placehold.co/600x400/1e1e1e/cccccc?text=API+Gateway",
+        tags: ["Node.js", "Express", "Redis", "Docker"],
         githubUrl: "https://github.com",
         liveUrl: "https://example.com",
         category: "backend"
     },
     {
         id: 4,
-        title: "Real-time Chat Application",
-        description: "Chat application with real-time messaging, user presence, and file sharing capabilities.",
-        image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Chat+App+Project",
-        tags: ["React", "Socket.io", "Express", "MongoDB"],
-        githubUrl: "https://github.com",
-        liveUrl: "https://example.com",
-        category: "fullstack"
-    },
-    {
-        id: 5,
-        title: "Weather Dashboard",
-        description: "Interactive weather dashboard with data visualization and location-based forecasts.",
-        image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Weather+Dashboard",
-        tags: ["JavaScript", "Chart.js", "Weather API"],
+        title: "Analytics Dashboard",
+        description: "Interactive data visualization dashboard with real-time metrics, filtering, and customizable chart components.",
+        image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Analytics+Dashboard",
+        tags: ["React", "D3.js", "WebSockets", "Material UI"],
         githubUrl: "https://github.com",
         liveUrl: "https://example.com",
         category: "frontend"
     },
     {
-        id: 6,
+        id: 5,
         title: "Content Management System",
-        description: "Headless CMS for managing website content with a user-friendly interface.",
-        image: "https://placehold.co/600x400/1e1e1e/cccccc?text=CMS+Project",
+        description: "Headless CMS with a user-friendly interface for managing website content, media assets, and user permissions.",
+        image: "https://placehold.co/600x400/1e1e1e/cccccc?text=CMS+System",
         tags: ["Node.js", "Express", "PostgreSQL", "GraphQL"],
         githubUrl: "https://github.com",
         liveUrl: "https://example.com",
         category: "backend"
+    },
+    {
+        id: 6,
+        title: "Real-time Chat Application",
+        description: "Feature-rich messaging platform with private/group chats, file sharing, read receipts, and end-to-end encryption.",
+        image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Chat+Application",
+        tags: ["React", "Socket.io", "Express", "MongoDB"],
+        githubUrl: "https://github.com",
+        liveUrl: "https://example.com",
+        category: "fullstack"
     }
 ];
 
-// Experience Data
+// Experience Data with detailed achievements
 const EXPERIENCE = [
     {
         company: "Tech Innovations Inc.",
@@ -137,9 +137,9 @@ const EXPERIENCE = [
         location: "San Francisco, CA",
         achievements: [
             "Led development of microservices architecture that improved system scalability by 40%",
-            "Mentored junior developers and conducted code reviews to maintain high code quality",
-            "Implemented CI/CD pipelines that reduced deployment time by 60%",
-            "Optimized database queries resulting in a 30% performance improvement"
+            "Mentored 5 junior developers and established code review standards, reducing production bugs by 30%",
+            "Implemented CI/CD pipelines that reduced deployment time from days to hours",
+            "Optimized database queries and caching strategy, resulting in 3x faster page loads"
         ],
         technologies: ["React", "Node.js", "MongoDB", "Docker", "AWS"]
     },
@@ -149,10 +149,10 @@ const EXPERIENCE = [
         period: "2018 - 2021",
         location: "Boston, MA",
         achievements: [
-            "Developed and maintained multiple client-facing web applications",
-            "Designed and implemented RESTful APIs consumed by web and mobile applications",
-            "Collaborated with UX/UI team to implement responsive designs",
-            "Migrated legacy systems to modern tech stacks, improving performance and user experience"
+            "Developed and maintained client-facing web applications serving 50,000+ daily active users",
+            "Designed and implemented RESTful APIs consumed by both web and mobile applications",
+            "Collaborated with UX/UI team to implement responsive designs across all breakpoints",
+            "Migrated legacy PHP system to a modern React/Node.js stack, improving performance by 60%"
         ],
         technologies: ["JavaScript", "Vue.js", "Express", "MongoDB", "AWS"]
     },
@@ -162,73 +162,61 @@ const EXPERIENCE = [
         period: "2016 - 2018",
         location: "Seattle, WA",
         achievements: [
-            "Built interactive UI components for various client websites",
-            "Implemented responsive designs following best practices",
-            "Worked with backend team to integrate frontend with APIs",
-            "Optimized website performance and loading times"
+            "Built interactive UI components for 15+ client websites with a focus on accessibility",
+            "Implemented responsive designs ensuring compatibility across all modern browsers",
+            "Created an internal component library that reduced development time by 25%",
+            "Optimized website performance through code splitting and asset optimization techniques"
         ],
         technologies: ["HTML/CSS", "JavaScript", "jQuery", "Bootstrap", "Sass"]
     }
 ];
 
-// Initialize Everything
+// Initialize Everything with enhanced functionality
 document.addEventListener('DOMContentLoaded', () => {
+    // Set current year in footer
     const currentYear = new Date().getFullYear();
-    document.getElementById('currentYear').textContent = currentYear;
+    const currentYearElement = document.getElementById('currentYear');
+    if (currentYearElement) {
+        currentYearElement.textContent = currentYear;
+    }
     
-    // Initialize Typed.js
-    new Typed('.typing', {
-        strings: [
-            'build web applications',
-            'solve complex problems',
-            'create user experiences',
-            'love what I do'
-        ],
-        typeSpeed: 60,
-        backSpeed: 30,
-        backDelay: 1500,
-        startDelay: 1000,
-        loop: true
-    });
+    // Initialize Typed.js with coding-focused strings
+    const typedElement = document.querySelector('.typing');
+    if (typedElement) {
+        new Typed(typedElement, {
+            strings: [
+                'build scalable web applications',
+                'solve complex technical challenges',
+                'create intuitive user experiences',
+                'architect robust backend systems',
+                'optimize for performance',
+                'love what I do'
+            ],
+            typeSpeed: 60,
+            backSpeed: 30,
+            backDelay: 1500,
+            startDelay: 1000,
+            loop: true
+        });
+    }
 
-    // Initialize Particles with connections
+    // Initialize all functionality
     initializeParticles();
-    
-    // Initialize VanillaTilt
     initializeVanillaTilt();
-
-    // Custom Cursor
     initializeCustomCursor();
-
-    // Scroll Reveal
+    initializeNavigation();
     initializeScrollReveal();
-
-    // Skill Bars Animation
+    initializeSkillTabs();
     initializeSkillBars();
-
-    // Project Filtering
     initializeProjects();
-    
-    // Experience Timeline
     initializeExperience();
-
-    // Contact Form
     initializeContactForm();
-
-    // Theme Toggle
     initializeThemeToggle();
-
-    // Mobile Menu
-    initializeMobileMenu();
-
-    // Smooth Scrolling
-    initializeSmoothScrolling();
-    
-    // GSAP Animations
+    initializeScrollToTop();
     initializeGSAPAnimations();
 });
 
-// Initialize Particles
+// Initialize Particles with improved visuals
 function initializeParticles() {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -240,7 +228,8 @@ function initializeParticles() {
     canvas.height = window.innerHeight;
     particlesContainer.appendChild(canvas);
 
-    const particles = Array.from({ length: 50 }, () => new Particle(canvas));
+    const particleCount = window.innerWidth > 768 ? 60 : 30;
+    const particles = Array.from({ length: particleCount }, () => new Particle(canvas));
 
     function handleResize() {
         canvas.width = window.innerWidth;
@@ -261,10 +250,10 @@ function initializeParticles() {
     animate();
 }
 
-// Initialize VanillaTilt
+// Initialize VanillaTilt for card hover effects
 function initializeVanillaTilt() {
     const tiltElements = document.querySelectorAll("[data-tilt]");
-    if (tiltElements.length === 0) return;
+    if (tiltElements.length === 0 || typeof VanillaTilt === 'undefined') return;
 
     VanillaTilt.init(tiltElements, {
         max: 15,
@@ -275,7 +264,7 @@ function initializeVanillaTilt() {
     });
 }
 
-// Initialize Custom Cursor
+// Initialize Custom Cursor with interactive feedback
 function initializeCustomCursor() {
     const cursor = document.querySelector('.custom-cursor');
     if (!cursor) return;
@@ -285,15 +274,15 @@ function initializeCustomCursor() {
         cursor.style.top = `${e.clientY}px`;
     });
     
-    // Add effects when hovering over links and buttons
-    const interactiveElements = document.querySelectorAll('a, button, .btn, input, textarea, [data-tilt]');
+    // Add effects when hovering over interactive elements
+    const interactiveElements = document.querySelectorAll('a, button, .btn, input, textarea, [data-tilt], .project-card, .filter-btn, .tab-btn');
     interactiveElements.forEach(el => {
         el.addEventListener('mouseenter', () => {
             cursor.style.width = '40px';
             cursor.style.height = '40px';
             cursor.style.borderColor = 'var(--primary-light)';
             cursor.style.borderWidth = '1px';
-            cursor.style.backgroundColor = 'rgba(59, 130, 246, 0.2)';
+            cursor.style.backgroundColor = 'rgba(155, 135, 245, 0.2)';
         });
         
         el.addEventListener('mouseleave', () => {
@@ -315,7 +304,90 @@ function initializeCustomCursor() {
     });
 }
 
-// Initialize Scroll Reveal
+// Initialize Navigation with active states and scroll events
+function initializeNavigation() {
+    const navbar = document.getElementById('navbar');
+    const menuButton = document.querySelector('.mobile-menu');
+    const nav = document.querySelector('.nav-links');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    
+    // Handle scroll events for navbar styling
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+        
+        updateActiveNavLink();
+    });
+    
+    // Handle mobile menu toggle
+    if (menuButton && nav) {
+        menuButton.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            menuButton.classList.toggle('active');
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!nav.contains(e.target) && !menuButton.contains(e.target) && nav.classList.contains('active')) {
+                nav.classList.remove('active');
+                menuButton.classList.remove('active');
+            }
+        });
+        
+        // Close menu when clicking on a nav link
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                menuButton.classList.remove('active');
+            });
+        });
+    }
+    
+    // Smooth scrolling for all anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                const navbarHeight = navbar.offsetHeight;
+                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    // Update active nav link based on scroll position
+    function updateActiveNavLink() {
+        const scrollPosition = window.scrollY;
+        
+        document.querySelectorAll('section').forEach(section => {
+            const sectionTop = section.offsetTop - navbar.offsetHeight - 20;
+            const sectionBottom = sectionTop + section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+            
+            if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${sectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }
+    
+    // Initial call to set active link on page load
+    updateActiveNavLink();
+}
+
+// Initialize Scroll Reveal for element animations
 function initializeScrollReveal() {
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
@@ -327,6 +399,27 @@ function initializeScrollReveal() {
     }, { threshold: 0.15 });
 
     reveals.forEach(reveal => observer.observe(reveal));
+}
+
+// Initialize Skill Tabs functionality
+function initializeSkillTabs() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    
+    if (tabButtons.length === 0) return;
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons and panes
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabPanes.forEach(pane => pane.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding pane
+            button.classList.add('active');
+            const target = button.getAttribute('data-target');
+            document.getElementById(target).classList.add('active');
+        });
+    });
 }
 
 // Initialize Skill Bars Animation
@@ -343,14 +436,17 @@ function initializeSkillBars() {
                 if (percentageDisplay) {
                     let count = 0;
                     const target = parseInt(progress);
-                    const interval = setInterval(() => {
+                    const duration = 1500; // milliseconds
+                    const interval = duration / target;
+                    
+                    const counter = setInterval(() => {
                         if (count < target) {
                             count++;
                             percentageDisplay.textContent = `${count}%`;
                         } else {
-                            clearInterval(interval);
+                            clearInterval(counter);
                         }
-                    }, 15);
+                    }, interval);
                 }
             }
         });
@@ -361,14 +457,14 @@ function initializeSkillBars() {
 
 // Project Filtering and Creation
 function initializeProjects() {
-    const filters = document.querySelectorAll('.project-filters button');
+    const filters = document.querySelectorAll('.filter-btn');
     const projectsGrid = document.querySelector('.projects-grid');
     
     if (!projectsGrid) return;
 
     function createProjectCard(project) {
         return `
-            <div class="project-card" data-category="${project.category}">
+            <div class="project-card" data-category="${project.category}" data-tilt>
                 <img src="${project.image}" alt="${project.title}" loading="lazy">
                 <div class="project-content">
                     <h3>${project.title}</h3>
@@ -377,8 +473,18 @@ function initializeProjects() {
                         ${project.tags.map(tag => `<span>${tag}</span>`).join('')}
                     </div>
                     <div class="project-links">
-                        <a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer">GitHub</a>
-                        <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer">Live Demo</a>
+                        <a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" fill="currentColor" height="18" width="18">
+                                <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z" />
+                            </svg>
+                            GitHub
+                        </a>
+                        <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" fill="currentColor" height="18" width="18">
+                                <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3m-2 16H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7h-2v7z" />
+                            </svg>
+                            Live Demo
+                        </a>
                     </div>
                 </div>
             </div>
@@ -387,6 +493,7 @@ function initializeProjects() {
 
     // Initialize projects
     projectsGrid.innerHTML = PROJECTS.map(createProjectCard).join('');
+    initializeVanillaTilt(); // Reinitialize tilt for new cards
 
     // Filter functionality
     filters.forEach(filter => {
@@ -404,34 +511,52 @@ function initializeProjects() {
             
             // Animate out current projects
             const currentProjects = projectsGrid.querySelectorAll('.project-card');
-            gsap.to(currentProjects, {
-                opacity: 0,
-                y: 20,
-                stagger: 0.1,
-                onComplete: () => {
-                    // Update projects
-                    projectsGrid.innerHTML = filteredProjects.map(createProjectCard).join('');
-                    
-                    // Animate in new projects
-                    gsap.from(projectsGrid.querySelectorAll('.project-card'), {
-                        opacity: 0,
-                        y: 20,
-                        stagger: 0.1
-                    });
-
-                    // Re-initialize VanillaTilt for new cards
-                    if (typeof VanillaTilt !== 'undefined') {
-                        VanillaTilt.init(projectsGrid.querySelectorAll('.project-card'), {
-                            max: 10,
-                            speed: 400,
-                            glare: true,
-                            "max-glare": 0.3
-                        });
+            
+            // Using GSAP if available, fallback to CSS transitions
+            if (typeof gsap !== 'undefined') {
+                gsap.to(currentProjects, {
+                    opacity: 0,
+                    y: 20,
+                    stagger: 0.1,
+                    onComplete: () => {
+                        updateProjectsGrid(filteredProjects);
                     }
-                }
-            });
+                });
+            } else {
+                currentProjects.forEach(card => {
+                    card.style.opacity = 0;
+                    card.style.transform = 'translateY(20px)';
+                });
+                
+                setTimeout(() => {
+                    updateProjectsGrid(filteredProjects);
+                }, 300);
+            }
         });
     });
+    
+    function updateProjectsGrid(projects) {
+        projectsGrid.innerHTML = projects.map(createProjectCard).join('');
+        initializeVanillaTilt(); // Reinitialize tilt for new cards
+        
+        // Animate in new projects
+        const newProjects = projectsGrid.querySelectorAll('.project-card');
+        
+        if (typeof gsap !== 'undefined') {
+            gsap.from(newProjects, {
+                opacity: 0,
+                y: 20,
+                stagger: 0.1
+            });
+        } else {
+            newProjects.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = 1;
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        }
+    }
 }
 
 // Initialize Experience Timeline
@@ -444,7 +569,12 @@ function initializeExperience() {
         <div class="timeline-item" data-index="${index}">
             <div class="timeline-content">
                 <div class="timeline-date">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" height="16" width="16">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
                     ${exp.period}
                 </div>
                 <h3 class="timeline-position">${exp.role}</h3>
@@ -460,15 +590,61 @@ function initializeExperience() {
     `).join('');
     
     experienceTimeline.innerHTML = timelineHTML;
+    
+    // Animate timeline items on scroll
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    
+    const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = entry.target.classList.contains('even') 
+                    ? 'translateX(0)' 
+                    : 'translateX(0)';
+            }
+        });
+    }, { threshold: 0.2 });
+    
+    timelineItems.forEach((item, index) => {
+        if (index % 2 === 0) {
+            item.classList.add('even');
+            item.style.opacity = 0;
+            item.style.transform = 'translateX(-50px)';
+        } else {
+            item.classList.add('odd');
+            item.style.opacity = 0;
+            item.style.transform = 'translateX(50px)';
+        }
+        
+        item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        timelineObserver.observe(item);
+    });
 }
 
-// Contact Form
+// Contact Form with validation and submission feedback
 function initializeContactForm() {
     const form = document.getElementById('contact-form');
     if (!form) return;
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
+        
+        // Basic form validation
+        const name = form.querySelector('#name').value.trim();
+        const email = form.querySelector('#email').value.trim();
+        const subject = form.querySelector('#subject').value.trim();
+        const message = form.querySelector('#message').value.trim();
+        
+        if (!name || !email || !subject || !message) {
+            showToast('Please fill in all fields', 'error');
+            return;
+        }
+        
+        if (!isValidEmail(email)) {
+            showToast('Please enter a valid email address', 'error');
+            return;
+        }
         
         // Display sending state
         const submitBtn = form.querySelector('button[type="submit"]');
@@ -478,7 +654,7 @@ function initializeContactForm() {
         
         // Simulate sending (replace with actual AJAX call)
         setTimeout(() => {
-            showToast('Message sent successfully!');
+            showToast('Message sent successfully! I\'ll respond within 24 hours.');
             form.reset();
             
             // Restore button
@@ -486,9 +662,14 @@ function initializeContactForm() {
             submitBtn.innerHTML = originalContent;
         }, 1500);
     });
+    
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
 }
 
-// Theme Toggle
+// Theme Toggle with preference saving
 function initializeThemeToggle() {
     const themeToggle = document.querySelector('.theme-toggle');
     if (!themeToggle) return;
@@ -511,63 +692,34 @@ function initializeThemeToggle() {
     });
 }
 
-// Mobile Menu
-function initializeMobileMenu() {
-    const menuButton = document.querySelector('.mobile-menu');
-    const nav = document.querySelector('.nav-links');
-    
-    if (!menuButton || !nav) return;
-    
-    menuButton.addEventListener('click', () => {
-        nav.classList.toggle('active');
-        menuButton.classList.toggle('active');
-    });
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!nav.contains(e.target) && !menuButton.contains(e.target) && nav.classList.contains('active')) {
-            nav.classList.remove('active');
-            menuButton.classList.remove('active');
-        }
-    });
-    
-    // Close menu when clicking on a nav link
-    nav.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            nav.classList.remove('active');
-            menuButton.classList.remove('active');
-        });
-    });
-    
-    // Update active link on scroll
-    const sections = document.querySelectorAll('section');
-    const navLinks = document.querySelectorAll('.nav-links a');
+// Scroll To Top Button
+function initializeScrollToTop() {
+    const scrollToTopBtn = document.querySelector('.scroll-to-top');
+    if (!scrollToTopBtn) return;
     
     window.addEventListener('scroll', () => {
-        let current = '';
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            
-            if (pageYOffset >= sectionTop - 200) {
-                current = section.getAttribute('id');
-            }
-        });
-        
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
-        });
+        if (window.pageYOffset > 300) {
+            scrollToTopBtn.classList.add('visible');
+        } else {
+            scrollToTopBtn.classList.remove('visible');
+        }
     });
 }
 
 // Toast Notification
-function showToast(message, duration = 3000) {
+function showToast(message, type = 'success', duration = 3000) {
     const toast = document.getElementById('toast');
     if (!toast) return;
+    
+    // Remove previous toast classes
+    toast.classList.remove('success', 'error');
+    
+    // Add type class
+    if (type === 'error') {
+        toast.style.background = 'linear-gradient(135deg, #ff4d4d 0%, #f84f62 100%)';
+    } else {
+        toast.style.background = 'linear-gradient(135deg, #9b87f5 0%, #7b67d5 100%)';
+    }
     
     toast.textContent = message;
     toast.classList.add('show');
@@ -575,39 +727,6 @@ function showToast(message, duration = 3000) {
     setTimeout(() => {
         toast.classList.remove('show');
     }, duration);
-}
-
-// Smooth Scrolling
-function initializeSmoothScrolling() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                const navbarHeight = document.getElementById('navbar').offsetHeight;
-                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-    
-    // Scroll to top button
-    const scrollToTopBtn = document.querySelector('.scroll-to-top');
-    if (scrollToTopBtn) {
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                scrollToTopBtn.style.opacity = '1';
-                scrollToTopBtn.style.pointerEvents = 'all';
-            } else {
-                scrollToTopBtn.style.opacity = '0';
-                scrollToTopBtn.style.pointerEvents = 'none';
-            }
-        });
-    }
 }
 
 // GSAP Animations
@@ -651,7 +770,7 @@ function initializeGSAPAnimations() {
     // Enhance scroll reveal with GSAP if ScrollTrigger is available
     if (gsap.plugins && gsap.plugins.ScrollTrigger) {
         gsap.utils.toArray('.reveal').forEach((section) => {
-            gsap.from(section.querySelectorAll('h2, .section-subtitle, .about-card, .skill-category, .project-card, .timeline-item'), {
+            gsap.from(section.querySelectorAll('h2, .section-subtitle, .about-card, .key-point, .code-showcase, .tab-btn, .project-card, .timeline-item, .education-item, .info-card, .contact-form'), {
                 opacity: 0,
                 y: 50,
                 stagger: 0.2,
