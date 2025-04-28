@@ -31,11 +31,13 @@ const Footer = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <ScrollRevealWrapper>
-            <motion.div whileHover={{ x: 5 }}>
-              <a href="#" className="text-2xl font-bold text-white flex items-center">
-                <Code className="mr-2 text-blue" />
-                Dev<span className="text-blue">Portfolio</span>
-              </a>
+            <div className="flex flex-col">
+              <motion.div whileHover={{ x: 5 }} className="inline-block">
+                <a href="#" className="text-2xl font-bold text-white flex items-center">
+                  <Code className="mr-2 text-blue" />
+                  Dev<span className="text-blue">Portfolio</span>
+                </a>
+              </motion.div>
               <p className="mt-4 text-muted-foreground max-w-xs">
                 A passionate software engineer specializing in creating exceptional digital experiences.
               </p>
@@ -59,73 +61,77 @@ const Footer = () => {
                   </motion.a>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </ScrollRevealWrapper>
           
           <ScrollRevealWrapper delay={0.2}>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              {[
-                { name: "About", url: "#about" },
-                { name: "Skills", url: "#skills" },
-                { name: "Projects", url: "#projects" },
-                { name: "Experience", url: "#experience" },
-                { name: "Contact", url: "#contact" }
-              ].map((link, idx) => (
-                <motion.li key={idx} whileHover={{ x: 5 }}>
-                  <a 
-                    href={link.url} 
-                    className="text-muted-foreground hover:text-white transition-colors flex items-center"
-                  >
-                    <span className="w-1.5 h-1.5 bg-blue rounded-full mr-2"></span>
-                    {link.name}
-                  </a>
-                </motion.li>
-              ))}
-            </ul>
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+              <ul className="space-y-2">
+                {[
+                  { name: "About", url: "#about" },
+                  { name: "Skills", url: "#skills" },
+                  { name: "Projects", url: "#projects" },
+                  { name: "Experience", url: "#experience" },
+                  { name: "Contact", url: "#contact" }
+                ].map((link, idx) => (
+                  <motion.li key={idx} whileHover={{ x: 5 }}>
+                    <a 
+                      href={link.url} 
+                      className="text-muted-foreground hover:text-white transition-colors flex items-center"
+                    >
+                      <span className="w-1.5 h-1.5 bg-blue rounded-full mr-2"></span>
+                      {link.name}
+                    </a>
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
           </ScrollRevealWrapper>
           
           <ScrollRevealWrapper delay={0.4}>
-            <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
-            <ul className="space-y-3">
-              <motion.li 
-                className="flex items-start"
-                whileHover={{ x: 5 }}
-              >
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dark-300/80 backdrop-blur-sm flex items-center justify-center mr-3">
-                  <MapPin className="w-4 h-4 text-blue" />
-                </div>
-                <span className="text-muted-foreground">San Francisco, California</span>
-              </motion.li>
-              <motion.li 
-                className="flex items-start"
-                whileHover={{ x: 5 }}
-              >
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dark-300/80 backdrop-blur-sm flex items-center justify-center mr-3">
-                  <Mail className="w-4 h-4 text-blue" />
-                </div>
-                <a href="mailto:contact@example.com" className="text-muted-foreground hover:text-white transition-colors">
-                  contact@example.com
-                </a>
-              </motion.li>
-              <motion.li 
-                className="flex items-start"
-                whileHover={{ x: 5 }}
-              >
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dark-300/80 backdrop-blur-sm flex items-center justify-center mr-3">
-                  <Phone className="w-4 h-4 text-blue" />
-                </div>
-                <a href="tel:+1234567890" className="text-muted-foreground hover:text-white transition-colors">
-                  +1 (234) 567-890
-                </a>
-              </motion.li>
-            </ul>
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
+              <ul className="space-y-3">
+                <motion.li 
+                  className="flex items-start"
+                  whileHover={{ x: 5 }}
+                >
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dark-300/80 backdrop-blur-sm flex items-center justify-center mr-3">
+                    <MapPin className="w-4 h-4 text-blue" />
+                  </div>
+                  <span className="text-muted-foreground">San Francisco, California</span>
+                </motion.li>
+                <motion.li 
+                  className="flex items-start"
+                  whileHover={{ x: 5 }}
+                >
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dark-300/80 backdrop-blur-sm flex items-center justify-center mr-3">
+                    <Mail className="w-4 h-4 text-blue" />
+                  </div>
+                  <a href="mailto:contact@example.com" className="text-muted-foreground hover:text-white transition-colors">
+                    contact@example.com
+                  </a>
+                </motion.li>
+                <motion.li 
+                  className="flex items-start"
+                  whileHover={{ x: 5 }}
+                >
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dark-300/80 backdrop-blur-sm flex items-center justify-center mr-3">
+                    <Phone className="w-4 h-4 text-blue" />
+                  </div>
+                  <a href="tel:+1234567890" className="text-muted-foreground hover:text-white transition-colors">
+                    +1 (234) 567-890
+                  </a>
+                </motion.li>
+              </ul>
+            </div>
           </ScrollRevealWrapper>
         </div>
         
         <div className="border-t border-dark-300 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-muted-foreground text-sm">
-            © {currentYear} John Doe. All rights reserved.
+            © {currentYear} Brendon Lightfoot. All rights reserved.
           </p>
           <p className="text-muted-foreground text-sm mt-4 md:mt-0 flex items-center">
             Designed & Built with 
@@ -136,7 +142,7 @@ const Footer = () => {
             >
               <Heart size={16} className="text-red-500" />
             </motion.div>
-            by John Doe
+            by Brendon Lightfoot
           </p>
         </div>
       </div>
