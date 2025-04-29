@@ -7,26 +7,35 @@
   <script type="text/javascript">
     // Single Page App for GitHub Pages
     // https://github.com/rafgraph/spa-github-pages
-    // This script takes the current URL and converts the path and query
-    // string into just a query string, and then redirects the browser
-    // to the new URL with only a query string and hash fragment
     
-    // This is modified to work specifically with the /Developer-Portfolio/ base path
-    var pathSegmentsToKeep = 1;
-
-    var l = window.location;
-    var basePathName = '/Developer-Portfolio';
+    // This redirects 404s to the index.html page and preserves the URL
+    var segmentCount = 1; // For /Developer-Portfolio/
+    var location = window.location;
     
-    // Debug the redirect process
+    // Log for debugging
     console.log('404.html redirect script running');
     console.log('Current location:', window.location.href);
     
-    l.replace(
-      l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-      basePathName + '/?/' +
-      l.pathname.slice(basePathName.length).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-      (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-      l.hash
+    // Don't redirect if on the homepage
+    if (location.pathname.split('/').length <= segmentCount + 1) {
+      location.replace(
+        location.protocol + '//' + location.hostname + 
+        (location.port ? ':' + location.port : '') +
+        '/Developer-Portfolio/'
+      );
+      return;
+    }
+    
+    var redirectPath = '/Developer-Portfolio/?p=' + 
+      location.pathname.slice('/Developer-Portfolio/'.length) +
+      location.search +
+      location.hash;
+    
+    console.log('Redirecting to:', redirectPath);
+    location.replace(
+      location.protocol + '//' + location.hostname + 
+      (location.port ? ':' + location.port : '') +
+      redirectPath
     );
   </script>
 </head>

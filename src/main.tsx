@@ -3,9 +3,13 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
+// Flag to track React initialization
+window.reactLoaded = false;
+
 // Error handling for React rendering
 const renderApp = () => {
   try {
+    console.log("Starting to mount React app...");
     // This ensures React app mounts properly regardless of the base URL path
     const rootElement = document.getElementById("root");
     
@@ -13,7 +17,7 @@ const renderApp = () => {
       throw new Error('Failed to find the root element');
     }
 
-    console.log("Mounting React app to root element");
+    console.log("Found root element, mounting React app");
     
     const root = createRoot(rootElement);
     root.render(<App />);
@@ -25,6 +29,7 @@ const renderApp = () => {
     }
     
     console.log("React app mounted successfully");
+    window.reactLoaded = true;
   } catch (error) {
     console.error("Error rendering React application:", error);
     
@@ -43,5 +48,13 @@ const renderApp = () => {
   }
 };
 
-// Execute with a slight delay to ensure all scripts are loaded
-setTimeout(renderApp, 100);
+// Execute app mounting
+console.log("main.tsx executed, preparing to render app");
+renderApp();
+
+// Add additional window global
+declare global {
+  interface Window {
+    reactLoaded: boolean;
+  }
+}

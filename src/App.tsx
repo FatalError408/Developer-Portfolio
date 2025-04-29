@@ -13,6 +13,7 @@ const queryClient = new QueryClient();
 // Add console logging to help debug GitHub Pages deployment
 console.log("App initializing with basename: /Developer-Portfolio");
 console.log("Current URL:", window.location.href);
+console.log("Current pathname:", window.location.pathname);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
