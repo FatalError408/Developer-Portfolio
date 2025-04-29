@@ -14,13 +14,13 @@ const queryClient = new QueryClient();
 console.log("App initializing with basename for GitHub Pages");
 console.log("Current URL:", window.location.href);
 console.log("Current pathname:", window.location.pathname);
+console.log("Current hash:", window.location.hash);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      {/* Switch from BrowserRouter to HashRouter which works better with GitHub Pages */}
       <HashRouter>
         <Routes>
           <Route path="/" element={<Index />} />
