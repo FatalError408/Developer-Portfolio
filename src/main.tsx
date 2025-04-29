@@ -10,6 +10,8 @@ window.reactLoaded = false;
 const renderApp = () => {
   try {
     console.log("Starting to mount React app...");
+    console.log("Window location:", window.location.href);
+    
     // This ensures React app mounts properly regardless of the base URL path
     const rootElement = document.getElementById("root");
     
@@ -44,6 +46,14 @@ const renderApp = () => {
           <pre style="background: #f8f8f8; padding: 10px; border-radius: 5px; text-align: left; margin-top: 20px; overflow: auto;">${error?.toString()}</pre>
         </div>
       `;
+    }
+    
+    // Also update the error display if it exists
+    const errorMessage = document.getElementById('error-message');
+    const errorDisplay = document.getElementById('error-display');
+    if (errorMessage && errorDisplay) {
+      errorMessage.textContent = error?.toString() || 'Unknown error';
+      errorDisplay.style.display = 'block';
     }
   }
 };

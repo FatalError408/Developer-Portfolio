@@ -5,45 +5,12 @@
   <meta charset="utf-8">
   <title>Redirecting...</title>
   <script type="text/javascript">
-    // Single Page App for GitHub Pages
-    // https://github.com/rafgraph/spa-github-pages
-    
-    // This redirects 404s to the index.html page and preserves the URL
-    var segmentCount = 1; // For /Developer-Portfolio/
-    var location = window.location;
-    
-    // Log for debugging
-    console.log('404.html redirect script running');
-    console.log('Current location:', window.location.href);
-    
-    // Don't redirect if on the homepage
-    if (location.pathname.split('/').length <= segmentCount + 1) {
-      location.replace(
-        location.protocol + '//' + location.hostname + 
-        (location.port ? ':' + location.port : '') +
-        '/Developer-Portfolio/'
-      );
-      return;
-    }
-    
-    var redirectPath = '/Developer-Portfolio/?p=' + 
-      location.pathname.slice('/Developer-Portfolio/'.length) +
-      location.search +
-      location.hash;
-    
-    console.log('Redirecting to:', redirectPath);
-    location.replace(
-      location.protocol + '//' + location.hostname + 
-      (location.port ? ':' + location.port : '') +
-      redirectPath
-    );
+    // Redirect to the index with hash routing for GitHub Pages SPA
+    window.location.href = '/Developer-Portfolio/#' + window.location.pathname.slice('/Developer-Portfolio/'.length);
   </script>
 </head>
 <body>
   <h1>Redirecting...</h1>
-  <p>If you are not redirected automatically, click <a id="redirect-link" href="/Developer-Portfolio/">here</a>.</p>
-  <script>
-    document.getElementById('redirect-link').href = '/Developer-Portfolio/';
-  </script>
+  <p>If you are not redirected automatically, click <a href="/Developer-Portfolio/">here</a>.</p>
 </body>
 </html>
