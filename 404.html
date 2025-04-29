@@ -5,17 +5,21 @@
   <meta charset="utf-8">
   <title>Redirecting...</title>
   <script type="text/javascript">
-    // Single Page Apps for GitHub Pages
-    // Redirect to the index.html and let the HashRouter handle the routing
-    var pathSegmentsToKeep = 1;
-    var l = window.location;
-    l.replace(
-      l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-      l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/#/' +
-      l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-      (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-      l.hash
-    );
+    // Simple SPA Redirect for GitHub Pages
+    // More reliable redirect for GitHub Pages with hash routing
+    (function() {
+      var segmentCount = 1; // Adjust based on your repo name
+      var repo = "Developer-Portfolio"; // Your repository name
+      
+      var l = window.location;
+      var redirect = l.protocol + '//' + l.hostname + 
+                    (l.port ? ':' + l.port : '') + 
+                    '/' + repo + '/#' + 
+                    l.pathname.slice(('/' + repo).length);
+                    
+      console.log("404 redirect to:", redirect);
+      window.location.replace(redirect);
+    })();
   </script>
 </head>
 <body>

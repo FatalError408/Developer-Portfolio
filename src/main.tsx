@@ -11,6 +11,7 @@ const renderApp = () => {
   try {
     console.log("Starting to mount React app...");
     console.log("Window location:", window.location.href);
+    console.log("Base path:", document.querySelector('base')?.getAttribute('href') || '');
     
     // This ensures React app mounts properly regardless of the base URL path
     const rootElement = document.getElementById("root");
@@ -44,6 +45,7 @@ const renderApp = () => {
           <p>Sorry, there was a problem loading the application.</p>
           <p>Please check the browser console for more information or try refreshing the page.</p>
           <pre style="background: #f8f8f8; padding: 10px; border-radius: 5px; text-align: left; margin-top: 20px; overflow: auto;">${error?.toString()}</pre>
+          <button onclick="window.location.reload()" style="background: #3498db; color: white; border: none; padding: 10px 20px; margin-top: 20px; cursor: pointer; border-radius: 5px;">Refresh Page</button>
         </div>
       `;
     }
@@ -58,9 +60,10 @@ const renderApp = () => {
   }
 };
 
-// Execute app mounting
+// Execute app mounting with a small delay to ensure HTML is fully loaded
 console.log("main.tsx executed, preparing to render app");
-renderApp();
+// Small delay to ensure the DOM is fully ready
+setTimeout(renderApp, 100);
 
 // Add additional window global
 declare global {

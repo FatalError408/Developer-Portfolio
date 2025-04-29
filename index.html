@@ -9,17 +9,30 @@
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1005/1005141.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <base href="/">
     
     <!-- Debug script to help identify loading issues -->
     <script type="text/javascript">
       console.log('HTML document loading at:', new Date().toISOString());
-      console.log('Base path: /Developer-Portfolio/');
+      console.log('Environment:', window.location.hostname);
+      console.log('Is GitHub Pages:', window.location.hostname.includes('github.io'));
+      
+      // Set base href dynamically for GitHub Pages vs local development
+      if (window.location.hostname.includes('github.io')) {
+        document.querySelector('base').setAttribute('href', '/Developer-Portfolio/');
+        console.log('Set base href for GitHub Pages: /Developer-Portfolio/');
+      }
       
       // Enable more verbose error reporting
       window.onerror = function(message, source, lineno, colno, error) {
         console.error('JavaScript error:', { message, source, lineno, colno, error });
-        document.getElementById('error-display').style.display = 'block';
-        document.getElementById('error-message').textContent = message;
+        const errorDisplay = document.getElementById('error-display');
+        const errorMessage = document.getElementById('error-message');
+        if (errorDisplay && errorMessage) {
+          errorDisplay.style.display = 'block';
+          errorMessage.textContent = message || 'Unknown error';
+        }
+        return false; // Allow default error handling as well
       };
       
       window.addEventListener('DOMContentLoaded', function() {
@@ -34,7 +47,11 @@
         setTimeout(function() {
           var root = document.getElementById('root');
           if (root && root.children.length === 0 && !window.reactLoaded) {
-            document.getElementById('error-display').style.display = 'block';
+            const errorDisplay = document.getElementById('error-display');
+            if (errorDisplay) {
+              errorDisplay.style.display = 'block';
+              console.error('React app failed to load within 5 seconds');
+            }
           }
         }, 5000); // Wait 5 seconds to check if React loaded
       });
@@ -55,6 +72,7 @@
         <p>The application failed to load properly.</p>
         <p>Error message: <span id="error-message">Unknown error</span></p>
         <p>Try refreshing the page. If the problem persists, please check the browser console for more details.</p>
+        <button onclick="window.location.reload()" style="background: #3498db; color: white; border: none; padding: 10px 20px; margin-top: 20px; cursor: pointer; border-radius: 5px;">Refresh Page</button>
     </div>
     
     <style>
