@@ -10,19 +10,31 @@
     // This script takes the current URL and converts the path and query
     // string into just a query string, and then redirects the browser
     // to the new URL with only a query string and hash fragment
+    
+    // This is modified to work specifically with the /Developer-Portfolio/ base path
     var pathSegmentsToKeep = 1;
 
     var l = window.location;
+    var basePathName = '/Developer-Portfolio';
+    
+    // Debug the redirect process
+    console.log('404.html redirect script running');
+    console.log('Current location:', window.location.href);
+    
     l.replace(
       l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-      l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-      l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+      basePathName + '/?/' +
+      l.pathname.slice(basePathName.length).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
       (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
       l.hash
     );
   </script>
 </head>
 <body>
-  Redirecting...
+  <h1>Redirecting...</h1>
+  <p>If you are not redirected automatically, click <a id="redirect-link" href="/Developer-Portfolio/">here</a>.</p>
+  <script>
+    document.getElementById('redirect-link').href = '/Developer-Portfolio/';
+  </script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Github, Linkedin, Twitter, Heart, Mail, MapPin, Phone, ChevronUp, Code } from "lucide-react";
 import ScrollRevealWrapper from "./ScrollRevealWrapper";
@@ -35,7 +34,7 @@ const Footer = () => {
               <motion.div whileHover={{ x: 5 }} className="inline-block">
                 <a href="#" className="text-2xl font-bold text-white flex items-center">
                   <Code className="mr-2 text-blue" />
-                  Dev<span className="text-blue">Portfolio</span>
+                  <span>Dev<span className="text-blue">Portfolio</span></span>
                 </a>
               </motion.div>
               <p className="mt-4 text-muted-foreground max-w-xs">
@@ -142,7 +141,7 @@ const Footer = () => {
             >
               <Heart size={16} className="text-red-500" />
             </motion.div>
-            by Brendon Lightfoot
+            <span>by Brendon Lightfoot</span>
           </p>
         </div>
       </div>

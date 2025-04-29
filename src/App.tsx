@@ -7,7 +7,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
+// Initialize React Query client
 const queryClient = new QueryClient();
+
+// Add console logging to help debug GitHub Pages deployment
+console.log("App initializing with basename: /Developer-Portfolio");
+console.log("Current URL:", window.location.href);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
