@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brendon Lightfoot | Software Engineer Portfolio</title>
+    <meta name="description" content="Professional portfolio of Brendon Lightfoot, Software Engineer specializing in modern web technologies">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1005/1005141.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <!-- GitHub Pages SPA redirect -->
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      (function() {
+        // If we're redirected from 404.html with a query parameter
+        var query = window.location.search;
+        var prefix = '?p=';
+        
+        if (query.indexOf(prefix) !== -1) {
+          // Get the actual pathname from the query parameter
+          var pathname = query.substring(query.indexOf(prefix) + prefix.length);
+          
+          // If there's more query parameters, extract those too
+          var searchIndex = pathname.indexOf('&');
+          var search = '';
+          if (searchIndex !== -1) {
+            search = pathname.substring(searchIndex);
+            pathname = pathname.substring(0, searchIndex);
+          }
+          
+          // Replace the URL to make it look like we're on the right page
+          var newUrl = window.location.protocol + '//' + window.location.host + '/Developer-Portfolio/' + pathname + search;
+          window.history.replaceState(null, null, newUrl);
+          
+          console.log('Redirected to:', newUrl);
+        }
+      })();
+      
+      // Original SPA redirect logic
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+        console.log('SPA redirect script processed URL:', window.location.href);
+      }(window.location))
+    </script>
+    <!-- Debug script to help identify loading issues -->
+    <script type="text/javascript">
+      console.log('HTML document loading at:', new Date().toISOString());
+      console.log('Base path: /Developer-Portfolio/');
+      
+      window.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM content loaded at:', new Date().toISOString());
+      });
+      window.addEventListener('load', function() {
+        console.log('Window loaded at:', new Date().toISOString());
+        console.log('Base URL:', document.baseURI);
+        
+        // Add visible error display if React fails to load
+        setTimeout(function() {
+          var root = document.getElementById('root');
+          if (root && root.children.length === 0 && !window.reactLoaded) {
+            var errorDiv = document.createElement('div');
+            errorDiv.style.padding = '20px';
+            errorDiv.style.background = '#f8f8f8';
+            errorDiv.style.border = '1px solid #ddd';
+            errorDiv.style.borderRadius = '5px';
+            errorDiv.style.margin = '20px';
+            errorDiv.innerHTML = '<h2>Unable to load the application</h2>' +
+              '<p>Please check the browser console for more information.</p>';
+            root.appendChild(errorDiv);
+          }
+        }, 5000); // Wait 5 seconds to check if React loaded
+      });
+    </script>
+  <script type="module" crossorigin src="/Developer-Portfolio/assets/index-DRgSKzGZ.js"></script>
+  <link rel="modulepreload" crossorigin href="/Developer-Portfolio/assets/vendor-Ba6cMjAU.js">
+  <link rel="modulepreload" crossorigin href="/Developer-Portfolio/assets/ui-MFLMJC3W.js">
+  <link rel="stylesheet" crossorigin href="/Developer-Portfolio/assets/index-ClwIPm4m.css">
+</head>
+<body class="dark-theme">
+    <!-- Loading indicator -->
+    <div id="loading-indicator" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: #121212; color: white; z-index: 9999;">
+        <div style="text-align: center;">
+            <div style="border: 5px solid #333; border-radius: 50%; border-top: 5px solid #3498db; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+            <p style="margin-top: 20px;">Loading portfolio...</p>
+        </div>
+    </div>
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loadingIndicator = document.getElementById('loading-indicator');
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                }
+            }, 1000);
+        });
+    </script>
+
+    <div id="root"></div>
+</body>
+</html>
