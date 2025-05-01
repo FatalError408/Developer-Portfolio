@@ -11,8 +11,10 @@ import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ParticlesBackground from "@/components/ParticlesBackground";
-import ParticlesBackground3D from "@/components/ParticlesBackground3D";
-import Interactive3D from "@/components/Interactive3D";
+// Import 3D components conditionally to avoid initial rendering issues
+import { lazy, Suspense } from "react";
+const Interactive3D = lazy(() => import("@/components/Interactive3D"));
+const ParticlesBackground3D = lazy(() => import("@/components/ParticlesBackground3D"));
 
 const Index = () => {
   // Smooth scroll implementation
@@ -50,14 +52,18 @@ const Index = () => {
       variants={fadeIn}
     >
       <ParticlesBackground />
-      <ParticlesBackground3D />
+      <Suspense fallback={<div>Loading 3D elements...</div>}>
+        <ParticlesBackground3D />
+      </Suspense>
       <Navbar />
       <main>
         <Hero />
         <div className="bg-dark-400 py-16">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold mb-8 text-center">Interactive 3D Elements</h2>
-            <Interactive3D />
+            <Suspense fallback={<div className="h-96 w-full flex items-center justify-center">Loading 3D scene...</div>}>
+              <Interactive3D />
+            </Suspense>
           </div>
         </div>
         <About />
