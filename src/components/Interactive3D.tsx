@@ -23,7 +23,7 @@ const AnimatedSphere = ({ position, color, speed, distort }: AnimatedSphereProps
 
   return (
     <Sphere args={[1, 64, 64]} position={position} ref={mesh}>
-      <meshPhongMaterial 
+      <meshStandardMaterial 
         color={color} 
         roughness={0.5}
         metalness={0.2}
