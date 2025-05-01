@@ -1,15 +1,17 @@
 
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei';
+import { OrbitControls, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 
-const AnimatedSphere = ({ position, color, speed, distort }: { 
-  position: [number, number, number], 
-  color: string, 
-  speed: number,
-  distort: number
-}) => {
+interface AnimatedSphereProps { 
+  position: [number, number, number];
+  color: string;
+  speed: number;
+  distort: number;
+}
+
+const AnimatedSphere = ({ position, color, speed, distort }: AnimatedSphereProps) => {
   const mesh = useRef<THREE.Mesh>(null!);
   
   useFrame((state) => {
@@ -21,12 +23,12 @@ const AnimatedSphere = ({ position, color, speed, distort }: {
 
   return (
     <Sphere args={[1, 64, 64]} position={position} ref={mesh}>
-      <MeshDistortMaterial 
+      <meshPhongMaterial 
         color={color} 
-        attach="material" 
-        distort={distort} 
-        speed={speed} 
         roughness={0.5}
+        metalness={0.2}
+        emissive={color}
+        emissiveIntensity={0.2}
       />
     </Sphere>
   );

@@ -32,7 +32,6 @@ function Points({ count = 2000 }: PointsProps) {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={positions.current.length / 3}
           array={positions.current}
           itemSize={3}
         />
