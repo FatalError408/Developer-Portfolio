@@ -51,7 +51,7 @@ const Hero = () => {
               className="text-4xl md:text-5xl font-bold leading-tight"
               variants={itemVariants}
             >
-              Hi, I'm <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Brendon Julian Lightfoot</span>
+              Hi, I'm <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">JulianArtisan408</span>
               <span className="block mt-2 text-2xl md:text-3xl">Software Engineer, 28</span>
             </motion.h1>
             
@@ -98,12 +98,12 @@ const Hero = () => {
           >
             <div className="relative">
               <motion.div 
-                className="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden border-2 border-purple-500/20 relative"
+                className="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden border-4 border-blue-500/30 relative"
                 animate={{
                   boxShadow: [
-                    "0 0 0 rgba(168, 85, 247, 0.4)",
-                    "0 0 20px rgba(168, 85, 247, 0.2)",
-                    "0 0 0 rgba(168, 85, 247, 0.4)"
+                    "0 0 0 rgba(59, 130, 246, 0.4)",
+                    "0 0 30px rgba(59, 130, 246, 0.3)",
+                    "0 0 0 rgba(59, 130, 246, 0.4)"
                   ]
                 }}
                 transition={{
@@ -114,11 +114,11 @@ const Hero = () => {
               >
                 <Avatar className="w-full h-full">
                   <AvatarImage 
-                    src="https://photos.fife.usercontent.google.com/pw/AP1GczMBaB7Xu7DTbn77bFtxDvKvppBFrkcyIeQHiGFxZd91Okx5N3ZNlbR6=w696-h928-s-no-gm?authuser=0" 
-                    alt="Brendon Lightfoot"
+                    src="/lovable-uploads/400e435c-d0b5-4249-9f48-ecddcafc5226.png" 
+                    alt="Julian Artisan"
                     className="w-full h-full object-cover"
                   />
-                  <AvatarFallback className="text-4xl">BL</AvatarFallback>
+                  <AvatarFallback className="text-4xl">JA</AvatarFallback>
                 </Avatar>
                 
                 {/* Animated decorative elements */}

@@ -22,8 +22,7 @@ const ThreeDFallback = () => (
   </div>
 );
 
-// Use dynamic imports for 3D components
-const Interactive3D = lazy(() => import("@/components/Interactive3D"));
+// Use dynamic import for 3D particle background
 const ParticlesBackground3D = lazy(() => import("@/components/ParticlesBackground3D"));
 
 const Index = () => {
@@ -71,16 +70,6 @@ const Index = () => {
       <Navbar />
       <main>
         <Hero />
-        <div className="bg-dark-400 py-16">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-8 text-center">Interactive 3D Elements</h2>
-            <Suspense fallback={<div className="h-96 w-full flex items-center justify-center">Loading 3D scene...</div>}>
-              <ErrorBoundary>
-                <Interactive3D />
-              </ErrorBoundary>
-            </Suspense>
-          </div>
-        </div>
         <About />
         <Skills />
         <Projects />
