@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useRef } from "react";
 
 const Hero = () => {
   const containerVariants = {
@@ -31,6 +32,8 @@ const Hero = () => {
     { name: "Contact", icon: "📧", href: "#contact" }
   ];
 
+  const imgRef = useRef<HTMLDivElement>(null);
+  
   return (
     <section className="relative min-h-[90vh] flex items-center pt-16 overflow-hidden bg-dark-500">
       <div className="absolute inset-0 opacity-20 bg-noise mix-blend-overlay pointer-events-none"></div>
@@ -89,8 +92,11 @@ const Hero = () => {
           <motion.div 
             className="w-full md:w-5/12 flex justify-center"
             variants={itemVariants}
+            ref={imgRef}
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 300 }}
           >
-            <div className="relative max-w-sm">
+            <div className="relative">
               <motion.div 
                 className="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden border-2 border-purple-500/20 relative"
                 animate={{
@@ -108,12 +114,38 @@ const Hero = () => {
               >
                 <Avatar className="w-full h-full">
                   <AvatarImage 
-                    src="https://photos.fife.usercontent.google.com/pw/AP1GczPTT_VDcpVuXnzu3rVB6vBbCmBrZCVu2HnrYDN-C7-p6PDF76KY9MWfYTZyW7bmCK3Yis1UuxeajDxm2ikkrn9gAjXPHw=w697-h930-s-no-gm" 
+                    src="https://photos.fife.usercontent.google.com/pw/AP1GczMBaB7Xu7DTbn77bFtxDvKvppBFrkcyIeQHiGFxZd91Okx5N3ZNlbR6=w696-h928-s-no-gm?authuser=0" 
                     alt="Brendon Lightfoot"
                     className="w-full h-full object-cover"
                   />
                   <AvatarFallback className="text-4xl">BL</AvatarFallback>
                 </Avatar>
+                
+                {/* Animated decorative elements */}
+                <motion.div 
+                  className="absolute -top-4 -right-4 w-8 h-8 bg-blue-500 rounded-full opacity-70"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.7, 0.9, 0.7],
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+                <motion.div 
+                  className="absolute -bottom-3 -left-3 w-6 h-6 bg-purple-500 rounded-full opacity-60"
+                  animate={{
+                    scale: [1, 1.3, 1],
+                    opacity: [0.6, 0.8, 0.6],
+                  }}
+                  transition={{ duration: 2.5, delay: 0.5, repeat: Infinity }}
+                />
+                <motion.div 
+                  className="absolute top-5 -left-4 w-5 h-5 bg-yellow-400 rounded-full opacity-60"
+                  animate={{
+                    scale: [1, 1.4, 1],
+                    opacity: [0.6, 0.8, 0.6],
+                  }}
+                  transition={{ duration: 4, delay: 1, repeat: Infinity }}
+                />
               </motion.div>
             </div>
           </motion.div>
