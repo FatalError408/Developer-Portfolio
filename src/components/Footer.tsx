@@ -142,7 +142,7 @@ const Footer = () => {
             >
               <Heart size={16} className="text-red-500" />
             </motion.div>
-            <span>by JulianArtisan408</span>
+            by Brendon Julian Lightfoot
           </p>
         </div>
       </div>

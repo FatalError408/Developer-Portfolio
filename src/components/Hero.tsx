@@ -51,7 +51,7 @@ const Hero = () => {
               className="text-4xl md:text-5xl font-bold leading-tight"
               variants={itemVariants}
             >
-              Hi, I'm <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">JulianArtisan408</span>
+              Hi, I'm <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Brendon Julian Lightfoot</span>
               <span className="block mt-2 text-2xl md:text-3xl">Software Engineer, 28</span>
             </motion.h1>
             
@@ -114,11 +114,11 @@ const Hero = () => {
               >
                 <Avatar className="w-full h-full">
                   <AvatarImage 
-                    src="/lovable-uploads/400e435c-d0b5-4249-9f48-ecddcafc5226.png" 
-                    alt="Julian Artisan"
+                    src="https://photos.fife.usercontent.google.com/pw/AP1GczMBaB7Xu7DTbn77bFtxDvKvppBFrkcyIeQHiGFxZd91Okx5N3ZNlbR6=w696-h928-s-no-gm?authuser=0" 
+                    alt="Brendon Julian Lightfoot"
                     className="w-full h-full object-cover"
                   />
-                  <AvatarFallback className="text-4xl">JA</AvatarFallback>
+                  <AvatarFallback className="text-4xl">BJL</AvatarFallback>
                 </Avatar>
                 
                 {/* Animated decorative elements */}

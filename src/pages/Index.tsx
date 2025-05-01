@@ -11,19 +11,6 @@ import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ParticlesBackground from "@/components/ParticlesBackground";
-// Only import the standard components directly
-// Import 3D components conditionally to avoid initial rendering issues
-import { lazy, Suspense } from "react";
-
-// Define a fallback component for 3D elements
-const ThreeDFallback = () => (
-  <div className="w-full h-full flex items-center justify-center">
-    <div className="text-muted-foreground">Loading 3D elements...</div>
-  </div>
-);
-
-// Use dynamic import for 3D particle background
-const ParticlesBackground3D = lazy(() => import("@/components/ParticlesBackground3D"));
 
 const Index = () => {
   // Smooth scroll implementation
@@ -61,12 +48,6 @@ const Index = () => {
       variants={fadeIn}
     >
       <ParticlesBackground />
-      {/* Wrap 3D elements in error boundaries and suspense */}
-      <Suspense fallback={<div className="fixed inset-0 -z-10 opacity-50"></div>}>
-        <ErrorBoundary>
-          <ParticlesBackground3D />
-        </ErrorBoundary>
-      </Suspense>
       <Navbar />
       <main>
         <Hero />
@@ -81,14 +62,5 @@ const Index = () => {
     </motion.div>
   );
 };
-
-// Simple error boundary component
-function ErrorBoundary({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="error-boundary">
-      {children}
-    </div>
-  );
-}
 
 export default Index;
