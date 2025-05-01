@@ -114,7 +114,7 @@ const Hero = () => {
               >
                 <Avatar className="w-full h-full">
                   <AvatarImage 
-                    src="https://photos.fife.usercontent.google.com/pw/AP1GczMBaB7Xu7DTbn77bFtxDvKvppBFrkcyIeQHiGFxZd91Okx5N3ZNlbR6=w696-h928-s-no-gm?authuser=0" 
+                    src="/lovable-uploads/846d9dfe-30b4-4ff3-aac8-a361601dbd00.png" 
                     alt="Brendon Julian Lightfoot"
                     className="w-full h-full object-cover"
                   />

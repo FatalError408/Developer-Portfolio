@@ -1,6 +1,5 @@
-
 import { motion } from "framer-motion";
-import { Github, Linkedin, Twitter, Heart, Mail, MapPin, Phone, ChevronUp, Code } from "lucide-react";
+import { Github, Linkedin, Twitter, Mail, MapPin, Phone, ChevronUp, Code } from "lucide-react";
 import ScrollRevealWrapper from "./ScrollRevealWrapper";
 
 const Footer = () => {
@@ -133,16 +132,8 @@ const Footer = () => {
           <p className="text-muted-foreground text-sm">
             © {currentYear} JulianArtisan408. All rights reserved.
           </p>
-          <p className="text-muted-foreground text-sm mt-4 md:mt-0 flex items-center">
-            Designed & Built with 
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="mx-1"
-            >
-              <Heart size={16} className="text-red-500" />
-            </motion.div>
-            by Brendon Julian Lightfoot
+          <p className="text-muted-foreground text-sm mt-4 md:mt-0">
+            Designed & Built by Brendon Julian Lightfoot
           </p>
         </div>
       </div>
