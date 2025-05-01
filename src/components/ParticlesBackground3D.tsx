@@ -1,7 +1,6 @@
 
 import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
 interface PointsProps {
@@ -26,7 +25,7 @@ function ParticlePoints({ count = 2000 }: PointsProps) {
   });
 
   return (
-    <Points ref={points} limit={1500}>
+    <points ref={points}>
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
@@ -35,14 +34,15 @@ function ParticlePoints({ count = 2000 }: PointsProps) {
           itemSize={3}
         />
       </bufferGeometry>
-      <PointMaterial
-        transparent
+      <pointsMaterial
         color="#3b82f6"
         size={0.03}
         sizeAttenuation={true}
+        transparent={true}
+        opacity={0.8}
         depthWrite={false}
       />
-    </Points>
+    </points>
   );
 }
 

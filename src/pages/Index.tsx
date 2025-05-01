@@ -11,8 +11,18 @@ import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ParticlesBackground from "@/components/ParticlesBackground";
+// Only import the standard components directly
 // Import 3D components conditionally to avoid initial rendering issues
 import { lazy, Suspense } from "react";
+
+// Define a fallback component for 3D elements
+const ThreeDFallback = () => (
+  <div className="w-full h-full flex items-center justify-center">
+    <div className="text-muted-foreground">Loading 3D elements...</div>
+  </div>
+);
+
+// Use dynamic imports for 3D components
 const Interactive3D = lazy(() => import("@/components/Interactive3D"));
 const ParticlesBackground3D = lazy(() => import("@/components/ParticlesBackground3D"));
 
@@ -52,8 +62,11 @@ const Index = () => {
       variants={fadeIn}
     >
       <ParticlesBackground />
-      <Suspense fallback={<div>Loading 3D elements...</div>}>
-        <ParticlesBackground3D />
+      {/* Wrap 3D elements in error boundaries and suspense */}
+      <Suspense fallback={<div className="fixed inset-0 -z-10 opacity-50"></div>}>
+        <ErrorBoundary>
+          <ParticlesBackground3D />
+        </ErrorBoundary>
       </Suspense>
       <Navbar />
       <main>
@@ -62,7 +75,9 @@ const Index = () => {
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold mb-8 text-center">Interactive 3D Elements</h2>
             <Suspense fallback={<div className="h-96 w-full flex items-center justify-center">Loading 3D scene...</div>}>
-              <Interactive3D />
+              <ErrorBoundary>
+                <Interactive3D />
+              </ErrorBoundary>
             </Suspense>
           </div>
         </div>
@@ -77,5 +92,14 @@ const Index = () => {
     </motion.div>
   );
 };
+
+// Simple error boundary component
+function ErrorBoundary({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="error-boundary">
+      {children}
+    </div>
+  );
+}
 
 export default Index;
