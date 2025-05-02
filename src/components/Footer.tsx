@@ -15,18 +15,18 @@ const Footer = () => {
   
   return (
     <footer className="bg-dark-500 border-t border-dark-300 relative">
-      {/* Background elements */}
+      {/* Background elements with improved visuals */}
       <div className="absolute inset-0 opacity-20 bg-noise mix-blend-overlay pointer-events-none"></div>
       <div className="absolute left-0 top-0 w-full h-20 bg-gradient-to-t from-dark-500 to-transparent"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 relative z-10">
         <motion.div 
           className="absolute bottom-auto right-6 top-6 w-10 h-10 rounded-full border border-dark-200 bg-dark-300 flex items-center justify-center cursor-pointer hover:bg-dark-200 transition-colors duration-300"
-          whileHover={{ y: -5 }}
+          whileHover={{ y: -5, boxShadow: "0 5px 15px rgba(0, 0, 0, 0.2)" }}
           whileTap={{ scale: 0.9 }}
           onClick={scrollToTop}
         >
-          <ChevronUp className="w-5 h-5 text-muted-foreground" />
+          <ChevronUp className="w-5 h-5 text-blue" />
         </motion.div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -54,7 +54,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     className="w-9 h-9 rounded-full bg-dark-300/80 backdrop-blur-sm flex items-center justify-center text-gray-400 hover:text-white hover:bg-dark-200 transition-colors"
                     aria-label={social.label}
-                    whileHover={{ y: -5, scale: 1.1 }}
+                    whileHover={{ y: -5, scale: 1.1, boxShadow: "0 5px 15px rgba(0, 0, 0, 0.2)" }}
                     whileTap={{ scale: 0.9 }}
                   >
                     {social.icon}
