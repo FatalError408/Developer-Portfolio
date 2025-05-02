@@ -15,7 +15,7 @@ const ParticlesBackground = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
   
-  // Enhanced canvas matrix effect with better performance
+  // Enhanced canvas matrix effect with better performance and hover behavior
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -59,6 +59,7 @@ const ParticlesBackground = () => {
     const textTypes: number[] = [];
     const fontSizes = [12, 14, 16];
     const opacities: number[] = [];
+    const lastUpdatedChars: string[] = [];
     
     // Initialize arrays with varied parameters for better visual effect
     for (let i = 0; i < columns; i++) {
@@ -68,19 +69,21 @@ const ParticlesBackground = () => {
       
       // Create more vibrant blue-purple colors
       const hue = Math.random() * 40 + 220;  // Blue to purple range (220-260)
-      const saturation = Math.random() * 40 + 70;  // 70-110%
-      const lightness = Math.random() * 25 + 55;  // 55-80%
+      const saturation = Math.random() * 40 + 80;  // 80-120%
+      const lightness = Math.random() * 25 + 60;  // 60-85%
       colors[i] = `hsla(${hue}, ${saturation}%, ${lightness}%, 0.95)`;
       
       sizes[i] = fontSizes[Math.floor(Math.random() * fontSizes.length)];
       textTypes[i] = Math.random() > 0.8 ? 1 : 0;
-      opacities[i] = Math.random() * 0.4 + 0.6; // Higher base opacity for better visibility
+      opacities[i] = Math.random() * 0.5 + 0.6; // Higher base opacity for better visibility
+      lastUpdatedChars[i] = chars[Math.floor(Math.random() * chars.length)];
     }
     
     // Optimized draw function with better visuals and performance
+    // Fixed to ensure it doesn't disappear on mouse movement
     const draw = () => {
       // Semi-transparent black background for trail effect - more transparent for better legibility
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.035)';
       ctx.fillRect(0, 0, canvas.width / (window.devicePixelRatio || 1), canvas.height / (window.devicePixelRatio || 1));
       
       // Calculate distance from mouse for enhanced interactive glow
@@ -104,10 +107,15 @@ const ParticlesBackground = () => {
           glowIntensity = 1 - (distance / mouseRadius);
         }
         
+        // Update character every few frames for a more dynamic effect
+        if (Math.random() > 0.9) {
+          lastUpdatedChars[i] = chars[Math.floor(Math.random() * chars.length)];
+        }
+        
         // Draw character with enhanced glow effect
         if (textTypes[i] === 0) {
           // Regular characters
-          const text = chars[Math.floor(Math.random() * chars.length)];
+          const text = lastUpdatedChars[i];
           
           // Apply enhanced glow effect near mouse
           if (glowIntensity > 0) {
@@ -150,7 +158,7 @@ const ParticlesBackground = () => {
           if (Math.random() > 0.8) {
             speeds[i] = Math.random() * (window.innerWidth > 768 ? 0.8 : 0.5) + (window.innerWidth > 768 ? 0.5 : 0.3);
             textTypes[i] = Math.random() > 0.8 ? 1 : 0;
-            opacities[i] = Math.random() * 0.4 + 0.6;
+            opacities[i] = Math.random() * 0.5 + 0.6;
           }
         }
         
@@ -186,20 +194,21 @@ const ParticlesBackground = () => {
   
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* Canvas with improved visibility */}
+      {/* Canvas with improved visibility and high z-index to ensure it's always visible */}
       <canvas 
         ref={canvasRef} 
-        className="absolute inset-0 opacity-30"
+        className="absolute inset-0 opacity-35"
+        style={{ pointerEvents: "none" }} // Ensure it doesn't interfere with mouse events
       />
       
       {/* Enhanced floating particles with better responsiveness */}
-      {Array.from({ length: window.innerWidth > 768 ? 25 : 15 }).map((_, i) => {
-        const size = Math.random() * 3 + 1;
-        const isBlue = Math.random() > 0.6;
-        const isPurple = Math.random() > 0.8;
+      {Array.from({ length: window.innerWidth > 768 ? 30 : 18 }).map((_, i) => {
+        const size = Math.random() * 3.5 + 1;
+        const isBlue = Math.random() > 0.5;
+        const isPurple = Math.random() > 0.7;
         const isYellow = !isBlue && !isPurple;
         const color = isBlue ? "#4B92F6" : isPurple ? "#9861F9" : "#EAB308";
-        const opacity = Math.random() * 0.2 + 0.15;
+        const opacity = Math.random() * 0.25 + 0.2;
         
         return (
           <motion.div
@@ -212,7 +221,8 @@ const ParticlesBackground = () => {
               opacity: opacity,
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
-              filter: `blur(${Math.random() > 0.7 ? 1 : 0}px)`
+              filter: `blur(${Math.random() > 0.7 ? 1 : 0}px)`,
+              pointerEvents: "none" // Ensure particles don't block mouse events
             }}
             animate={{
               x: [0, Math.random() * 200 - 100],
@@ -230,7 +240,7 @@ const ParticlesBackground = () => {
       
       {/* Enhanced mouse follower effect with smoother transitions */}
       <motion.div 
-        className="absolute w-96 h-96 rounded-full bg-blue/10 filter blur-3xl"
+        className="absolute w-96 h-96 rounded-full bg-blue/10 filter blur-3xl pointer-events-none"
         animate={{
           x: mousePosition.x - 192,
           y: mousePosition.y - 192,
@@ -244,7 +254,7 @@ const ParticlesBackground = () => {
       />
       
       <motion.div 
-        className="absolute w-64 h-64 rounded-full bg-purple/10 filter blur-2xl"
+        className="absolute w-64 h-64 rounded-full bg-purple/10 filter blur-2xl pointer-events-none"
         animate={{
           x: mousePosition.x - 128,
           y: mousePosition.y - 128,
@@ -258,9 +268,9 @@ const ParticlesBackground = () => {
       />
       
       {/* Enhanced gradient orbs with more vibrant colors */}
-      <div className="absolute top-1/4 -right-40 w-96 h-96 bg-yellow/15 rounded-full filter blur-3xl animate-pulse-glow" />
-      <div className="absolute bottom-1/4 -left-40 w-96 h-96 bg-blue/15 rounded-full filter blur-3xl animate-pulse-glow animation-delay-1000" />
-      <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-purple/12 rounded-full filter blur-2xl animate-pulse-glow animation-delay-1500" />
+      <div className="absolute top-1/4 -right-40 w-96 h-96 bg-yellow/15 rounded-full filter blur-3xl animate-pulse-glow pointer-events-none" />
+      <div className="absolute bottom-1/4 -left-40 w-96 h-96 bg-blue/15 rounded-full filter blur-3xl animate-pulse-glow animation-delay-1000 pointer-events-none" />
+      <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-purple/12 rounded-full filter blur-2xl animate-pulse-glow animation-delay-1500 pointer-events-none" />
     </div>
   );
 };
