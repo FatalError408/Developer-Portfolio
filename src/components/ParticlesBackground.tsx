@@ -168,11 +168,11 @@ const ParticlesBackground = () => {
       {/* Canvas for enhanced code rain effect */}
       <canvas 
         ref={canvasRef} 
-        className="absolute inset-0 opacity-20"
+        className="absolute inset-0 opacity-25"
       />
       
       {/* Enhanced floating particles with varied effects */}
-      {Array.from({ length: 18 }).map((_, i) => {
+      {Array.from({ length: 20 }).map((_, i) => {
         const size = Math.random() * 3 + 1;
         const isBlue = Math.random() > 0.6;
         const isPurple = Math.random() > 0.8;

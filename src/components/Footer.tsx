@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Github, Linkedin, Twitter, Mail, MapPin, Phone, ChevronUp, Code } from "lucide-react";
 import ScrollRevealWrapper from "./ScrollRevealWrapper";
