@@ -91,32 +91,15 @@ const ParticlesBackground = () => {
     }
     
     // Optimized draw function with better visuals and performance
-    // Fixed to ensure it doesn't disappear on mouse movement
     const draw = () => {
       // Semi-transparent black background for trail effect - more transparent for better legibility
       ctx.fillStyle = 'rgba(0, 0, 0, 0.035)';
       ctx.fillRect(0, 0, canvas.width / (window.devicePixelRatio || 1), canvas.height / (window.devicePixelRatio || 1));
       
-      // Calculate distance from mouse for enhanced interactive glow
-      const mouseX = mousePosition.x;
-      const mouseY = mousePosition.y;
-      const mouseRadius = window.innerWidth > 768 ? 150 : 100; // Reduced area of influence
-      
       // For each column with optimized rendering
       for (let i = 0; i < drops.length; i++) {
         const x = i * columnWidth;
         const y = drops[i] * sizes[i];
-        
-        // Calculate distance to mouse - only for subtle effects, not disappearing
-        const dx = mouseX - x;
-        const dy = mouseY - y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        let glowIntensity = 0;
-        
-        if (distance < mouseRadius) {
-          // Subtle glow effect - reduced intensity to avoid disappearing
-          glowIntensity = Math.min(0.6, (1 - (distance / mouseRadius)) * 0.6);
-        }
         
         // Update character every few frames for a more dynamic effect
         if (Math.random() > 0.9) {
@@ -128,16 +111,8 @@ const ParticlesBackground = () => {
           // Regular characters
           const text = lastUpdatedChars[i];
           
-          // Apply subtle glow effect near mouse
-          if (glowIntensity > 0) {
-            ctx.shadowBlur = 12 * glowIntensity;
-            ctx.shadowColor = "rgba(140, 210, 255, 0.6)";
-            ctx.fillStyle = `rgba(220, 240, 255, ${0.5 * glowIntensity + 0.6})`;
-          } else {
-            ctx.shadowBlur = 0;
-            ctx.fillStyle = colors[i];
-          }
-          
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = colors[i];
           ctx.font = `${sizes[i]}px "Fira Code", monospace`;
           ctx.globalAlpha = Math.max(0.4, opacities[i]); // Ensure minimum opacity for visibility
           ctx.fillText(text, x, y);
@@ -146,16 +121,8 @@ const ParticlesBackground = () => {
           // Code snippets (less frequent)
           const snippet = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
           
-          // Different style for snippets - more pronounced but still visible
-          if (glowIntensity > 0) {
-            ctx.shadowBlur = 12 * glowIntensity;
-            ctx.shadowColor = "rgba(160, 120, 255, 0.6)";
-            ctx.fillStyle = `rgba(230, 210, 255, ${0.5 * glowIntensity + 0.5})`;
-          } else {
-            ctx.shadowBlur = 0;
-            ctx.fillStyle = "rgba(186, 140, 255, 0.9)"; // More vibrant purple for snippets
-          }
-          
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = "rgba(186, 140, 255, 0.9)"; // More vibrant purple for snippets
           ctx.font = `bold ${sizes[i]}px "Fira Code", monospace`;
           ctx.globalAlpha = Math.max(0.5, opacities[i]); // Ensure minimum opacity
           ctx.fillText(snippet, x, y);
@@ -208,26 +175,39 @@ const ParticlesBackground = () => {
       {/* Canvas with improved visibility and higher opacity */}
       <canvas 
         ref={canvasRef} 
-        className="absolute inset-0 opacity-45"
+        className="absolute inset-0 opacity-55"
         style={{ pointerEvents: "none" }} 
       />
       
-      {/* Fixed floating particles that don't react to mouse movement */}
-      {Array.from({ length: window.innerWidth > 768 ? 30 : 18 }).map((_, i) => {
-        const size = Math.random() * 3.5 + 1;
-        const isBlue = Math.random() > 0.5;
-        const isPurple = Math.random() > 0.7;
-        const isYellow = !isBlue && !isPurple;
-        const color = isBlue ? "#4B92F6" : isPurple ? "#9861F9" : "#EAB308";
-        const opacity = Math.random() * 0.25 + 0.2;
+      {/* Fixed floating particles that DON'T react to mouse movement */}
+      {Array.from({ length: window.innerWidth > 768 ? 40 : 25 }).map((_, i) => {
+        const size = Math.random() * 4 + 1.5;
         
-        // Generate unique positions for each particle that won't change
+        // Better color distribution with enhanced palette
+        const colorRoll = Math.random();
+        let color;
+        
+        if (colorRoll < 0.4) {
+          color = "#9b87f5"; // Primary Purple
+        } else if (colorRoll < 0.6) {
+          color = "#8B5CF6"; // Vivid Purple
+        } else if (colorRoll < 0.8) {
+          color = "#1EAEDB"; // Bright Blue
+        } else {
+          color = "#6E59A5"; // Tertiary Purple
+        }
+        
+        const opacity = Math.random() * 0.35 + 0.25;
+        
+        // Fixed positions that don't change with mouse movement
         const top = `${Math.random() * 100}%`;
         const left = `${Math.random() * 100}%`;
-        // Create unique animation parameters
-        const xMove = Math.random() * 200 - 100;
-        const yMove = Math.random() * 200 - 100;
-        const duration = Math.random() * 15 + 10;
+        
+        // More natural, varied movements that are completely independent from mouse position
+        const xMove = Math.random() * 180 - 90;
+        const yMove = Math.random() * 180 - 90;
+        const duration = Math.random() * 20 + 15; // Slower, more subtle movement
+        const delay = Math.random() * -15; // Random starting positions in animation cycle
         
         return (
           <motion.div
@@ -243,43 +223,43 @@ const ParticlesBackground = () => {
               filter: `blur(${Math.random() > 0.7 ? 1 : 0}px)`,
               pointerEvents: "none"
             }}
-            initial={{ 
-              top: top,
-              left: left
-            }}
+            initial={{ opacity: 0 }}
             animate={{
-              x: [0, xMove],
-              y: [0, yMove],
-              opacity: [opacity, opacity * 2.5, opacity],
+              x: [0, xMove, 0, -xMove / 1.5, 0], // More complex movement pattern
+              y: [0, yMove, -yMove / 2, yMove / 1.5, 0],
+              opacity: [opacity, opacity * 2, opacity * 1.5, opacity], // Subtle pulsing
             }}
             transition={{
               duration: duration,
               repeat: Infinity,
-              repeatType: "reverse",
+              ease: "easeInOut",
+              delay: delay,
+              times: [0, 0.25, 0.5, 0.75, 1] // Control timing of animation sequence
             }}
           />
         );
       })}
       
-      {/* More subtle mouse follower effect */}
+      {/* Subtle gradient orbs in background - not tied to mouse movement */}
+      <div className="absolute top-1/4 -right-32 w-96 h-96 bg-yellow-400/10 rounded-full filter blur-3xl animate-pulse-slow pointer-events-none" />
+      <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-blue-500/10 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1000 pointer-events-none" />
+      <div className="absolute top-2/3 right-1/4 w-80 h-80 bg-purple-500/8 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1500 pointer-events-none" />
+      <div className="absolute top-1/3 left-1/3 w-64 h-64 bg-indigo-600/5 rounded-full filter blur-3xl animate-pulse-slow animation-delay-2000 pointer-events-none" />
+      
+      {/* Subtle mouse follower that doesn't affect other elements */}
       <motion.div 
-        className="absolute w-64 h-64 rounded-full bg-blue-500/5 filter blur-3xl pointer-events-none"
+        className="absolute w-72 h-72 rounded-full bg-blue-500/5 filter blur-3xl pointer-events-none"
         animate={{
-          x: mousePosition.x - 128,
-          y: mousePosition.y - 128,
+          x: mousePosition.x - 144,
+          y: mousePosition.y - 144,
         }}
         transition={{
           type: "spring",
-          damping: 25,
-          stiffness: 120,
-          mass: 3.5, // Heavier for slower movement
+          damping: 30,
+          stiffness: 90,
+          mass: 4.5, // Even heavier for smoother, less noticeable movement
         }}
       />
-      
-      {/* Fixed gradient orbs in background */}
-      <div className="absolute top-1/4 -right-40 w-96 h-96 bg-yellow-400/8 rounded-full filter blur-3xl animate-pulse-slow pointer-events-none" />
-      <div className="absolute bottom-1/4 -left-40 w-96 h-96 bg-blue-500/8 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1000 pointer-events-none" />
-      <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-purple-500/8 rounded-full filter blur-2xl animate-pulse-slow animation-delay-1500 pointer-events-none" />
     </div>
   );
 };
