@@ -6,16 +6,27 @@ const ParticlesBackground = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
+  // Throttle mouse movement to reduce performance impact
   useEffect(() => {
+    let timeoutId: number | null = null;
+    
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      if (timeoutId) return; // Skip if we're throttling
+      
+      timeoutId = window.setTimeout(() => {
+        setMousePosition({ x: e.clientX, y: e.clientY });
+        timeoutId = null;
+      }, 100); // Only update every 100ms
     };
     
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
   }, []);
   
-  // Enhanced canvas matrix effect with better performance and hover behavior
+  // Enhanced canvas matrix effect with better performance and persistent behavior
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -49,7 +60,7 @@ const ParticlesBackground = () => {
     
     // Optimize for better performance on different screens
     const columnWidth = 14;
-    const columns = Math.floor(window.innerWidth / columnWidth);
+    const columns = Math.ceil(window.innerWidth / columnWidth);
     
     // Arrays to track data for each column
     const drops: number[] = [];
@@ -89,22 +100,22 @@ const ParticlesBackground = () => {
       // Calculate distance from mouse for enhanced interactive glow
       const mouseX = mousePosition.x;
       const mouseY = mousePosition.y;
-      const mouseRadius = window.innerWidth > 768 ? 180 : 120; // Responsive area of influence
+      const mouseRadius = window.innerWidth > 768 ? 150 : 100; // Reduced area of influence
       
       // For each column with optimized rendering
       for (let i = 0; i < drops.length; i++) {
         const x = i * columnWidth;
         const y = drops[i] * sizes[i];
         
-        // Calculate distance to mouse
+        // Calculate distance to mouse - only for subtle effects, not disappearing
         const dx = mouseX - x;
         const dy = mouseY - y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         let glowIntensity = 0;
         
         if (distance < mouseRadius) {
-          // Stronger glow effect
-          glowIntensity = 1 - (distance / mouseRadius);
+          // Subtle glow effect - reduced intensity to avoid disappearing
+          glowIntensity = Math.min(0.6, (1 - (distance / mouseRadius)) * 0.6);
         }
         
         // Update character every few frames for a more dynamic effect
@@ -112,41 +123,41 @@ const ParticlesBackground = () => {
           lastUpdatedChars[i] = chars[Math.floor(Math.random() * chars.length)];
         }
         
-        // Draw character with enhanced glow effect
+        // Draw character with enhanced glow effect - always visible
         if (textTypes[i] === 0) {
           // Regular characters
           const text = lastUpdatedChars[i];
           
-          // Apply enhanced glow effect near mouse
+          // Apply subtle glow effect near mouse
           if (glowIntensity > 0) {
-            ctx.shadowBlur = 18 * glowIntensity;
-            ctx.shadowColor = "rgba(140, 210, 255, 0.9)";
-            ctx.fillStyle = `rgba(220, 240, 255, ${0.8 * glowIntensity + 0.2})`;
+            ctx.shadowBlur = 12 * glowIntensity;
+            ctx.shadowColor = "rgba(140, 210, 255, 0.6)";
+            ctx.fillStyle = `rgba(220, 240, 255, ${0.5 * glowIntensity + 0.6})`;
           } else {
             ctx.shadowBlur = 0;
             ctx.fillStyle = colors[i];
           }
           
           ctx.font = `${sizes[i]}px "Fira Code", monospace`;
-          ctx.globalAlpha = opacities[i];
+          ctx.globalAlpha = Math.max(0.4, opacities[i]); // Ensure minimum opacity for visibility
           ctx.fillText(text, x, y);
           ctx.globalAlpha = 1;
         } else {
           // Code snippets (less frequent)
           const snippet = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
           
-          // Different style for snippets - more pronounced
+          // Different style for snippets - more pronounced but still visible
           if (glowIntensity > 0) {
-            ctx.shadowBlur = 18 * glowIntensity;
-            ctx.shadowColor = "rgba(160, 120, 255, 0.95)";
-            ctx.fillStyle = `rgba(230, 210, 255, ${0.85 * glowIntensity + 0.15})`;
+            ctx.shadowBlur = 12 * glowIntensity;
+            ctx.shadowColor = "rgba(160, 120, 255, 0.6)";
+            ctx.fillStyle = `rgba(230, 210, 255, ${0.5 * glowIntensity + 0.5})`;
           } else {
             ctx.shadowBlur = 0;
             ctx.fillStyle = "rgba(186, 140, 255, 0.9)"; // More vibrant purple for snippets
           }
           
           ctx.font = `bold ${sizes[i]}px "Fira Code", monospace`;
-          ctx.globalAlpha = opacities[i];
+          ctx.globalAlpha = Math.max(0.5, opacities[i]); // Ensure minimum opacity
           ctx.fillText(snippet, x, y);
           ctx.globalAlpha = 1;
         }
@@ -190,18 +201,18 @@ const ParticlesBackground = () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', setCanvasDimensions);
     };
-  }, [mousePosition]);
+  }, []); // Removed mousePosition dependency to avoid reinitialization on mouse move
   
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* Canvas with improved visibility and high z-index to ensure it's always visible */}
+      {/* Canvas with improved visibility and higher opacity */}
       <canvas 
         ref={canvasRef} 
-        className="absolute inset-0 opacity-35"
-        style={{ pointerEvents: "none" }} // Ensure it doesn't interfere with mouse events
+        className="absolute inset-0 opacity-45"
+        style={{ pointerEvents: "none" }} 
       />
       
-      {/* Enhanced floating particles with better responsiveness */}
+      {/* Fixed floating particles that don't react to mouse movement */}
       {Array.from({ length: window.innerWidth > 768 ? 30 : 18 }).map((_, i) => {
         const size = Math.random() * 3.5 + 1;
         const isBlue = Math.random() > 0.5;
@@ -209,6 +220,14 @@ const ParticlesBackground = () => {
         const isYellow = !isBlue && !isPurple;
         const color = isBlue ? "#4B92F6" : isPurple ? "#9861F9" : "#EAB308";
         const opacity = Math.random() * 0.25 + 0.2;
+        
+        // Generate unique positions for each particle that won't change
+        const top = `${Math.random() * 100}%`;
+        const left = `${Math.random() * 100}%`;
+        // Create unique animation parameters
+        const xMove = Math.random() * 200 - 100;
+        const yMove = Math.random() * 200 - 100;
+        const duration = Math.random() * 15 + 10;
         
         return (
           <motion.div
@@ -219,18 +238,22 @@ const ParticlesBackground = () => {
               height: `${size}px`,
               background: color,
               opacity: opacity,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
+              top: top,
+              left: left,
               filter: `blur(${Math.random() > 0.7 ? 1 : 0}px)`,
-              pointerEvents: "none" // Ensure particles don't block mouse events
+              pointerEvents: "none"
+            }}
+            initial={{ 
+              top: top,
+              left: left
             }}
             animate={{
-              x: [0, Math.random() * 200 - 100],
-              y: [0, Math.random() * 200 - 100],
+              x: [0, xMove],
+              y: [0, yMove],
               opacity: [opacity, opacity * 2.5, opacity],
             }}
             transition={{
-              duration: Math.random() * 15 + 10,
+              duration: duration,
               repeat: Infinity,
               repeatType: "reverse",
             }}
@@ -238,39 +261,25 @@ const ParticlesBackground = () => {
         );
       })}
       
-      {/* Enhanced mouse follower effect with smoother transitions */}
+      {/* More subtle mouse follower effect */}
       <motion.div 
-        className="absolute w-96 h-96 rounded-full bg-blue/10 filter blur-3xl pointer-events-none"
-        animate={{
-          x: mousePosition.x - 192,
-          y: mousePosition.y - 192,
-        }}
-        transition={{
-          type: "spring",
-          damping: 25,
-          stiffness: 150,
-          mass: 2.5,
-        }}
-      />
-      
-      <motion.div 
-        className="absolute w-64 h-64 rounded-full bg-purple/10 filter blur-2xl pointer-events-none"
+        className="absolute w-64 h-64 rounded-full bg-blue-500/5 filter blur-3xl pointer-events-none"
         animate={{
           x: mousePosition.x - 128,
           y: mousePosition.y - 128,
         }}
         transition={{
           type: "spring",
-          damping: 35,
-          stiffness: 200,
-          mass: 1.8,
+          damping: 25,
+          stiffness: 120,
+          mass: 3.5, // Heavier for slower movement
         }}
       />
       
-      {/* Enhanced gradient orbs with more vibrant colors */}
-      <div className="absolute top-1/4 -right-40 w-96 h-96 bg-yellow/15 rounded-full filter blur-3xl animate-pulse-glow pointer-events-none" />
-      <div className="absolute bottom-1/4 -left-40 w-96 h-96 bg-blue/15 rounded-full filter blur-3xl animate-pulse-glow animation-delay-1000 pointer-events-none" />
-      <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-purple/12 rounded-full filter blur-2xl animate-pulse-glow animation-delay-1500 pointer-events-none" />
+      {/* Fixed gradient orbs in background */}
+      <div className="absolute top-1/4 -right-40 w-96 h-96 bg-yellow-400/8 rounded-full filter blur-3xl animate-pulse-slow pointer-events-none" />
+      <div className="absolute bottom-1/4 -left-40 w-96 h-96 bg-blue-500/8 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1000 pointer-events-none" />
+      <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-purple-500/8 rounded-full filter blur-2xl animate-pulse-slow animation-delay-1500 pointer-events-none" />
     </div>
   );
 };
