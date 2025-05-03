@@ -61,14 +61,14 @@ const Index = () => {
         <Skills />
         
         {/* Projects section with matrix background */}
-        <MatrixBackgroundSection intensity="low" particleCount={20}>
+        <MatrixBackgroundSection intensity="high" particleCount={30}>
           <Projects />
         </MatrixBackgroundSection>
         
         <GitHubRepositories />
         
         {/* Experience section with matrix background */}
-        <MatrixBackgroundSection intensity="high" particleCount={30}>
+        <MatrixBackgroundSection intensity="medium" particleCount={25}>
           <Experience />
         </MatrixBackgroundSection>
         
