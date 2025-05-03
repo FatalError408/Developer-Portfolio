@@ -48,32 +48,37 @@ const Index = () => {
       animate="visible"
       variants={fadeIn}
     >
+      {/* Global particles background with matrix rain effect */}
       <ParticlesBackground />
+      
       <Navbar />
+      
       <main className="relative z-10">
+        {/* Hero section with default particles */}
         <Hero />
         
-        {/* About section with matrix background */}
-        <MatrixBackgroundSection intensity="medium" particleCount={25}>
+        {/* About section with enhanced matrix background */}
+        <MatrixBackgroundSection intensity="medium" particleCount={35}>
           <About />
         </MatrixBackgroundSection>
         
         <Skills />
         
-        {/* Projects section with matrix background */}
-        <MatrixBackgroundSection intensity="high" particleCount={30}>
+        {/* Projects section with high intensity matrix effect */}
+        <MatrixBackgroundSection intensity="high" particleCount={40}>
           <Projects />
         </MatrixBackgroundSection>
         
         <GitHubRepositories />
         
-        {/* Experience section with matrix background */}
-        <MatrixBackgroundSection intensity="medium" particleCount={25}>
+        {/* Experience section with medium matrix background */}
+        <MatrixBackgroundSection intensity="medium" particleCount={30}>
           <Experience />
         </MatrixBackgroundSection>
         
         <Contact />
       </main>
+      
       <Footer />
     </motion.div>
   );

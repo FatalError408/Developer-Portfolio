@@ -28,29 +28,51 @@ const MatrixBackgroundSection = ({
     }
   };
   
-  // Matrix rain effect
+  // Matrix rain effect with performance optimization
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
-    const ctx = canvas.getContext('2d', { alpha: true });
+    const ctx = canvas.getContext('2d', { 
+      alpha: true,
+      desynchronized: true, // Hardware acceleration where available
+    });
     if (!ctx) return;
     
     // Set canvas dimensions
     const setCanvasDimensions = () => {
-      if (canvas && canvas.parentElement) {
-        const rect = canvas.parentElement.getBoundingClientRect();
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        canvas.style.width = `${rect.width}px`;
-        canvas.style.height = `${rect.height}px`;
-        ctx.scale(dpr, dpr);
-      }
+      if (!canvas || !canvas.parentElement) return;
+      
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      
+      // Set actual dimensions accounting for device pixel ratio
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      
+      // Set display size
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${rect.height}px`;
+      
+      // Scale context for hi-DPI displays
+      ctx.scale(dpr, dpr);
+      
+      // Clear canvas when resizing
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      
+      console.log("Section canvas dimensions updated", rect.width, rect.height);
     };
     
     setCanvasDimensions();
-    window.addEventListener('resize', setCanvasDimensions);
+    
+    // Debounce resize for better performance
+    let resizeTimer: number;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(setCanvasDimensions, 200);
+    };
+    
+    window.addEventListener('resize', handleResize);
     
     // Matrix rain effect
     const settings = getIntensitySettings();
@@ -61,51 +83,47 @@ const MatrixBackgroundSection = ({
       "<div>", "</div>", "<span>", "{props}", "useState", "useEffect"
     ];
     
-    const columnWidth = 14;
+    // Optimize columns based on screen width and performance
+    const columnWidth = Math.max(14, Math.floor(window.innerWidth / 120));
     const columns = Math.ceil((canvas.width / window.devicePixelRatio) / columnWidth);
     
-    // Arrays for columns
-    const drops: number[] = [];
-    const speeds: number[] = [];
-    const colors: string[] = [];
-    const sizes: number[] = [];
-    const textTypes: number[] = [];
-    const fontSizes = [12, 14, 16];
-    
-    // Initialize arrays with varied parameters
-    for (let i = 0; i < columns; i++) {
-      drops[i] = Math.random() * -100;
-      speeds[i] = Math.random() * settings.speed + 0.35;
-      
-      // Create vibrant blue-purple gradient colors
-      const hue = Math.random() * 40 + 220; // Blue to purple range (220-260)
-      const saturation = Math.random() * 40 + 80; // 80-120%
-      const lightness = Math.random() * 25 + 60; // 60-85%
-      colors[i] = `hsla(${hue}, ${saturation}%, ${lightness}%, ${settings.opacity})`;
-      
-      sizes[i] = fontSizes[Math.floor(Math.random() * fontSizes.length)];
-      textTypes[i] = Math.random() > 0.8 ? 1 : 0; // 20% chance for code snippets
-    }
+    // Pre-allocate arrays for better performance
+    const drops = new Array(columns).fill(0).map(() => Math.random() * -100);
+    const speeds = new Array(columns).fill(0).map(() => Math.random() * settings.speed + 0.35);
+    const colors = new Array(columns).fill('').map(() => {
+      const hue = Math.random() * 40 + 220; // Blue to purple range
+      const saturation = Math.random() * 40 + 80; 
+      const lightness = Math.random() * 25 + 60;
+      return `hsla(${hue}, ${saturation}%, ${lightness}%, ${settings.opacity})`;
+    });
+    const sizes = new Array(columns).fill(0).map(() => [12, 14, 16][Math.floor(Math.random() * 3)]);
+    const textTypes = new Array(columns).fill(0).map(() => Math.random() > 0.8 ? 1 : 0);
+    const chars_to_draw = new Array(columns).fill('').map(() => chars[Math.floor(Math.random() * chars.length)]);
     
     const draw = () => {
-      // Semi-transparent background for trail effect
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
-      ctx.fillRect(0, 0, canvas.width / (window.devicePixelRatio || 1), canvas.height / (window.devicePixelRatio || 1));
+      // Semi-transparent background for trail effect - adjusted for visibility
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+      ctx.fillRect(0, 0, canvas.width / window.devicePixelRatio, canvas.height / window.devicePixelRatio);
       
       // Draw each column
       for (let i = 0; i < drops.length; i++) {
         const x = i * columnWidth;
         const y = drops[i] * sizes[i];
         
-        // Use code snippets or random characters
+        // Use pre-calculated characters for better performance, update occasionally
+        if (Math.random() > 0.95) {
+          chars_to_draw[i] = chars[Math.floor(Math.random() * chars.length)];
+        }
+        
+        // Choose what to draw - code snippet or character
         let text;
         if (textTypes[i] === 1) {
           text = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
         } else {
-          text = chars[Math.floor(Math.random() * chars.length)];
+          text = chars_to_draw[i];
         }
         
-        // Add glow effect for some characters
+        // Add occasional glow effect
         if (Math.random() > 0.95) {
           ctx.shadowColor = "rgba(155, 135, 245, 0.8)";
           ctx.shadowBlur = settings.glow;
@@ -118,7 +136,7 @@ const MatrixBackgroundSection = ({
         ctx.fillText(text, x, y);
         
         // Reset when off screen
-        if (y > canvas.height / (window.devicePixelRatio || 1) && Math.random() > 0.98) {
+        if (y > canvas.height / window.devicePixelRatio && Math.random() > 0.98) {
           drops[i] = 0;
         }
         
@@ -130,13 +148,13 @@ const MatrixBackgroundSection = ({
     // Animation loop with optimized framerate
     let animationFrameId: number;
     let lastTime = 0;
-    const fps = 30;
+    const fps = window.innerWidth > 768 ? 30 : 20; // Lower FPS on mobile devices
     const fpsInterval = 1000 / fps;
     
     const animate = (currentTime: number) => {
       animationFrameId = requestAnimationFrame(animate);
       
-      // Throttle frame rate
+      // Throttle frame rate for performance
       const elapsed = currentTime - lastTime;
       if (elapsed > fpsInterval) {
         lastTime = currentTime - (elapsed % fpsInterval);
@@ -148,21 +166,22 @@ const MatrixBackgroundSection = ({
     
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', setCanvasDimensions);
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimer);
     };
   }, [intensity]);
   
   return (
-    <div className="relative overflow-hidden">
-      {/* Matrix canvas background */}
+    <div className="relative overflow-hidden py-12">
+      {/* Matrix canvas background with increased opacity */}
       <canvas 
         ref={canvasRef}
-        className="absolute inset-0 opacity-70 pointer-events-none"
+        className="absolute inset-0 opacity-80 pointer-events-none"
       />
       
-      {/* Enhanced floating particles - bigger, more vibrant and more variety */}
-      {Array.from({ length: particleCount }).map((_, i) => {
-        const size = Math.random() * 5 + 2;
+      {/* Enhanced floating particles with better performance */}
+      {Array.from({ length: Math.min(particleCount, 40) }).map((_, i) => {
+        const size = Math.random() * 4 + 2;
         
         // Enhanced color distribution with more vibrant colors
         const colorRoll = Math.random();
@@ -177,18 +196,17 @@ const MatrixBackgroundSection = ({
         } else if (colorRoll < 0.85) {
           color = "#6E59A5"; // Tertiary Purple
         } else {
-          // Occasionally add a bright highlight color
           color = "#50E3C2"; // Bright Cyan
         }
         
-        const opacity = Math.random() * 0.4 + 0.3; // More visible particles
+        const opacity = Math.random() * 0.5 + 0.3;
         const top = `${Math.random() * 100}%`;
         const left = `${Math.random() * 100}%`;
         
-        // More varied and natural movement patterns
-        const xMove = Math.random() * 200 - 100;
-        const yMove = Math.random() * 200 - 100;
-        const duration = Math.random() * 25 + 15;
+        // Optimized movement patterns
+        const xMove = Math.random() * 100 - 50;
+        const yMove = Math.random() * 100 - 50;
+        const duration = Math.random() * 20 + 15;
         const delay = Math.random() * -15;
         
         return (
@@ -209,24 +227,21 @@ const MatrixBackgroundSection = ({
             animate={{
               x: [0, xMove, 0, -xMove / 1.5, 0],
               y: [0, yMove, -yMove / 2, yMove / 1.5, 0],
-              opacity: [opacity, opacity * 2, opacity * 1.5, opacity],
-              scale: Math.random() > 0.8 ? [1, 1.2, 0.9, 1.1, 1] : [1, 1, 1, 1, 1],
+              opacity: [opacity, opacity * 1.5, opacity],
             }}
             transition={{
               duration: duration,
               repeat: Infinity,
               ease: "easeInOut",
               delay: delay,
-              times: [0, 0.25, 0.5, 0.75, 1]
             }}
           />
         );
       })}
       
-      {/* Enhanced gradient orbs with smoother gradients and better blur effects */}
-      <div className="absolute top-1/4 -right-32 w-96 h-96 bg-gradient-radial from-blue-500/15 to-transparent rounded-full filter blur-3xl animate-pulse-slow pointer-events-none" />
-      <div className="absolute bottom-1/3 -left-24 w-80 h-80 bg-gradient-radial from-purple-500/15 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-1500 pointer-events-none" />
-      <div className="absolute top-2/3 left-1/4 w-72 h-72 bg-gradient-radial from-indigo-500/10 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-2000 pointer-events-none" />
+      {/* Simplified gradient orbs for better performance */}
+      <div className="absolute top-1/4 -right-32 w-96 h-96 bg-gradient-radial from-blue-500/15 to-transparent rounded-full filter blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/3 -left-24 w-80 h-80 bg-gradient-radial from-purple-500/15 to-transparent rounded-full filter blur-3xl pointer-events-none" />
       
       {/* Content with appropriate z-index to appear above background */}
       <div className="relative z-10">
