@@ -12,6 +12,7 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import MatrixBackgroundSection from "@/components/MatrixBackgroundSection";
+import ParticlesBackground3D from "@/components/ParticlesBackground3D";
 
 const Index = () => {
   // Smooth scroll implementation
@@ -50,6 +51,9 @@ const Index = () => {
     >
       {/* Global particles background with matrix rain effect */}
       <ParticlesBackground />
+      
+      {/* 3D matrix background for additional effect */}
+      <ParticlesBackground3D />
       
       <Navbar />
       

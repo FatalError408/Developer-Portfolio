@@ -15,6 +15,7 @@ function CodeParticles({ count = 3000 }: PointsProps) {
   const positions = new Float32Array(count * 3);
   const speeds = new Float32Array(count);
   const sizes = new Float32Array(count);
+  const colors = new Float32Array(count * 3);
   
   // Set up particles in a more structured grid-like pattern
   for (let i = 0; i < count; i++) {
@@ -29,6 +30,11 @@ function CodeParticles({ count = 3000 }: PointsProps) {
     speeds[i] = 0.01 + Math.random() * 0.03;
     // Varying sizes for visual interest
     sizes[i] = Math.random() * 0.05 + 0.01;
+    
+    // Blue to purple color range
+    colors[i * 3] = 0.2 + Math.random() * 0.1; // r
+    colors[i * 3 + 1] = 0.3 + Math.random() * 0.2; // g
+    colors[i * 3 + 2] = 0.8 + Math.random() * 0.2; // b
   }
 
   useFrame(() => {
@@ -62,6 +68,12 @@ function CodeParticles({ count = 3000 }: PointsProps) {
           itemSize={3}
         />
         <bufferAttribute
+          attach="attributes-color"
+          array={colors}
+          count={count}
+          itemSize={3}
+        />
+        <bufferAttribute
           attach="attributes-size"
           array={sizes}
           count={count}
@@ -69,12 +81,13 @@ function CodeParticles({ count = 3000 }: PointsProps) {
         />
       </bufferGeometry>
       <pointsMaterial
-        color="#3b82f6"
-        size={0.02}
+        size={0.03}
         sizeAttenuation={true}
         transparent={true}
-        opacity={0.6}
+        opacity={0.7}
         depthWrite={false}
+        vertexColors={true}
+        blending={THREE.AdditiveBlending}
       />
     </points>
   );
@@ -82,9 +95,13 @@ function CodeParticles({ count = 3000 }: PointsProps) {
 
 const ParticlesBackground3D = () => {
   return (
-    <div className="fixed inset-0 -z-10 opacity-60">
-      <Canvas camera={{ position: [0, 0, 10], fov: 60 }}>
-        <CodeParticles count={2500} />
+    <div className="fixed inset-0 -z-10 opacity-50 pointer-events-none">
+      <Canvas 
+        camera={{ position: [0, 0, 10], fov: 60 }} 
+        dpr={[1, 2]} // Optimize performance with dynamic pixel ratio
+        performance={{ min: 0.5 }} // Further performance optimization
+      >
+        <CodeParticles count={window.innerWidth > 768 ? 2000 : 1000} />
       </Canvas>
     </div>
   );
