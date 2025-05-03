@@ -49,7 +49,7 @@ const Index = () => {
     >
       <ParticlesBackground />
       <Navbar />
-      <main>
+      <main className="relative z-10">
         <Hero />
         <About />
         <Skills />
