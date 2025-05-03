@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 
@@ -247,6 +246,9 @@ const ParticlesBackground = () => {
       <div className="absolute top-1/3 left-1/3 w-64 h-64 bg-indigo-600/5 rounded-full filter blur-3xl animate-pulse-slow animation-delay-2000 pointer-events-none" />
       <div className="absolute bottom-1/3 right-1/3 w-72 h-72 bg-blue-400/8 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1200 pointer-events-none" />
       <div className="absolute top-3/4 left-1/4 w-60 h-60 bg-purple-600/6 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1800 pointer-events-none" />
+      
+      {/* Add an additional large circular gradient for enhanced visual depth */}
+      <div className="absolute -top-64 -left-64 w-[40rem] h-[40rem] bg-gradient-radial from-blue-900/10 via-purple-900/5 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-2200 pointer-events-none" />
     </div>
   );
 };

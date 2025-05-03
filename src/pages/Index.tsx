@@ -11,6 +11,7 @@ import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ParticlesBackground from "@/components/ParticlesBackground";
+import MatrixBackgroundSection from "@/components/MatrixBackgroundSection";
 
 const Index = () => {
   // Smooth scroll implementation
@@ -51,11 +52,26 @@ const Index = () => {
       <Navbar />
       <main className="relative z-10">
         <Hero />
-        <About />
+        
+        {/* About section with matrix background */}
+        <MatrixBackgroundSection intensity="medium" particleCount={25}>
+          <About />
+        </MatrixBackgroundSection>
+        
         <Skills />
-        <Projects />
+        
+        {/* Projects section with matrix background */}
+        <MatrixBackgroundSection intensity="low" particleCount={20}>
+          <Projects />
+        </MatrixBackgroundSection>
+        
         <GitHubRepositories />
-        <Experience />
+        
+        {/* Experience section with matrix background */}
+        <MatrixBackgroundSection intensity="high" particleCount={30}>
+          <Experience />
+        </MatrixBackgroundSection>
+        
         <Contact />
       </main>
       <Footer />
