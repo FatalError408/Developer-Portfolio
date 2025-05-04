@@ -3,9 +3,6 @@ import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-// Safely check for window to avoid SSR issues
-const isBrowser = typeof window !== 'undefined';
-
 interface PointsProps {
   count: number;
 }
@@ -34,9 +31,9 @@ function CodeParticles({ count = 3000 }: PointsProps) {
     // Varying sizes for visual interest
     sizes[i] = Math.random() * 0.05 + 0.01;
     
-    // Blue to purple color range with more vibrance
-    colors[i * 3] = 0.2 + Math.random() * 0.2; // r - increased range
-    colors[i * 3 + 1] = 0.3 + Math.random() * 0.3; // g - increased range
+    // Blue to purple color range
+    colors[i * 3] = 0.2 + Math.random() * 0.1; // r
+    colors[i * 3 + 1] = 0.3 + Math.random() * 0.2; // g
     colors[i * 3 + 2] = 0.8 + Math.random() * 0.2; // b
   }
 
@@ -84,10 +81,10 @@ function CodeParticles({ count = 3000 }: PointsProps) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.05} // Increased size for more visibility
+        size={0.03}
         sizeAttenuation={true}
         transparent={true}
-        opacity={0.85} // Increased opacity
+        opacity={0.7}
         depthWrite={false}
         vertexColors={true}
         blending={THREE.AdditiveBlending}
@@ -97,16 +94,14 @@ function CodeParticles({ count = 3000 }: PointsProps) {
 }
 
 const ParticlesBackground3D = () => {
-  // Use safe default for window check
-  const particleCount = isBrowser && window.innerWidth > 768 ? 2000 : 1000;
-  
   return (
-    <div className="fixed inset-0 -z-10 opacity-70 pointer-events-none">
+    <div className="fixed inset-0 -z-10 opacity-50 pointer-events-none">
       <Canvas 
         camera={{ position: [0, 0, 10], fov: 60 }} 
-        dpr={[1, 1.5]} // More balanced performance setting
+        dpr={[1, 2]} // Optimize performance with dynamic pixel ratio
+        performance={{ min: 0.5 }} // Further performance optimization
       >
-        <CodeParticles count={particleCount} />
+        <CodeParticles count={window.innerWidth > 768 ? 2000 : 1000} />
       </Canvas>
     </div>
   );
