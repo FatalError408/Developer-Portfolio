@@ -10,133 +10,117 @@ interface PointsProps {
   count: number;
 }
 
-// Performance-optimized particles with reduced CPU usage
-function CodeParticles({ count = 3000 }: PointsProps) {
+// Highly optimized particles
+function CodeParticles({ count = 500 }: PointsProps) {
   const points = useRef<THREE.Points>(null!);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0, z: 0 });
   const frameCount = useRef(0);
+  const lastUpdateTime = useRef(0);
   
-  // Track mouse position with throttled updates for better performance
+  // Super throttled mouse position tracking
   useEffect(() => {
-    let timeoutId: number;
+    let timeoutId: number | null = null;
+    
     const handleMouseMove = (e: MouseEvent) => {
-      // Throttle mouse move events for better performance
-      if (timeoutId) return;
+      if (timeoutId !== null) return;
       
       timeoutId = window.setTimeout(() => {
         // Convert mouse position to normalized device coordinates (-1 to +1)
         const x = (e.clientX / window.innerWidth) * 2 - 1;
         const y = -(e.clientY / window.innerHeight) * 2 + 1;
         setMousePosition({ x, y, z: 0 });
-        timeoutId = 0;
-      }, 50); // Update at most every 50ms
+        timeoutId = null;
+      }, 100); // Very throttled - only update every 100ms
     };
     
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      if (timeoutId) window.clearTimeout(timeoutId);
+      if (timeoutId !== null) window.clearTimeout(timeoutId);
     };
   }, []);
   
-  // Create particles with memoization for better performance
-  const { positions, speeds, sizes, colors } = useMemo(() => {
+  // Extremely optimized particles with one-time setup
+  const { positions, colors, sizes } = useMemo(() => {
     const positions = new Float32Array(count * 3);
-    const speeds = new Float32Array(count);
-    const sizes = new Float32Array(count);
     const colors = new Float32Array(count * 3);
+    const sizes = new Float32Array(count);
     
-    // Setup more efficient grid pattern
+    // Spread particles in a more sparse pattern
     for (let i = 0; i < count; i++) {
-      // Create more defined "columns" of particles
-      positions[i * 3] = (Math.floor(i / 50) * 0.2) - 10 + (Math.random() * 0.1);
-      // Stagger vertical positions
-      positions[i * 3 + 1] = ((i % 50) * 0.3) - 7 + (Math.random() * 0.05);
-      // Add some depth variation
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 5;
+      // Create columns with greater spacing
+      positions[i * 3] = (Math.floor(i / 30) * 0.5) - 15 + (Math.random() * 0.3);
+      positions[i * 3 + 1] = ((i % 30) * 0.5) - 7 + (Math.random() * 0.2);
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 8;
       
-      // Varying speeds for natural flow
-      speeds[i] = 0.01 + Math.random() * 0.03;
-      // Varying sizes for visual interest - smaller for better performance
-      sizes[i] = Math.random() * 0.04 + 0.01;
+      // Reduce particle sizes significantly
+      sizes[i] = Math.random() * 0.02 + 0.01;
       
-      // Blue to purple color range
-      colors[i * 3] = 0.2 + Math.random() * 0.2;
-      colors[i * 3 + 1] = 0.3 + Math.random() * 0.3;
-      colors[i * 3 + 2] = 0.8 + Math.random() * 0.2;
+      // Blue to purple color range - more efficient color calculation
+      colors[i * 3] = 0.2 + Math.random() * 0.2;     // R
+      colors[i * 3 + 1] = 0.3 + Math.random() * 0.3; // G
+      colors[i * 3 + 2] = 0.8 + Math.random() * 0.2; // B
     }
     
-    return { positions, speeds, sizes, colors };
+    return { positions, colors, sizes };
+  }, [count]);
+  
+  // Cache for particle speed - don't recompute on every frame
+  const speeds = useMemo(() => {
+    return new Float32Array(count).map(() => 0.01 + Math.random() * 0.02);
   }, [count]);
 
-  // Optimized animation - process fewer particles per frame
+  // Extremely optimized animation with frame skipping
   useFrame((state) => {
     if (!points.current) return;
     
-    const time = state.clock.getElapsedTime();
+    // Skip frames for performance - only update every 2nd or 3rd frame
+    frameCount.current = (frameCount.current + 1) % 3;
+    if (frameCount.current !== 0) return;
+    
+    const currentTime = state.clock.elapsedTime;
+    // Throttle updates even further - maximum 20 FPS
+    if (currentTime - lastUpdateTime.current < 0.05) return;
+    lastUpdateTime.current = currentTime;
+    
     const positions = points.current.geometry.attributes.position.array as Float32Array;
     
-    // Only create ripples occasionally to save on processing
-    const createRipple = Math.random() > 0.998;
-    const rippleX = createRipple ? (Math.random() - 0.5) * 10 : 0;
-    const rippleY = createRipple ? (Math.random() - 0.5) * 10 : 0;
+    // Update only 1/5th of particles each frame - super efficient
+    const startIdx = Math.floor(Math.random() * 5) * Math.floor(count / 5);
+    const endIdx = startIdx + Math.floor(count / 5);
     
-    // Increment frame counter for staggered updates
-    frameCount.current = (frameCount.current + 1) % 3;
-    
-    // Only update 1/3 of particles each frame for better performance
-    const startIdx = frameCount.current * (count / 3);
-    const endIdx = Math.min(startIdx + (count / 3), count);
-    
-    // Update only a subset of positions each frame
     for (let i = startIdx; i < endIdx; i++) {
       const i3 = i * 3;
       
-      // Simpler mouse influence with distance check first for performance
-      const dx = mousePosition.x * 10 - positions[i3];
-      const dy = mousePosition.y * 10 - positions[i3 + 1];
-      const distToMouse = Math.sqrt(dx * dx + dy * dy);
-      
-      // Only apply mouse influence to nearby particles
-      if (distToMouse < 5) {
-        const mouseInfluence = 0.0005;
-        positions[i3] -= dx * mouseInfluence * 2;
-        positions[i3 + 1] -= dy * mouseInfluence * 2;
-      }
-      
-      // Skip ripple effect calculations if no ripple is happening
-      if (createRipple) {
-        const dx = positions[i3] - rippleX;
-        const dy = positions[i3 + 1] - rippleY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+      // Very limited mouse influence - only check particles in a sparse grid
+      if (i % 10 === 0) {
+        const dx = mousePosition.x * 10 - positions[i3];
+        const dy = mousePosition.y * 10 - positions[i3 + 1];
+        const distToMouse = Math.sqrt(dx * dx + dy * dy);
         
-        if (dist < 3) {
-          // Push particles away from ripple center
-          positions[i3] += (dx / dist) * 0.04;
-          positions[i3 + 1] += (dy / dist) * 0.04;
+        if (distToMouse < 3) {
+          positions[i3] -= dx * 0.0002;
+          positions[i3 + 1] -= dy * 0.0002;
         }
       }
       
-      // Move particles downward with slight wobble - simplified calculation
-      positions[i3 + 1] -= speeds[i] * (1 + 0.05 * Math.sin(time + i));
+      // Simpler movement logic - fewer calculations
+      positions[i3 + 1] -= speeds[i % speeds.length];
       
-      // Add simplified horizontal drift
-      if (i % 5 === 0) { // Only calculate sine for 20% of particles
-        positions[i3] += Math.sin(time * 0.5 + i * 0.1) * 0.002;
-      }
-      
-      // Reset particles when they go off screen
+      // Reset particles when they go off screen - less frequent checks
       if (positions[i3 + 1] < -7) {
         positions[i3 + 1] = 7;
-        positions[i3] = (Math.floor(i / 50) * 0.2) - 10 + (Math.random() * 0.1);
+        positions[i3] = (Math.floor(i / 30) * 0.5) - 15 + (Math.random() * 0.3);
       }
     }
     
+    // Minimized updates
     points.current.geometry.attributes.position.needsUpdate = true;
     
-    // Slower rotation for better performance
-    points.current.rotation.y = Math.sin(time * 0.05) * 0.05;
-    points.current.rotation.x = Math.cos(time * 0.05) * 0.03;
+    // Minimal rotation - much less computation
+    if (frameCount.current === 0) {
+      points.current.rotation.y = Math.sin(currentTime * 0.02) * 0.02;
+    }
   });
 
   return (
@@ -162,10 +146,10 @@ function CodeParticles({ count = 3000 }: PointsProps) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.05}
+        size={0.04}
         sizeAttenuation={true}
         transparent={true}
-        opacity={0.8}
+        opacity={0.6}
         depthWrite={false}
         vertexColors={true}
         blending={THREE.AdditiveBlending}
@@ -174,57 +158,54 @@ function CodeParticles({ count = 3000 }: PointsProps) {
   );
 }
 
-// Add subtle ambient light
+// Ultra-minimal scene with just the basics
 function AmbientScene() {
-  return (
-    <>
-      <ambientLight intensity={0.1} />
-      <directionalLight position={[0, 10, 5]} intensity={0.2} />
-    </>
-  );
+  return <ambientLight intensity={0.1} />;
 }
 
 const ParticlesBackground3D = () => {
-  // More aggressive particle count adjustment based on device performance
-  const [particleCount, setParticleCount] = useState(500); // Start with lower default
+  // Ultra-conservative particle count
+  const [particleCount, setParticleCount] = useState(200);
   
   useEffect(() => {
-    if (isBrowser) {
-      // More aggressive device capability detection
-      const hardwareConcurrency = navigator.hardwareConcurrency || 2;
-      const isHighPerformance = hardwareConcurrency > 4;
-      const isMediumPerformance = hardwareConcurrency > 2;
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      const width = window.innerWidth;
-      
-      // Determine particle count based on device capabilities
-      let count = 500; // Default low
-      
-      if (isHighPerformance && !isMobile && width > 1024) {
-        count = 2000;
-      } else if (isMediumPerformance && !isMobile && width > 768) {
-        count = 1000;
-      } else if (isMobile) {
-        count = 300; // Very low for mobile
-      }
-      
-      setParticleCount(count);
+    if (!isBrowser) return;
+    
+    // Extremely aggressive performance detection - prioritize smoothness
+    const hardwareConcurrency = navigator.hardwareConcurrency || 1;
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const width = window.innerWidth;
+    const isLowEndDevice = isMobile || hardwareConcurrency <= 4 || width < 768;
+    
+    // Very conservative particle counts based on device
+    let count = 100; // Ultra low default
+    
+    if (!isLowEndDevice && width > 1280) {
+      count = 400; // High-end desktop only
+    } else if (!isLowEndDevice && width > 1024) {
+      count = 300; // Decent desktop/laptop
+    } else if (!isMobile && width > 768) {
+      count = 200; // Lower-end desktop
     }
+    
+    setParticleCount(count);
   }, []);
   
   return (
-    <div className="fixed inset-0 -z-10 opacity-80 pointer-events-none">
+    <div className="fixed inset-0 -z-10 opacity-70 pointer-events-none">
       <Canvas 
-        camera={{ position: [0, 0, 10], fov: 60 }} 
-        dpr={[0.6, 1.5]} // Lower DPR for better performance
+        camera={{ position: [0, 0, 10], fov: 50 }} 
+        dpr={[0.5, 1.0]} // Dramatically reduced DPR
         gl={{ 
           alpha: true, 
           antialias: false,
-          powerPreference: 'high-performance',
-          depth: false, // Disable depth testing for better performance
+          powerPreference: 'low-power',
+          depth: false,
+          stencil: false,
+          precision: "lowp"
         }}
         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
         frameloop="demand" // Only render when needed
+        performance={{ min: 0.1 }}
       >
         <AmbientScene />
         <CodeParticles count={particleCount} />

@@ -6,110 +6,103 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Skills from "@/components/Skills";
 
-// Lazy load components that are lower in the page
-const Projects = lazy(() => import("@/components/Projects"));
-const GitHubRepositories = lazy(() => import("@/components/GitHubRepositories"));
+// Defer loading lower-priority components
+const Projects = lazy(() => 
+  new Promise(resolve => {
+    // Only load after main content is visible
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(() => 
+        import("@/components/Projects").then(resolve)
+      );
+    } else {
+      setTimeout(() => import("@/components/Projects").then(resolve), 1500);
+    }
+  })
+);
+
+const GitHubRepositories = lazy(() => 
+  new Promise(resolve => {
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(() => 
+        import("@/components/GitHubRepositories").then(resolve)
+      );
+    } else {
+      setTimeout(() => import("@/components/GitHubRepositories").then(resolve), 2000);
+    }
+  })
+);
+
 const Experience = lazy(() => import("@/components/Experience"));
 const Contact = lazy(() => import("@/components/Contact"));
 const Footer = lazy(() => import("@/components/Footer"));
 
-// Background components
+// Ultra-minimal loading component
+const SectionLoading = () => <div className="w-full h-[30vh]" />;
+
+// Background components - core experience only loads the minimal one 
 import ParticlesBackground from "@/components/ParticlesBackground";
-import MatrixBackgroundSection from "@/components/MatrixBackgroundSection";
+const MatrixBackgroundSection = lazy(() => import("@/components/MatrixBackgroundSection"));
 
-// Loading fallback component for lazy-loaded sections
-const SectionLoading = () => (
-  <div className="w-full h-[50vh] flex items-center justify-center">
-    <div className="animate-pulse flex flex-col items-center">
-      <div className="w-32 h-2 bg-blue/30 rounded mb-3"></div>
-      <div className="w-48 h-2 bg-blue/20 rounded"></div>
-    </div>
-  </div>
-);
-
-// Using dynamic import with error boundary for 3D components
+// Only load 3D particles for high-end devices after a long delay
 const ParticlesBackground3D = lazy(() => 
-  import("@/components/ParticlesBackground3D")
-    .catch(() => {
-      console.warn("Failed to load 3D particles, using fallback");
-      // Return a mock component if 3D fails to load
-      return { default: () => null };
-    })
+  new Promise(resolve => {
+    setTimeout(() => 
+      import("@/components/ParticlesBackground3D")
+        .then(resolve)
+        .catch(() => {
+          console.warn("Failed to load 3D particles, using fallback");
+          return { default: () => null };
+        }),
+      3000 // 3-second delay for 3D effects
+    );
+  })
 );
 
 const Index = () => {
-  // Track visit to show custom welcome effect
-  const [showWelcomeEffect, setShowWelcomeEffect] = useState(true);
-  const [isLowPowerMode, setIsLowPowerMode] = useState(false);
+  const [isLowPowerMode, setIsLowPowerMode] = useState(true); // Default to low power
   const [load3DEffects, setLoad3DEffects] = useState(false);
+  const [showWelcomeEffect, setShowWelcomeEffect] = useState(false); // Disable by default
   
-  // Check device capabilities
+  // Performance-optimized detection
   useEffect(() => {
-    // Detect low-power devices
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const hardwareConcurrency = navigator.hardwareConcurrency || 2;
-    const isLowPower = isMobile || hardwareConcurrency <= 2;
-    
-    setIsLowPowerMode(isLowPower);
-    
-    // Load 3D effects after a short delay to prevent initial render blocking
-    const timer = setTimeout(() => {
-      setLoad3DEffects(true);
-    }, 1000);
-    
-    // Log performance info
-    console.log("Device info:", {
-      isMobile,
-      cores: hardwareConcurrency,
-      isLowPower,
-      screenWidth: window.innerWidth
-    });
-    
-    return () => clearTimeout(timer);
-  }, []);
-  
-  // Optimized smooth scroll implementation
-  useEffect(() => {
-    const handleAnchorClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('#')) {
-        e.preventDefault();
-        const id = target.getAttribute('href')?.replace('#', '');
-        const element = document.getElementById(id || '');
-        if (element) {
-          window.scrollTo({
-            top: element.offsetTop - 80,
-            behavior: 'smooth'
-          });
-        }
+    const detectPerformance = () => {
+      // Quick performance check
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const hardwareConcurrency = navigator.hardwareConcurrency || 2;
+      const screenWidth = window.innerWidth;
+      const isHighEnd = !isMobile && hardwareConcurrency > 6 && screenWidth > 1024;
+      
+      // Very conservative approach
+      setIsLowPowerMode(!isHighEnd);
+      
+      // Only load 3D effects on high-end devices and after a delay
+      if (isHighEnd) {
+        setTimeout(() => setLoad3DEffects(true), 2500);
+      }
+      
+      // Skip welcome animation on lower-end devices
+      if (screenWidth > 1024 && !isMobile) {
+        setShowWelcomeEffect(true);
+        setTimeout(() => setShowWelcomeEffect(false), 2500); // Shorter animation
       }
     };
-
-    // Use passive event listener for better performance
-    document.addEventListener('click', handleAnchorClick, { passive: false });
     
-    // Hide welcome effect after 3 seconds for faster interaction
-    const timer = setTimeout(() => setShowWelcomeEffect(false), 3000);
-    
-    return () => {
-      document.removeEventListener('click', handleAnchorClick);
-      clearTimeout(timer);
-    };
+    // Defer detection slightly
+    setTimeout(detectPerformance, 100);
   }, []);
-
-  // Memoized animation variants
+  
+  // Performance-optimized animations
   const fadeIn = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.6 } } // Faster fade for better UX
+    visible: { opacity: 1, transition: { duration: 0.4 } }
   };
   
-  // Memoized typing effect
   const typingEffect = {
     hidden: { width: "0%" },
     visible: { 
       width: "100%",
       transition: { 
-        duration: 1.2, // Faster typing
+        duration: 0.8, // Faster typing
         ease: "easeInOut" 
       } 
     }
@@ -122,16 +115,16 @@ const Index = () => {
       animate="visible"
       variants={fadeIn}
     >
-      {/* Welcome Easter Egg - optimized */}
+      {/* Welcome animation - only on high-end devices */}
       {showWelcomeEffect && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-dark-500 bg-opacity-95 pointer-events-none">
           <motion.div 
             className="text-center"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4 }} // Faster animation
+            transition={{ duration: 0.3 }}
           >
-            <div className="font-mono text-3xl md:text-5xl text-blue-light mb-4">
+            <div className="font-mono text-2xl md:text-4xl text-blue-light mb-3">
               <motion.div
                 className="overflow-hidden inline-block"
                 variants={typingEffect}
@@ -145,40 +138,19 @@ const Index = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.2, duration: 0.4 }} // Faster fade-in
+              transition={{ delay: 0.8, duration: 0.3 }}
               className="font-mono text-lg text-muted-foreground"
             >
               Welcome to the developer matrix
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.6, duration: 0.4 }} // Faster animation
-              className="mt-8 text-muted-foreground text-sm"
-            >
-              Activating interactive background...
-            </motion.div>
-            
-            <motion.div 
-              className="mt-4 h-1 w-64 bg-dark-300 rounded-full mx-auto overflow-hidden"
-              initial={{ width: "64px" }}
-            >
-              <motion.div 
-                className="h-full bg-blue" 
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ delay: 1.8, duration: 1.2 }} // Faster loading
-              />
             </motion.div>
           </motion.div>
         </div>
       )}
       
-      {/* Global particles background with matrix rain effect - always enabled */}
+      {/* Basic particles - always loaded for all devices */}
       <ParticlesBackground />
       
-      {/* Conditionally render 3D particles based on device capability and delayed loading */}
+      {/* 3D particles - only loaded for high-end devices and after delay */}
       {!isLowPowerMode && load3DEffects && (
         <Suspense fallback={null}>
           <ParticlesBackground3D />
@@ -188,40 +160,39 @@ const Index = () => {
       <Navbar />
       
       <main className="relative z-10">
-        {/* Hero section with default particles */}
+        {/* Core sections loaded immediately */}
         <Hero />
-        
-        {/* About section with matrix background */}
-        <MatrixBackgroundSection intensity={isLowPowerMode ? "low" : "medium"} particleCount={isLowPowerMode ? 20 : 40}>
-          <About />
-        </MatrixBackgroundSection>
-        
+        <About />
         <Skills />
         
-        {/* Projects section with high intensity matrix effect */}
-        <MatrixBackgroundSection intensity={isLowPowerMode ? "low" : "high"} particleCount={isLowPowerMode ? 25 : 50}>
-          <Suspense fallback={<SectionLoading />}>
+        {/* Dynamic sections with progressive enhancement */}
+        <Suspense fallback={<SectionLoading />}>
+          {!isLowPowerMode ? (
+            <MatrixBackgroundSection intensity="low" particleCount={15}>
+              <Projects />
+            </MatrixBackgroundSection>
+          ) : (
             <Projects />
-          </Suspense>
-        </MatrixBackgroundSection>
+          )}
+        </Suspense>
         
         <Suspense fallback={<SectionLoading />}>
           <GitHubRepositories />
         </Suspense>
         
-        {/* Experience section with matrix background */}
-        <MatrixBackgroundSection intensity={isLowPowerMode ? "low" : "medium"} particleCount={isLowPowerMode ? 15 : 35}>
-          <Suspense fallback={<SectionLoading />}>
+        <Suspense fallback={<SectionLoading />}>
+          {!isLowPowerMode ? (
+            <MatrixBackgroundSection intensity="low" particleCount={10}>
+              <Experience />
+            </MatrixBackgroundSection>
+          ) : (
             <Experience />
-          </Suspense>
-        </MatrixBackgroundSection>
+          )}
+        </Suspense>
         
-        {/* Contact section with low intensity background for readability */}
-        <MatrixBackgroundSection intensity="low" particleCount={isLowPowerMode ? 10 : 25}>
-          <Suspense fallback={<SectionLoading />}>
-            <Contact />
-          </Suspense>
-        </MatrixBackgroundSection>
+        <Suspense fallback={<SectionLoading />}>
+          <Contact />
+        </Suspense>
       </main>
       
       <Suspense fallback={null}>
