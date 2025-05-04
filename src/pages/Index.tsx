@@ -39,7 +39,7 @@ const Index = () => {
   // Animation variants
   const fadeIn = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.6 } }
+    visible: { opacity: 1, transition: { duration: 0.8 } } // Longer duration for smoother fade
   };
 
   return (
@@ -62,25 +62,28 @@ const Index = () => {
         <Hero />
         
         {/* About section with enhanced matrix background */}
-        <MatrixBackgroundSection intensity="medium" particleCount={35}>
+        <MatrixBackgroundSection intensity="medium" particleCount={40}>
           <About />
         </MatrixBackgroundSection>
         
         <Skills />
         
         {/* Projects section with high intensity matrix effect */}
-        <MatrixBackgroundSection intensity="high" particleCount={40}>
+        <MatrixBackgroundSection intensity="high" particleCount={50}>
           <Projects />
         </MatrixBackgroundSection>
         
         <GitHubRepositories />
         
         {/* Experience section with medium matrix background */}
-        <MatrixBackgroundSection intensity="medium" particleCount={30}>
+        <MatrixBackgroundSection intensity="medium" particleCount={35}>
           <Experience />
         </MatrixBackgroundSection>
         
-        <Contact />
+        {/* Contact section with low intensity background for better readability */}
+        <MatrixBackgroundSection intensity="low" particleCount={25}>
+          <Contact />
+        </MatrixBackgroundSection>
       </main>
       
       <Footer />

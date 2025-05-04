@@ -43,7 +43,7 @@ const ParticlesBackground = () => {
       if (!canvas) return;
       
       // Calculate dimensions
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x for performance
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       
@@ -56,8 +56,6 @@ const ParticlesBackground = () => {
       
       // Clear canvas and reset all parameters
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      console.log("Canvas dimensions updated", canvas.width, canvas.height);
     };
     
     setCanvasDimensions();
@@ -87,13 +85,38 @@ const ParticlesBackground = () => {
     // Arrays for tracking column data - pre-allocate
     const drops: number[] = new Array(columns).fill(0).map(() => Math.random() * -100);
     const speeds: number[] = new Array(columns).fill(0).map(() => Math.random() * 0.5 + 0.5);
+    
+    // Enhanced color palette with more vibrance
     const colors: string[] = new Array(columns).fill('').map(() => {
-      // Create vibrant blue-purple gradient colors
-      const hue = Math.random() * 40 + 220; // Blue to purple range (220-260)
-      const saturation = Math.random() * 40 + 80; // High saturation for visibility
-      const lightness = Math.random() * 25 + 60; // Bright enough to see
-      return `hsla(${hue}, ${saturation}%, ${lightness}%, 0.9)`;
+      const colorType = Math.random();
+      
+      if (colorType > 0.7) {
+        // Vivid purple-blue
+        const hue = Math.random() * 30 + 250; 
+        const saturation = Math.random() * 30 + 80;
+        const lightness = Math.random() * 20 + 65;
+        return `hsla(${hue}, ${saturation}%, ${lightness}%, 0.95)`;
+      } else if (colorType > 0.45) {
+        // Bright blue
+        const hue = Math.random() * 30 + 210;
+        const saturation = Math.random() * 30 + 80;
+        const lightness = Math.random() * 20 + 65;
+        return `hsla(${hue}, ${saturation}%, ${lightness}%, 0.95)`;
+      } else if (colorType > 0.25) {
+        // Cyan
+        const hue = Math.random() * 20 + 180;
+        const saturation = Math.random() * 30 + 80;
+        const lightness = Math.random() * 20 + 65;
+        return `hsla(${hue}, ${saturation}%, ${lightness}%, 0.95)`;
+      } else {
+        // Magenta highlights (rare)
+        const hue = Math.random() * 20 + 290;
+        const saturation = Math.random() * 30 + 80;
+        const lightness = Math.random() * 20 + 65;
+        return `hsla(${hue}, ${saturation}%, ${lightness}%, 0.95)`;
+      }
     });
+    
     const sizes: number[] = new Array(columns).fill(0).map(() => [12, 14, 16][Math.floor(Math.random() * 3)]);
     const textTypes: number[] = new Array(columns).fill(0).map(() => Math.random() > 0.8 ? 1 : 0);
     const chars_to_draw: string[] = new Array(columns).fill('').map(() => chars[Math.floor(Math.random() * chars.length)]);
@@ -123,10 +146,11 @@ const ParticlesBackground = () => {
           text = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
         }
         
-        // Add glow effect but only for a subset of characters to improve performance
-        if (Math.random() > 0.95) {
-          ctx.shadowColor = "rgba(155, 135, 245, 0.8)";
-          ctx.shadowBlur = 4;
+        // Enhanced glow effect for better visibility
+        if (Math.random() > 0.9) {
+          const glowColor = colors[i].replace('hsla', 'hsla').replace(/[\d.]+\)$/, '0.9)');
+          ctx.shadowColor = glowColor;
+          ctx.shadowBlur = 6; // Increased glow
         } else {
           ctx.shadowBlur = 0;
         }
@@ -177,40 +201,46 @@ const ParticlesBackground = () => {
     };
   }, []);
   
+  // Determine particle count based on viewport width
+  const particleCount = typeof window !== 'undefined' ? 
+    (window.innerWidth > 1200 ? 60 : window.innerWidth > 768 ? 50 : 30) : 30;
+  
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
       {/* Matrix rain canvas with improved visibility */}
       <canvas 
         ref={canvasRef} 
-        className="absolute inset-0 opacity-70" 
+        className="absolute inset-0 opacity-80" 
         style={{ pointerEvents: "none" }} 
       />
       
-      {/* Floating particles with better performance */}
-      {Array.from({ length: Math.min(window.innerWidth > 768 ? 50 : 30, 50) }).map((_, i) => {
-        const size = Math.random() * 4 + 2;
+      {/* Enhanced floating particles with better performance */}
+      {Array.from({ length: Math.min(particleCount, 60) }).map((_, i) => {
+        const size = Math.random() * 6 + 3; // Larger particles
         const colorRoll = Math.random();
         let color;
         
-        if (colorRoll < 0.3) {
+        if (colorRoll < 0.2) {
           color = "#9b87f5"; // Primary Purple
-        } else if (colorRoll < 0.5) {
+        } else if (colorRoll < 0.4) {
           color = "#8B5CF6"; // Vivid Purple
-        } else if (colorRoll < 0.7) {
+        } else if (colorRoll < 0.6) {
           color = "#1EAEDB"; // Bright Blue
-        } else if (colorRoll < 0.85) {
+        } else if (colorRoll < 0.75) {
           color = "#6E59A5"; // Tertiary Purple
-        } else {
+        } else if (colorRoll < 0.9) {
           color = "#50E3C2"; // Bright Cyan
+        } else {
+          color = "#D946EF"; // Magenta Pink - new color for pops
         }
         
-        const opacity = Math.random() * 0.4 + 0.3;
+        const opacity = Math.random() * 0.5 + 0.4; // Higher opacity
         const top = `${Math.random() * 100}%`;
         const left = `${Math.random() * 100}%`;
         
         // More varied movements that are more efficient
-        const xMove = Math.random() * 100 - 50;
-        const yMove = Math.random() * 100 - 50;
+        const xMove = Math.random() * 120 - 60; // Wider movement range
+        const yMove = Math.random() * 120 - 60;
         const duration = Math.random() * 25 + 15;
         const delay = Math.random() * -15;
         
@@ -226,13 +256,14 @@ const ParticlesBackground = () => {
               top: top,
               left: left,
               filter: `blur(${Math.random() > 0.7 ? 1 : 0}px)`,
-              boxShadow: Math.random() > 0.85 ? `0 0 8px 2px ${color}80` : 'none',
+              boxShadow: Math.random() > 0.75 ? `0 0 15px 6px ${color}90` : 'none', // Enhanced glow
             }}
             initial={{ opacity: 0 }}
             animate={{
               x: [0, xMove, 0, -xMove / 1.5, 0],
               y: [0, yMove, -yMove / 2, yMove / 1.5, 0],
-              opacity: [opacity, opacity * 1.5, opacity],
+              opacity: [opacity, opacity * 1.8, opacity], // More dramatic opacity shift
+              scale: [1, Math.random() > 0.6 ? 1.4 : 1, 1] // Add occasional pulsing
             }}
             transition={{
               duration: duration,
@@ -244,10 +275,11 @@ const ParticlesBackground = () => {
         );
       })}
       
-      {/* Optimized gradient orbs - reduced number for better performance */}
-      <div className="absolute top-1/4 -right-32 w-96 h-96 bg-gradient-radial from-blue-500/15 to-transparent rounded-full filter blur-3xl animate-pulse-slow pointer-events-none" />
-      <div className="absolute bottom-1/3 -left-24 w-80 h-80 bg-gradient-radial from-purple-500/15 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-1500 pointer-events-none" />
-      <div className="absolute top-2/3 left-1/4 w-72 h-72 bg-gradient-radial from-indigo-500/10 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-2000 pointer-events-none" />
+      {/* Enhanced gradient orbs - larger and more vibrant */}
+      <div className="absolute top-1/4 -right-32 w-[40rem] h-[40rem] bg-gradient-radial from-blue-500/20 to-transparent rounded-full filter blur-3xl animate-pulse-slow pointer-events-none" />
+      <div className="absolute bottom-1/3 -left-32 w-[35rem] h-[35rem] bg-gradient-radial from-purple-500/25 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-1500 pointer-events-none" />
+      <div className="absolute top-2/3 left-1/4 w-[30rem] h-[30rem] bg-gradient-radial from-cyan-400/15 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-2000 pointer-events-none" />
+      <div className="absolute top-1/3 left-1/2 w-[25rem] h-[25rem] bg-gradient-radial from-pink-500/10 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-1000 pointer-events-none" />
     </div>
   );
 };

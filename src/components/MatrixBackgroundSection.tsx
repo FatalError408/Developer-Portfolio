@@ -21,7 +21,7 @@ const MatrixBackgroundSection = ({
       case "low":
         return { opacity: 0.4, speed: 0.4, density: 0.6, glow: 2 };
       case "high":
-        return { opacity: 0.8, speed: 0.9, density: 1.5, glow: 4 };
+        return { opacity: 0.8, speed: 0.9, density: 1.5, glow: 5 }; // Enhanced glow
       case "medium":
       default:
         return { opacity: 0.6, speed: 0.65, density: 1.0, glow: 3 };
@@ -59,8 +59,6 @@ const MatrixBackgroundSection = ({
       
       // Clear canvas when resizing
       ctx.clearRect(0, 0, rect.width, rect.height);
-      
-      console.log("Section canvas dimensions updated", rect.width, rect.height);
     };
     
     setCanvasDimensions();
@@ -90,12 +88,33 @@ const MatrixBackgroundSection = ({
     // Pre-allocate arrays for better performance
     const drops = new Array(columns).fill(0).map(() => Math.random() * -100);
     const speeds = new Array(columns).fill(0).map(() => Math.random() * settings.speed + 0.35);
+    
+    // Enhanced color range - more vivid blues and purples
     const colors = new Array(columns).fill('').map(() => {
-      const hue = Math.random() * 40 + 220; // Blue to purple range
-      const saturation = Math.random() * 40 + 80; 
-      const lightness = Math.random() * 25 + 60;
-      return `hsla(${hue}, ${saturation}%, ${lightness}%, ${settings.opacity})`;
+      // Choose between different color palettes for more visual interest
+      const colorType = Math.random();
+      
+      if (colorType > 0.7) {
+        // Vivid purple
+        const hue = Math.random() * 30 + 260; 
+        const saturation = Math.random() * 30 + 70;
+        const lightness = Math.random() * 20 + 60;
+        return `hsla(${hue}, ${saturation}%, ${lightness}%, ${settings.opacity})`;
+      } else if (colorType > 0.4) {
+        // Bright blue
+        const hue = Math.random() * 30 + 210;
+        const saturation = Math.random() * 40 + 80;
+        const lightness = Math.random() * 20 + 65;
+        return `hsla(${hue}, ${saturation}%, ${lightness}%, ${settings.opacity})`;
+      } else {
+        // Cyan highlight
+        const hue = Math.random() * 20 + 180;
+        const saturation = Math.random() * 30 + 70;
+        const lightness = Math.random() * 25 + 60;
+        return `hsla(${hue}, ${saturation}%, ${lightness}%, ${settings.opacity})`;
+      }
     });
+    
     const sizes = new Array(columns).fill(0).map(() => [12, 14, 16][Math.floor(Math.random() * 3)]);
     const textTypes = new Array(columns).fill(0).map(() => Math.random() > 0.8 ? 1 : 0);
     const chars_to_draw = new Array(columns).fill('').map(() => chars[Math.floor(Math.random() * chars.length)]);
@@ -123,10 +142,11 @@ const MatrixBackgroundSection = ({
           text = chars_to_draw[i];
         }
         
-        // Add occasional glow effect
-        if (Math.random() > 0.95) {
-          ctx.shadowColor = "rgba(155, 135, 245, 0.8)";
-          ctx.shadowBlur = settings.glow;
+        // Enhanced glow effect for better visibility
+        if (Math.random() > 0.85) { // Increased chance for glow
+          const glowColor = colors[i].replace('rgba', 'rgba').replace(/[\d.]+\)$/, '0.9)');
+          ctx.shadowColor = glowColor;
+          ctx.shadowBlur = settings.glow + (Math.random() * 3);
         } else {
           ctx.shadowBlur = 0;
         }
@@ -176,30 +196,30 @@ const MatrixBackgroundSection = ({
       {/* Matrix canvas background with increased opacity */}
       <canvas 
         ref={canvasRef}
-        className="absolute inset-0 opacity-80 pointer-events-none"
+        className="absolute inset-0 opacity-90 pointer-events-none"
       />
       
       {/* Enhanced floating particles with better performance */}
       {Array.from({ length: Math.min(particleCount, 40) }).map((_, i) => {
-        const size = Math.random() * 4 + 2;
+        const size = Math.random() * 6 + 2; // Increased size
         
         // Enhanced color distribution with more vibrant colors
         const colorRoll = Math.random();
         let color;
         
-        if (colorRoll < 0.3) {
+        if (colorRoll < 0.25) {
           color = "#9b87f5"; // Primary Purple
-        } else if (colorRoll < 0.5) {
+        } else if (colorRoll < 0.45) {
           color = "#8B5CF6"; // Vivid Purple
-        } else if (colorRoll < 0.7) {
+        } else if (colorRoll < 0.65) {
           color = "#1EAEDB"; // Bright Blue
         } else if (colorRoll < 0.85) {
-          color = "#6E59A5"; // Tertiary Purple
-        } else {
           color = "#50E3C2"; // Bright Cyan
+        } else {
+          color = "#D946EF"; // Magenta Pink - new vibrant color
         }
         
-        const opacity = Math.random() * 0.5 + 0.3;
+        const opacity = Math.random() * 0.5 + 0.4; // Increased base opacity
         const top = `${Math.random() * 100}%`;
         const left = `${Math.random() * 100}%`;
         
@@ -221,13 +241,14 @@ const MatrixBackgroundSection = ({
               top: top,
               left: left,
               filter: `blur(${Math.random() > 0.7 ? 1 : 0}px)`,
-              boxShadow: Math.random() > 0.85 ? `0 0 8px 2px ${color}80` : 'none',
+              boxShadow: Math.random() > 0.7 ? `0 0 12px 4px ${color}80` : 'none', // Enhanced glow
             }}
             initial={{ opacity: 0 }}
             animate={{
               x: [0, xMove, 0, -xMove / 1.5, 0],
               y: [0, yMove, -yMove / 2, yMove / 1.5, 0],
-              opacity: [opacity, opacity * 1.5, opacity],
+              opacity: [opacity, opacity * 1.7, opacity], // More dramatic opacity shift
+              scale: [1, Math.random() > 0.7 ? 1.3 : 1, 1] // Add occasional pulsing
             }}
             transition={{
               duration: duration,
@@ -239,9 +260,10 @@ const MatrixBackgroundSection = ({
         );
       })}
       
-      {/* Simplified gradient orbs for better performance */}
-      <div className="absolute top-1/4 -right-32 w-96 h-96 bg-gradient-radial from-blue-500/15 to-transparent rounded-full filter blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/3 -left-24 w-80 h-80 bg-gradient-radial from-purple-500/15 to-transparent rounded-full filter blur-3xl pointer-events-none" />
+      {/* Enhanced gradient orbs for better performance */}
+      <div className="absolute top-1/4 -right-32 w-96 h-96 bg-gradient-radial from-blue-500/25 to-transparent rounded-full filter blur-3xl pointer-events-none animate-pulse-slow" />
+      <div className="absolute bottom-1/3 -left-24 w-80 h-80 bg-gradient-radial from-purple-500/25 to-transparent rounded-full filter blur-3xl pointer-events-none animate-pulse-slow animation-delay-1500" />
+      <div className="absolute top-3/4 left-1/2 w-72 h-72 bg-gradient-radial from-cyan-400/20 to-transparent rounded-full filter blur-3xl pointer-events-none animate-pulse-slow animation-delay-1000" /> {/* New cyan orb */}
       
       {/* Content with appropriate z-index to appear above background */}
       <div className="relative z-10">
