@@ -12,25 +12,43 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   plugins: [
-    react(),
+    react({
+      // Configure SWC to resolve React Three Fiber compatibility issues
+      swcOptions: {
+        jsc: {
+          transform: {
+            react: {
+              runtime: "automatic",
+              development: mode === 'development',
+              refresh: mode === 'development'
+            }
+          }
+        }
+      }
+    }),
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Ensure consistent versions for Three.js packages
+      "three": path.resolve(__dirname, "./node_modules/three"),
+      "@react-three/fiber": path.resolve(__dirname, "./node_modules/@react-three/fiber"),
+      "@react-three/drei": path.resolve(__dirname, "./node_modules/@react-three/drei"),
     },
+    dedupe: ['react', 'react-dom', 'three'],
   },
   build: {
     outDir: "dist",
     assetsDir: "assets",
     sourcemap: mode === 'development',
     chunkSizeWarningLimit: 1600,
-    target: 'esnext', // Modern browsers for better performance
-    minify: 'terser', // Better minification
+    target: 'esnext',
+    minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: mode === 'production', // Remove console logs in prod
+        drop_console: mode === 'production',
         drop_debugger: true,
       },
     },
@@ -39,7 +57,9 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
           ui: ['@radix-ui/react-avatar', '@radix-ui/react-toast', '@radix-ui/react-tooltip'],
-          three: ['three', '@react-three/fiber'],
+          three: ['three'],
+          fiber: ['@react-three/fiber'],
+          drei: ['@react-three/drei'],
           motion: ['framer-motion'],
         }
       }
@@ -47,6 +67,6 @@ export default defineConfig(({ mode }) => ({
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
-    exclude: ['@react-three/fiber'] // Can cause issues when prebundled
+    exclude: [] // Remove @react-three/fiber from exclusions to resolve dependencies properly
   }
 }));
