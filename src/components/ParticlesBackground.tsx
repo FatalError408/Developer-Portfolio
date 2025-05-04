@@ -6,280 +6,134 @@ const ParticlesBackground = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
-  // Throttle mouse movement to reduce performance impact
   useEffect(() => {
-    let timeoutId: number | null = null;
-    
     const handleMouseMove = (e: MouseEvent) => {
-      if (timeoutId) return; // Skip if we're throttling
-      
-      timeoutId = window.setTimeout(() => {
-        setMousePosition({ x: e.clientX, y: e.clientY });
-        timeoutId = null;
-      }, 100); // Only update every 100ms
+      setMousePosition({ x: e.clientX, y: e.clientY });
     };
     
     window.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      if (timeoutId) window.clearTimeout(timeoutId);
-    };
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
   
-  // Enhanced canvas matrix effect with better performance and persistent behavior
+  // Canvas matrix effect
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
-    const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
-    // Set canvas dimensions with device pixel ratio for crisp rendering
+    // Set canvas dimensions
     const setCanvasDimensions = () => {
       if (canvas) {
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = window.innerWidth * dpr;
-        canvas.height = window.innerHeight * dpr;
-        canvas.style.width = `${window.innerWidth}px`;
-        canvas.style.height = `${window.innerHeight}px`;
-        ctx.scale(dpr, dpr);
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
       }
     };
     
     setCanvasDimensions();
     window.addEventListener('resize', setCanvasDimensions);
     
-    // Enhanced code rain with optimized performance
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<>/?{}[]()=+-*&^%$#@!;:,.\\|~`'\"";
-    const codeSnippets = [
-      "function()", "const", "let", "var", "=>", "class", "import", "export",
-      "return", "async", "await", "try", "catch", "if", "else", "for", "while",
-      "<div>", "</div>", "<span>", "{props}", "useState", "useEffect", "()",
-      "=>", "==", "===", "&&", "||", "map", "filter", "reduce", "push", "pop"
-    ];
+    // Code rain characters
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<>/?{}[]()=+-*&^%$#@!";
     
-    // Optimize for better performance on different screens
-    const columnWidth = 14;
-    const columns = Math.ceil(window.innerWidth / columnWidth);
+    // Matrix rain configuration
+    const fontSize = 14;
+    const columns = Math.floor(canvas.width / fontSize);
     
-    // Arrays to track data for each column
+    // Array to track the Y position of each column
     const drops: number[] = [];
-    const speeds: number[] = [];
-    const colors: string[] = [];
-    const sizes: number[] = [];
-    const textTypes: number[] = [];
-    const fontSizes = [12, 14, 16];
-    const opacities: number[] = [];
-    const lastUpdatedChars: string[] = [];
-    
-    // Initialize arrays with varied parameters for better visual effect
     for (let i = 0; i < columns; i++) {
       drops[i] = Math.random() * -100;
-      // Varied speeds based on screen size for better responsiveness
-      speeds[i] = Math.random() * (window.innerWidth > 768 ? 0.8 : 0.5) + (window.innerWidth > 768 ? 0.5 : 0.3);
-      
-      // Create more vibrant blue-purple colors
-      const hue = Math.random() * 40 + 220;  // Blue to purple range (220-260)
-      const saturation = Math.random() * 40 + 80;  // 80-120%
-      const lightness = Math.random() * 25 + 60;  // 60-85%
-      colors[i] = `hsla(${hue}, ${saturation}%, ${lightness}%, 0.95)`;
-      
-      sizes[i] = fontSizes[Math.floor(Math.random() * fontSizes.length)];
-      textTypes[i] = Math.random() > 0.8 ? 1 : 0;
-      opacities[i] = Math.random() * 0.5 + 0.6; // Higher base opacity for better visibility
-      lastUpdatedChars[i] = chars[Math.floor(Math.random() * chars.length)];
     }
     
-    // Optimized draw function with better visuals and performance
-    // Fixed to ensure it doesn't disappear on mouse movement
+    // Draw matrix rain animation
     const draw = () => {
-      // Semi-transparent black background for trail effect - more transparent for better legibility
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.035)';
-      ctx.fillRect(0, 0, canvas.width / (window.devicePixelRatio || 1), canvas.height / (window.devicePixelRatio || 1));
+      // Slightly transparent black background to create trail effect
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Calculate distance from mouse for enhanced interactive glow
-      const mouseX = mousePosition.x;
-      const mouseY = mousePosition.y;
-      const mouseRadius = window.innerWidth > 768 ? 150 : 100; // Reduced area of influence
+      // Blue-purple text
+      ctx.fillStyle = '#4a72f5';
+      ctx.font = `${fontSize}px monospace`;
       
-      // For each column with optimized rendering
+      // For each column
       for (let i = 0; i < drops.length; i++) {
-        const x = i * columnWidth;
-        const y = drops[i] * sizes[i];
+        // Select random character
+        const text = chars[Math.floor(Math.random() * chars.length)];
         
-        // Calculate distance to mouse - only for subtle effects, not disappearing
-        const dx = mouseX - x;
-        const dy = mouseY - y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        let glowIntensity = 0;
+        // Draw character
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
         
-        if (distance < mouseRadius) {
-          // Subtle glow effect - reduced intensity to avoid disappearing
-          glowIntensity = Math.min(0.6, (1 - (distance / mouseRadius)) * 0.6);
-        }
-        
-        // Update character every few frames for a more dynamic effect
-        if (Math.random() > 0.9) {
-          lastUpdatedChars[i] = chars[Math.floor(Math.random() * chars.length)];
-        }
-        
-        // Draw character with enhanced glow effect - always visible
-        if (textTypes[i] === 0) {
-          // Regular characters
-          const text = lastUpdatedChars[i];
-          
-          // Apply subtle glow effect near mouse
-          if (glowIntensity > 0) {
-            ctx.shadowBlur = 12 * glowIntensity;
-            ctx.shadowColor = "rgba(140, 210, 255, 0.6)";
-            ctx.fillStyle = `rgba(220, 240, 255, ${0.5 * glowIntensity + 0.6})`;
-          } else {
-            ctx.shadowBlur = 0;
-            ctx.fillStyle = colors[i];
-          }
-          
-          ctx.font = `${sizes[i]}px "Fira Code", monospace`;
-          ctx.globalAlpha = Math.max(0.4, opacities[i]); // Ensure minimum opacity for visibility
-          ctx.fillText(text, x, y);
-          ctx.globalAlpha = 1;
-        } else {
-          // Code snippets (less frequent)
-          const snippet = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
-          
-          // Different style for snippets - more pronounced but still visible
-          if (glowIntensity > 0) {
-            ctx.shadowBlur = 12 * glowIntensity;
-            ctx.shadowColor = "rgba(160, 120, 255, 0.6)";
-            ctx.fillStyle = `rgba(230, 210, 255, ${0.5 * glowIntensity + 0.5})`;
-          } else {
-            ctx.shadowBlur = 0;
-            ctx.fillStyle = "rgba(186, 140, 255, 0.9)"; // More vibrant purple for snippets
-          }
-          
-          ctx.font = `bold ${sizes[i]}px "Fira Code", monospace`;
-          ctx.globalAlpha = Math.max(0.5, opacities[i]); // Ensure minimum opacity
-          ctx.fillText(snippet, x, y);
-          ctx.globalAlpha = 1;
-        }
-        
-        // Reset when off screen with varied reset positions for natural flow
-        if (y > canvas.height / (window.devicePixelRatio || 1) && Math.random() > 0.98) {
+        // Reset when off screen and randomize reset position
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.98) {
           drops[i] = 0;
-          // Occasionally change parameters for continued variety
-          if (Math.random() > 0.8) {
-            speeds[i] = Math.random() * (window.innerWidth > 768 ? 0.8 : 0.5) + (window.innerWidth > 768 ? 0.5 : 0.3);
-            textTypes[i] = Math.random() > 0.8 ? 1 : 0;
-            opacities[i] = Math.random() * 0.5 + 0.6;
-          }
         }
         
         // Increment Y coordinate for next character
-        drops[i] += speeds[i];
+        drops[i]++;
       }
     };
     
-    // Animation loop with optimized framerate
-    let animationFrameId: number;
-    let lastTime = 0;
-    const fps = 30; // Cap framerate for better performance
-    const fpsInterval = 1000 / fps;
-    
-    const animate = (currentTime: number) => {
-      animationFrameId = requestAnimationFrame(animate);
-      
-      // Throttle frame rate for better performance
-      const elapsed = currentTime - lastTime;
-      if (elapsed > fpsInterval) {
-        lastTime = currentTime - (elapsed % fpsInterval);
-        draw();
-      }
-    };
-    
-    animate(0);
+    // Animation loop
+    const interval = setInterval(draw, 80);
     
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      clearInterval(interval);
       window.removeEventListener('resize', setCanvasDimensions);
     };
-  }, []); // Removed mousePosition dependency to avoid reinitialization on mouse move
+  }, []);
   
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* Canvas with improved visibility and higher opacity */}
+      {/* Canvas for code rain effect */}
       <canvas 
         ref={canvasRef} 
-        className="absolute inset-0 opacity-45"
-        style={{ pointerEvents: "none" }} 
+        className="absolute inset-0 opacity-15"
       />
       
-      {/* Fixed floating particles that don't react to mouse movement */}
-      {Array.from({ length: window.innerWidth > 768 ? 30 : 18 }).map((_, i) => {
-        const size = Math.random() * 3.5 + 1;
-        const isBlue = Math.random() > 0.5;
-        const isPurple = Math.random() > 0.7;
-        const isYellow = !isBlue && !isPurple;
-        const color = isBlue ? "#4B92F6" : isPurple ? "#9861F9" : "#EAB308";
-        const opacity = Math.random() * 0.25 + 0.2;
-        
-        // Generate unique positions for each particle that won't change
-        const top = `${Math.random() * 100}%`;
-        const left = `${Math.random() * 100}%`;
-        // Create unique animation parameters
-        const xMove = Math.random() * 200 - 100;
-        const yMove = Math.random() * 200 - 100;
-        const duration = Math.random() * 15 + 10;
-        
-        return (
-          <motion.div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: `${size}px`,
-              height: `${size}px`,
-              background: color,
-              opacity: opacity,
-              top: top,
-              left: left,
-              filter: `blur(${Math.random() > 0.7 ? 1 : 0}px)`,
-              pointerEvents: "none"
-            }}
-            initial={{ 
-              top: top,
-              left: left
-            }}
-            animate={{
-              x: [0, xMove],
-              y: [0, yMove],
-              opacity: [opacity, opacity * 2.5, opacity],
-            }}
-            transition={{
-              duration: duration,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-          />
-        );
-      })}
+      {/* Floating particles */}
+      {Array.from({ length: 12 }).map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-2 h-2 rounded-full opacity-20"
+          style={{
+            background: i % 2 === 0 ? "#3B82F6" : "#EAB308",
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+          }}
+          animate={{
+            x: [0, Math.random() * 100 - 50],
+            y: [0, Math.random() * 100 - 50],
+            scale: [1, Math.random() + 0.5, 1],
+            opacity: [0.1, 0.3, 0.1],
+          }}
+          transition={{
+            duration: Math.random() * 10 + 10,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+        />
+      ))}
       
-      {/* More subtle mouse follower effect */}
+      {/* Mouse follower effect */}
       <motion.div 
-        className="absolute w-64 h-64 rounded-full bg-blue-500/5 filter blur-3xl pointer-events-none"
+        className="absolute w-96 h-96 rounded-full bg-blue/5 filter blur-3xl"
         animate={{
-          x: mousePosition.x - 128,
-          y: mousePosition.y - 128,
+          x: mousePosition.x - 192,
+          y: mousePosition.y - 192,
         }}
         transition={{
           type: "spring",
-          damping: 25,
-          stiffness: 120,
-          mass: 3.5, // Heavier for slower movement
+          damping: 30,
+          stiffness: 200,
+          mass: 3,
         }}
       />
       
-      {/* Fixed gradient orbs in background */}
-      <div className="absolute top-1/4 -right-40 w-96 h-96 bg-yellow-400/8 rounded-full filter blur-3xl animate-pulse-slow pointer-events-none" />
-      <div className="absolute bottom-1/4 -left-40 w-96 h-96 bg-blue-500/8 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1000 pointer-events-none" />
-      <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-purple-500/8 rounded-full filter blur-2xl animate-pulse-slow animation-delay-1500 pointer-events-none" />
+      {/* Gradient orbs */}
+      <div className="absolute top-1/4 -right-40 w-96 h-96 bg-yellow/10 rounded-full filter blur-3xl animate-pulse-glow" />
+      <div className="absolute bottom-1/4 -left-40 w-96 h-96 bg-blue/10 rounded-full filter blur-3xl animate-pulse-glow animation-delay-1000" />
     </div>
   );
 };
