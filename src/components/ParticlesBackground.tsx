@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 
@@ -167,19 +168,19 @@ const ParticlesBackground = () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', setCanvasDimensions);
     };
-  }, []);
+  }, []); // Removed mousePosition dependency to avoid reinitialization on mouse move
   
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
       {/* Canvas with improved visibility and higher opacity */}
       <canvas 
         ref={canvasRef} 
-        className="absolute inset-0 opacity-60"
+        className="absolute inset-0 opacity-55"
         style={{ pointerEvents: "none" }} 
       />
       
       {/* Fixed floating particles that DON'T react to mouse movement */}
-      {Array.from({ length: window.innerWidth > 768 ? 50 : 30 }).map((_, i) => {
+      {Array.from({ length: window.innerWidth > 768 ? 40 : 25 }).map((_, i) => {
         const size = Math.random() * 4 + 1.5;
         
         // Better color distribution with enhanced palette
@@ -239,16 +240,26 @@ const ParticlesBackground = () => {
         );
       })}
       
-      {/* Enhanced gradient orbs in background - not tied to mouse movement */}
+      {/* Subtle gradient orbs in background - not tied to mouse movement */}
       <div className="absolute top-1/4 -right-32 w-96 h-96 bg-yellow-400/10 rounded-full filter blur-3xl animate-pulse-slow pointer-events-none" />
       <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-blue-500/10 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1000 pointer-events-none" />
       <div className="absolute top-2/3 right-1/4 w-80 h-80 bg-purple-500/8 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1500 pointer-events-none" />
       <div className="absolute top-1/3 left-1/3 w-64 h-64 bg-indigo-600/5 rounded-full filter blur-3xl animate-pulse-slow animation-delay-2000 pointer-events-none" />
-      <div className="absolute bottom-1/3 right-1/3 w-72 h-72 bg-blue-400/8 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1200 pointer-events-none" />
-      <div className="absolute top-3/4 left-1/4 w-60 h-60 bg-purple-600/6 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1800 pointer-events-none" />
       
-      {/* Add an additional large circular gradient for enhanced visual depth */}
-      <div className="absolute -top-64 -left-64 w-[40rem] h-[40rem] bg-gradient-radial from-blue-900/10 via-purple-900/5 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-2200 pointer-events-none" />
+      {/* Subtle mouse follower that doesn't affect other elements */}
+      <motion.div 
+        className="absolute w-72 h-72 rounded-full bg-blue-500/5 filter blur-3xl pointer-events-none"
+        animate={{
+          x: mousePosition.x - 144,
+          y: mousePosition.y - 144,
+        }}
+        transition={{
+          type: "spring",
+          damping: 30,
+          stiffness: 90,
+          mass: 4.5, // Even heavier for smoother, less noticeable movement
+        }}
+      />
     </div>
   );
 };
