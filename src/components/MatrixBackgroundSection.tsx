@@ -14,6 +14,7 @@ const MatrixBackgroundSection = ({
   particleCount = 30
 }: MatrixBackgroundSectionProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const interactionRef = useRef<HTMLDivElement>(null);
   
   // Matrix effect intensity settings
   const getIntensitySettings = () => {
@@ -78,8 +79,29 @@ const MatrixBackgroundSection = ({
     const codeSnippets = [
       "function()", "const", "let", "var", "=>", "class", "import", "export",
       "return", "async", "await", "try", "catch", "if", "else", "for", "while",
-      "<div>", "</div>", "<span>", "{props}", "useState", "useEffect"
+      "<div>", "</div>", "<span>", "{props}", "useState", "useEffect", "<Code/>"
     ];
+    
+    // Track interaction events for responsive matrix effect
+    let mouseX = -1;
+    let mouseY = -1;
+    const interactionElement = interactionRef.current;
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+    };
+    
+    const handleMouseLeave = () => {
+      mouseX = -1;
+      mouseY = -1;
+    };
+    
+    if (interactionElement) {
+      interactionElement.addEventListener('mousemove', handleMouseMove);
+      interactionElement.addEventListener('mouseleave', handleMouseLeave);
+    }
     
     // Optimize columns based on screen width and performance
     const columnWidth = Math.max(14, Math.floor(window.innerWidth / 120));
@@ -119,6 +141,17 @@ const MatrixBackgroundSection = ({
     const textTypes = new Array(columns).fill(0).map(() => Math.random() > 0.8 ? 1 : 0);
     const chars_to_draw = new Array(columns).fill('').map(() => chars[Math.floor(Math.random() * chars.length)]);
     
+    // Easter egg: Special rare characters that contain hidden messages
+    const easterEggMessages = [
+      "YOU FOUND ME", "SECRET", "HIDDEN TALENT", "EASTER EGG",
+      "HIRE ME", "MAGIC", "PORTFOLIO SECRET"
+    ];
+    
+    // Show easter egg message very rarely (0.1% chance per character)
+    const showEasterEgg = () => {
+      return Math.random() > 0.999;
+    };
+    
     const draw = () => {
       // Semi-transparent background for trail effect - adjusted for visibility
       ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
@@ -134,25 +167,56 @@ const MatrixBackgroundSection = ({
           chars_to_draw[i] = chars[Math.floor(Math.random() * chars.length)];
         }
         
-        // Choose what to draw - code snippet or character
+        // Choose what to draw - code snippet, character or easter egg
         let text;
-        if (textTypes[i] === 1) {
-          text = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+        let isEasterEgg = showEasterEgg();
+        
+        if (isEasterEgg) {
+          text = easterEggMessages[Math.floor(Math.random() * easterEggMessages.length)];
+          ctx.font = `bold ${sizes[i]}px "Fira Code", monospace`;
+          ctx.fillStyle = `hsla(60, 100%, 70%, 0.9)`;  // Golden color for easter eggs
+          ctx.shadowColor = `hsla(60, 100%, 70%, 0.9)`;
+          ctx.shadowBlur = 10;
         } else {
-          text = chars_to_draw[i];
+          if (textTypes[i] === 1) {
+            text = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+          } else {
+            text = chars_to_draw[i];
+          }
+          
+          // Mouse proximity effect for standard characters
+          const distX = Math.abs(x - mouseX);
+          const distY = Math.abs(y - mouseY);
+          const dist = Math.sqrt(distX * distX + distY * distY);
+          const proximity = dist < 100 ? (100 - dist) / 100 : 0;
+          
+          // Enhanced glow effect for better visibility
+          if (proximity > 0.3 || Math.random() > 0.85) {
+            const glowColor = colors[i].replace('rgba', 'rgba').replace(/[\d.]+\)$/, '0.9)');
+            ctx.shadowColor = glowColor;
+            ctx.shadowBlur = settings.glow + (proximity * 5) + (Math.random() * 3);
+          } else {
+            ctx.shadowBlur = 0;
+          }
+          
+          // Brighten color near mouse position
+          if (proximity > 0.3) {
+            const colorParts = colors[i].match(/hsla\((\d+),\s*(\d+)%,\s*(\d+)%,\s*([\d.]+)\)/);
+            if (colorParts) {
+              const h = parseInt(colorParts[1]);
+              const s = parseInt(colorParts[2]);
+              const l = Math.min(85, parseInt(colorParts[3]) + (proximity * 15));
+              ctx.fillStyle = `hsla(${h}, ${s}%, ${l}%, ${settings.opacity + (proximity * 0.2)})`;
+            } else {
+              ctx.fillStyle = colors[i];
+            }
+          } else {
+            ctx.fillStyle = colors[i];
+          }
+          
+          ctx.font = `${textTypes[i] === 1 ? 'bold ' : ''}${sizes[i]}px "Fira Code", monospace`;
         }
         
-        // Enhanced glow effect for better visibility
-        if (Math.random() > 0.85) { // Increased chance for glow
-          const glowColor = colors[i].replace('rgba', 'rgba').replace(/[\d.]+\)$/, '0.9)');
-          ctx.shadowColor = glowColor;
-          ctx.shadowBlur = settings.glow + (Math.random() * 3);
-        } else {
-          ctx.shadowBlur = 0;
-        }
-        
-        ctx.fillStyle = colors[i];
-        ctx.font = `${textTypes[i] === 1 ? 'bold ' : ''}${sizes[i]}px "Fira Code", monospace`;
         ctx.fillText(text, x, y);
         
         // Reset when off screen
@@ -160,8 +224,18 @@ const MatrixBackgroundSection = ({
           drops[i] = 0;
         }
         
-        // Increment Y coordinate
-        drops[i] += speeds[i];
+        // Increment Y coordinate with adjusted speed near mouse
+        if (mouseX > 0 && mouseY > 0) {
+          const distX = Math.abs(x - mouseX);
+          const distY = Math.abs(y - mouseY);
+          const dist = Math.sqrt(distX * distX + distY * distY);
+          const proximity = dist < 100 ? (100 - dist) / 100 : 0;
+          
+          // Increase speed near mouse
+          drops[i] += speeds[i] * (1 + proximity);
+        } else {
+          drops[i] += speeds[i];
+        }
       }
     };
     
@@ -187,12 +261,16 @@ const MatrixBackgroundSection = ({
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
+      if (interactionElement) {
+        interactionElement.removeEventListener('mousemove', handleMouseMove);
+        interactionElement.removeEventListener('mouseleave', handleMouseLeave);
+      }
       clearTimeout(resizeTimer);
     };
   }, [intensity]);
   
   return (
-    <div className="relative overflow-hidden py-12">
+    <div className="relative overflow-hidden py-12" ref={interactionRef}>
       {/* Matrix canvas background with increased opacity */}
       <canvas 
         ref={canvasRef}
@@ -229,6 +307,28 @@ const MatrixBackgroundSection = ({
         const duration = Math.random() * 20 + 15;
         const delay = Math.random() * -15;
         
+        // Add variation to movement patterns for more uniqueness
+        const movementType = Math.random();
+        let animate = {};
+        
+        if (movementType > 0.8) {
+          // Circular motion
+          animate = {
+            x: Array.from({ length: 5 }, (_, i) => Math.sin(i * Math.PI / 2) * xMove / 2),
+            y: Array.from({ length: 5 }, (_, i) => Math.cos(i * Math.PI / 2) * yMove / 2),
+            opacity: [opacity, opacity * 1.7, opacity], // More dramatic opacity shift
+            scale: [1, Math.random() > 0.7 ? 1.3 : 1, 1] // Add occasional pulsing
+          };
+        } else {
+          // Standard movement
+          animate = {
+            x: [0, xMove, 0, -xMove / 1.5, 0],
+            y: [0, yMove, -yMove / 2, yMove / 1.5, 0],
+            opacity: [opacity, opacity * 1.7, opacity], // More dramatic opacity shift
+            scale: [1, Math.random() > 0.7 ? 1.3 : 1, 1] // Add occasional pulsing
+          };
+        }
+        
         return (
           <motion.div
             key={i}
@@ -244,12 +344,7 @@ const MatrixBackgroundSection = ({
               boxShadow: Math.random() > 0.7 ? `0 0 12px 4px ${color}80` : 'none', // Enhanced glow
             }}
             initial={{ opacity: 0 }}
-            animate={{
-              x: [0, xMove, 0, -xMove / 1.5, 0],
-              y: [0, yMove, -yMove / 2, yMove / 1.5, 0],
-              opacity: [opacity, opacity * 1.7, opacity], // More dramatic opacity shift
-              scale: [1, Math.random() > 0.7 ? 1.3 : 1, 1] // Add occasional pulsing
-            }}
+            animate={animate}
             transition={{
               duration: duration,
               repeat: Infinity,

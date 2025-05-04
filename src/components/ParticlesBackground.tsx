@@ -75,7 +75,7 @@ const ParticlesBackground = () => {
       "function()", "const", "let", "var", "=>", "class", "import", "export",
       "return", "async", "await", "try", "catch", "if", "else", "for", "while",
       "<div>", "</div>", "<span>", "{props}", "useState", "useEffect", "()",
-      "=>", "==", "===", "&&", "||", "map", "filter", "reduce"
+      "=>", "==", "===", "&&", "||", "map", "filter", "reduce", "<Matrix/>", "<Code/>"
     ];
     
     // Optimize the number of columns based on screen size and performance
@@ -121,6 +121,14 @@ const ParticlesBackground = () => {
     const textTypes: number[] = new Array(columns).fill(0).map(() => Math.random() > 0.8 ? 1 : 0);
     const chars_to_draw: string[] = new Array(columns).fill('').map(() => chars[Math.floor(Math.random() * chars.length)]);
     
+    // Track mouse position to create a subtle interactive effect
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    canvas.addEventListener('mousemove', (e) => {
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+    });
+    
     // Optimized draw function with reduced memory allocations
     const draw = () => {
       // Semi-transparent background for trail effect - adjust for better visibility
@@ -146,16 +154,40 @@ const ParticlesBackground = () => {
           text = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
         }
         
-        // Enhanced glow effect for better visibility
-        if (Math.random() > 0.9) {
-          const glowColor = colors[i].replace('hsla', 'hsla').replace(/[\d.]+\)$/, '0.9)');
+        // Mouse proximity effect - increase glow and speed when near mouse
+        const distX = Math.abs(x - lastMouseX);
+        const distY = Math.abs(y - lastMouseY);
+        const dist = Math.sqrt(distX * distX + distY * distY);
+        const proximity = dist < 150 ? (150 - dist) / 150 : 0;
+        
+        // Enhanced glow effect with mouse interaction
+        if (proximity > 0.3 || Math.random() > 0.9) {
+          const glowColor = colors[i].replace('hsla', 'hsla');
           ctx.shadowColor = glowColor;
-          ctx.shadowBlur = 6; // Increased glow
+          ctx.shadowBlur = 6 + (proximity * 4); // Increased glow near mouse
         } else {
           ctx.shadowBlur = 0;
         }
         
-        ctx.fillStyle = colors[i];
+        // Adjust character color based on mouse proximity
+        if (proximity > 0.3) {
+          // Brighter colors near mouse
+          const colorParts = colors[i].match(/hsla\((\d+),\s*(\d+)%,\s*(\d+)%,\s*([\d.]+)\)/);
+          if (colorParts) {
+            const h = parseInt(colorParts[1]);
+            const s = parseInt(colorParts[2]);
+            const l = Math.min(90, parseInt(colorParts[3]) + (proximity * 15)); // Brighter
+            ctx.fillStyle = `hsla(${h}, ${s}%, ${l}%, ${0.95 + (proximity * 0.05)})`;
+          } else {
+            ctx.fillStyle = colors[i];
+          }
+        } else {
+          ctx.fillStyle = colors[i];
+        }
+        
+        // Adjust speed based on mouse proximity
+        const currentSpeed = speeds[i] * (1 + (proximity * 1.5));
+        
         ctx.font = `${textTypes[i] === 1 ? 'bold ' : ''}${sizes[i]}px "Fira Code", monospace`;
         ctx.fillText(text, x, y);
         
@@ -169,15 +201,18 @@ const ParticlesBackground = () => {
           }
         }
         
-        // Increment Y coordinate
-        drops[i] += speeds[i];
+        // Increment Y coordinate using the potentially adjusted speed
+        drops[i] += currentSpeed;
       }
     };
     
     // Animation loop with optimized framerate using requestAnimationFrame
     let animationFrameId: number;
     let lastTime = 0;
-    const fps = window.innerWidth > 768 ? 30 : 20; // Lower FPS on mobile
+    // Adaptive frame rate based on device capabilities
+    const fps = navigator.hardwareConcurrency > 4 ? 
+                (window.innerWidth > 768 ? 30 : 24) : 
+                (window.innerWidth > 768 ? 24 : 18);
     const fpsInterval = 1000 / fps;
     
     const animate = (currentTime: number) => {
@@ -197,13 +232,16 @@ const ParticlesBackground = () => {
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
+      canvas.removeEventListener('mousemove', () => {});
       clearTimeout(resizeTimer);
     };
   }, []);
   
-  // Determine particle count based on viewport width
+  // Determine particle count based on viewport width and device capabilities
   const particleCount = typeof window !== 'undefined' ? 
-    (window.innerWidth > 1200 ? 60 : window.innerWidth > 768 ? 50 : 30) : 30;
+    (navigator.hardwareConcurrency > 4 ?
+      (window.innerWidth > 1200 ? 60 : window.innerWidth > 768 ? 50 : 30) :
+      (window.innerWidth > 1200 ? 40 : window.innerWidth > 768 ? 30 : 20)) : 30;
   
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
