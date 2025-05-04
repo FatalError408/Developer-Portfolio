@@ -1,155 +1,194 @@
-import { motion } from "framer-motion";
-import { Code, Database, Cog, Paintbrush, Globe, ChevronRight } from "lucide-react";
-import ScrollRevealWrapper from "./ScrollRevealWrapper";
 
-const SKILL_CATEGORIES = [
-  {
-    name: "Frontend",
-    icon: <Code className="w-5 h-5 text-blue" />,
-    skills: [
-      { name: "HTML5/CSS3", level: 95 },
-      { name: "JavaScript (ES6+)", level: 90 },
-      { name: "TypeScript", level: 85 },
-      { name: "React", level: 90 },
-      { name: "Next.js", level: 80 },
-      { name: "Vue.js", level: 75 },
-      { name: "Tailwind CSS", level: 85 },
-    ],
-  },
-  {
-    name: "Backend",
-    icon: <Database className="w-5 h-5 text-blue" />,
-    skills: [
-      { name: "Node.js", level: 85 },
-      { name: "Express", level: 80 },
-      { name: "Python", level: 75 },
-      { name: "Django", level: 70 },
-      { name: "SQL", level: 80 },
-      { name: "GraphQL", level: 75 },
-      { name: "REST API Design", level: 85 },
-    ],
-  },
-  {
-    name: "Tools & Others",
-    icon: <Cog className="w-5 h-5 text-blue" />,
-    skills: [
-      { name: "Git/GitHub", level: 90 },
-      { name: "Docker", level: 75 },
-      { name: "AWS", level: 70 },
-      { name: "Testing (Jest/RTL)", level: 80 },
-      { name: "CI/CD", level: 75 },
-      { name: "Agile/Scrum", level: 85 },
-      { name: "UI/UX Design", level: 70 },
-    ],
-  },
-];
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import ScrollRevealWrapper from './ScrollRevealWrapper';
+import { CodeIcon, BrainCircuitIcon, ServerIcon, PaletteIcon, WrenchIcon } from 'lucide-react';
 
 const Skills = () => {
-  return (
-    <section id="skills" className="py-20 bg-dark-500 relative overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute inset-0 opacity-10 bg-noise mix-blend-overlay pointer-events-none"></div>
-      <div className="absolute right-0 bottom-0 w-96 h-96 bg-blue/10 rounded-full filter blur-3xl opacity-20"></div>
-      <div className="absolute left-0 top-0 w-96 h-96 bg-yellow/10 rounded-full filter blur-3xl opacity-20"></div>
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const [konami, setKonami] = useState<string[]>([]);
+  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  
+  // Optimized Konami code handler with single event listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only check if we're not already showing the easter egg
+      if (showEasterEgg) return;
       
-      <div className="section-container relative z-10">
-        <ScrollRevealWrapper>
-          <h2 className="section-title">
-            Technical <span className="text-gradient-yellow">Skills</span>
-          </h2>
-          <p className="section-subtitle">
-            I've worked with a wide range of technologies in the web development world. Here's an overview of my technical expertise.
-          </p>
-        </ScrollRevealWrapper>
+      const newKonami = [...konami, e.key];
+      if (newKonami.length > konamiCode.length) {
+        newKonami.shift();
+      }
+      setKonami(newKonami);
+      
+      // Check for Konami code match
+      if (newKonami.length === konamiCode.length && 
+          newKonami.every((key, i) => key === konamiCode[i])) {
+        setShowEasterEgg(true);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [konami, showEasterEgg]);
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-10">
-          {SKILL_CATEGORIES.map((category, idx) => (
-            <ScrollRevealWrapper key={category.name} delay={idx * 0.2}>
-              <motion.div 
-                className="card-highlight group"
-                whileHover={{ y: -5 }}
-              >
-                <div className="flex items-center mb-4">
-                  <div className="bg-dark-400/80 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center mr-3 group-hover:bg-blue/10 transition-colors">
-                    {category.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold text-white">{category.name}</h3>
-                </div>
-                <div className="space-y-4">
-                  {category.skills.map((skill, index) => (
-                    <div key={skill.name}>
-                      <div className="flex justify-between mb-1">
-                        <span className="text-sm font-medium">{skill.name}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {skill.level}%
-                        </span>
-                      </div>
-                      <div className="w-full bg-dark-200 rounded-full h-2.5 overflow-hidden">
-                        <motion.div
-                          className="bg-gradient-to-r from-blue to-blue-light h-2.5 rounded-full"
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${skill.level}%` }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1, delay: 0.1 * index }}
-                        ></motion.div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            </ScrollRevealWrapper>
-          ))}
-        </div>
-        
-        <ScrollRevealWrapper delay={0.4} className="mt-16">
-          <div className="card-highlight p-8 relative bg-dark-300/50 backdrop-blur-md">
-            <h3 className="text-2xl font-semibold mb-6">Languages & Frameworks I Love</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {[
-                { name: "JavaScript", icon: <Code className="w-4 h-4" /> },
-                { name: "TypeScript", icon: <Code className="w-4 h-4" /> },
-                { name: "React", icon: <Code className="w-4 h-4" /> },
-                { name: "Node.js", icon: <Code className="w-4 h-4" /> },
-                { name: "Next.js", icon: <Globe className="w-4 h-4" /> },
-                { name: "Python", icon: <Code className="w-4 h-4" /> },
-                { name: "Tailwind CSS", icon: <Paintbrush className="w-4 h-4" /> },
-                { name: "Express", icon: <Database className="w-4 h-4" /> },
-                { name: "GraphQL", icon: <Database className="w-4 h-4" /> },
-                { name: "MongoDB", icon: <Database className="w-4 h-4" /> },
-                { name: "PostgreSQL", icon: <Database className="w-4 h-4" /> },
-                { name: "AWS", icon: <Cog className="w-4 h-4" /> }
-              ].map((tech, idx) => (
-                <motion.div 
-                  key={tech.name} 
-                  className="bg-dark-300 rounded-lg p-3 text-center border border-dark-200 hover:border-blue/30 transition-all duration-300 group"
-                  whileHover={{ 
-                    scale: 1.05, 
-                    backgroundColor: "rgba(59, 130, 246, 0.1)" 
-                  }}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.05 * idx }}
-                >
-                  <span className="text-sm font-medium flex items-center justify-center">
-                    {tech.icon}
-                    <span className="ml-1">{tech.name}</span>
-                  </span>
-                  <motion.div 
-                    className="absolute -right-1 -bottom-1 w-5 h-5 bg-blue/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    viewport={{ once: true }}
-                  >
-                    <ChevronRight className="w-3 h-3 text-blue absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-                  </motion.div>
-                </motion.div>
-              ))}
-            </div>
+  const frontendSkills = [
+    'React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'Redux Toolkit', 'React Query'
+  ];
+  
+  const backendSkills = [
+    'Node.js', 'Express', 'MongoDB', 'PostgreSQL', 'GraphQL', 'RESTful APIs', 'Firebase'
+  ];
+  
+  const aiSkills = [
+    'Machine Learning', 'PyTorch', 'TensorFlow', 'Langchain', 'Hugging Face', 'LLMs', 'Prompt Engineering'
+  ];
+  
+  const devopsSkills = [
+    'CI/CD', 'Docker', 'Git', 'GitHub Actions', 'AWS', 'Vercel', 'Netlify'
+  ];
+  
+  const designSkills = [
+    'Figma', 'UI Design', 'Responsive Design', 'Design Systems', 'Accessibility', 'User Experience'
+  ];
+
+  return (
+    <section id="skills" className="py-16 bg-dark-400/30">
+      <div className="container mx-auto px-4">
+        <ScrollRevealWrapper>
+          <div className="text-center mb-12">
+            <Badge variant="outline" className="mb-2">Expertise</Badge>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Technical Skills</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              A focused collection of technologies and frameworks I specialize in
+            </p>
           </div>
         </ScrollRevealWrapper>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <ScrollRevealWrapper delay={0.1}>
+            <SkillCard 
+              title="Frontend Development" 
+              skills={frontendSkills}
+              icon={<CodeIcon className="w-5 h-5" />}
+            />
+          </ScrollRevealWrapper>
+          
+          <ScrollRevealWrapper delay={0.2}>
+            <SkillCard 
+              title="Backend Development" 
+              skills={backendSkills}
+              icon={<ServerIcon className="w-5 h-5" />}
+            />
+          </ScrollRevealWrapper>
+          
+          <ScrollRevealWrapper delay={0.3}>
+            <SkillCard 
+              title="AI & Machine Learning" 
+              skills={aiSkills}
+              icon={<BrainCircuitIcon className="w-5 h-5" />}
+            />
+          </ScrollRevealWrapper>
+          
+          <ScrollRevealWrapper delay={0.4}>
+            <SkillCard 
+              title="DevOps & Deployment" 
+              skills={devopsSkills}
+              icon={<WrenchIcon className="w-5 h-5" />}
+            />
+          </ScrollRevealWrapper>
+          
+          <ScrollRevealWrapper delay={0.5}>
+            <SkillCard 
+              title="Design & UX" 
+              skills={designSkills}
+              icon={<PaletteIcon className="w-5 h-5" />}
+            />
+          </ScrollRevealWrapper>
+          
+          {showEasterEgg && (
+            <ScrollRevealWrapper delay={0.3}>
+              <MatrixSkillCard />
+            </ScrollRevealWrapper>
+          )}
+        </div>
+        
+        {/* Hidden Easter Egg - Only visible in source code */}
+        <div className="hidden">
+          {/* 
+            You found a hidden message! This portfolio has several easter eggs. 
+            Keep exploring and see what else you can discover.
+            
+            Hint: Try the Konami code on your keyboard: ↑ ↑ ↓ ↓ ← → ← → B A
+          */}
+        </div>
       </div>
     </section>
+  );
+};
+
+// Extracted components for better performance
+const SkillCard = ({ title, skills, icon }: { title: string, skills: string[], icon: React.ReactNode }) => (
+  <Card className="hover:border-blue/50 transition-all">
+    <CardHeader className="pb-2">
+      <CardTitle className="flex items-center gap-2 text-xl">
+        {icon}
+        {title}
+      </CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="flex flex-wrap gap-2">
+        {skills.map((skill, index) => (
+          <Badge 
+            key={index} 
+            variant="secondary" 
+            className="bg-dark-300 hover:bg-dark-200 transition-colors"
+          >
+            {skill}
+          </Badge>
+        ))}
+      </div>
+    </CardContent>
+  </Card>
+);
+
+// Matrix Easter Egg Component
+const MatrixSkillCard = () => {
+  const matrixSkills = [
+    'The Matrix', 'Reality Bending', 'Code Manipulation', 'Simulation Hacking', 
+    'Digital Kung Fu', 'Red Pill', 'Bullet Time', 'Agent Avoidance'
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Card className="border-green-500/50 bg-dark-400/80 shadow-lg shadow-green-900/30">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2 text-xl text-green-500">
+            <span className="font-mono">01</span>
+            <span>Matrix Expertise</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-2">
+            {matrixSkills.map((skill, index) => (
+              <Badge 
+                key={index} 
+                variant="outline"
+                className="border-green-500/50 text-green-400 hover:bg-green-900/20 transition-colors"
+              >
+                {skill}
+              </Badge>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 };
 

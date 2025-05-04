@@ -1,5 +1,6 @@
+
 import { motion } from "framer-motion";
-import { Github, Linkedin, Twitter, Heart, Mail, MapPin, Phone, ChevronUp, Code } from "lucide-react";
+import { Github, Linkedin, Twitter, Mail, MapPin, Phone, ChevronUp, Code } from "lucide-react";
 import ScrollRevealWrapper from "./ScrollRevealWrapper";
 
 const Footer = () => {
@@ -14,18 +15,18 @@ const Footer = () => {
   
   return (
     <footer className="bg-dark-500 border-t border-dark-300 relative">
-      {/* Background elements */}
+      {/* Background elements with improved visuals */}
       <div className="absolute inset-0 opacity-20 bg-noise mix-blend-overlay pointer-events-none"></div>
       <div className="absolute left-0 top-0 w-full h-20 bg-gradient-to-t from-dark-500 to-transparent"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 relative z-10">
         <motion.div 
           className="absolute bottom-auto right-6 top-6 w-10 h-10 rounded-full border border-dark-200 bg-dark-300 flex items-center justify-center cursor-pointer hover:bg-dark-200 transition-colors duration-300"
-          whileHover={{ y: -5 }}
+          whileHover={{ y: -5, boxShadow: "0 5px 15px rgba(0, 0, 0, 0.2)" }}
           whileTap={{ scale: 0.9 }}
           onClick={scrollToTop}
         >
-          <ChevronUp className="w-5 h-5 text-muted-foreground" />
+          <ChevronUp className="w-5 h-5 text-blue" />
         </motion.div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -34,17 +35,17 @@ const Footer = () => {
               <motion.div whileHover={{ x: 5 }} className="inline-block">
                 <a href="#" className="text-2xl font-bold text-white flex items-center">
                   <Code className="mr-2 text-blue" />
-                  <span>Dev<span className="text-blue">Portfolio</span></span>
+                  <span>Julian<span className="text-blue">Artisan</span>408</span>
                 </a>
               </motion.div>
               <p className="mt-4 text-muted-foreground max-w-xs">
-                A passionate software engineer specializing in creating exceptional digital experiences.
+                A passionate software engineer specializing in creating exceptional digital experiences with expertise in modern web technologies.
               </p>
               <div className="flex space-x-4 mt-6">
                 {[
-                  { icon: <Github size={20} />, url: "https://github.com", label: "GitHub" },
-                  { icon: <Linkedin size={20} />, url: "https://linkedin.com", label: "LinkedIn" },
-                  { icon: <Twitter size={20} />, url: "https://twitter.com", label: "Twitter" }
+                  { icon: <Github size={20} />, url: "https://github.com/JulianArtisan408", label: "GitHub" },
+                  { icon: <Linkedin size={20} />, url: "https://linkedin.com/in/julianartisan408", label: "LinkedIn" },
+                  { icon: <Twitter size={20} />, url: "https://twitter.com/julianartisan408", label: "Twitter" }
                 ].map((social, idx) => (
                   <motion.a
                     key={idx}
@@ -53,7 +54,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     className="w-9 h-9 rounded-full bg-dark-300/80 backdrop-blur-sm flex items-center justify-center text-gray-400 hover:text-white hover:bg-dark-200 transition-colors"
                     aria-label={social.label}
-                    whileHover={{ y: -5, scale: 1.1 }}
+                    whileHover={{ y: -5, scale: 1.1, boxShadow: "0 5px 15px rgba(0, 0, 0, 0.2)" }}
                     whileTap={{ scale: 0.9 }}
                   >
                     {social.icon}
@@ -109,7 +110,7 @@ const Footer = () => {
                     <Mail className="w-4 h-4 text-blue" />
                   </div>
                   <a href="mailto:contact@example.com" className="text-muted-foreground hover:text-white transition-colors">
-                    contact@example.com
+                    julianartisan408@example.com
                   </a>
                 </motion.li>
                 <motion.li 
@@ -130,18 +131,10 @@ const Footer = () => {
         
         <div className="border-t border-dark-300 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-muted-foreground text-sm">
-            © {currentYear} Brendon Lightfoot. All rights reserved.
+            © {currentYear} JulianArtisan408. All rights reserved.
           </p>
-          <p className="text-muted-foreground text-sm mt-4 md:mt-0 flex items-center">
-            Designed & Built with 
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="mx-1"
-            >
-              <Heart size={16} className="text-red-500" />
-            </motion.div>
-            <span>by Brendon Lightfoot</span>
+          <p className="text-muted-foreground text-sm mt-4 md:mt-0">
+            Designed & Built by Brendon Julian Lightfoot
           </p>
         </div>
       </div>
