@@ -63,11 +63,11 @@ const Skills = () => {
       
       {/* Hidden Easter Egg - Only visible in source code */}
       <div className="hidden">
-        {/* 
+        <!--
           You found a hidden message! This portfolio has several easter eggs. 
           Keep exploring and see what else you can discover.
           Hint: Try hovering over skills and watch for subtle glitches.
-        */}
+        -->
       </div>
       
       <div className="section-container relative z-10">
