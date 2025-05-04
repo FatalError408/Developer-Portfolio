@@ -11,6 +11,8 @@ import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ParticlesBackground from "@/components/ParticlesBackground";
+import ParticlesBackground3D from "@/components/ParticlesBackground3D";
+import Interactive3D from "@/components/Interactive3D";
 
 const Index = () => {
   // Smooth scroll implementation
@@ -48,9 +50,16 @@ const Index = () => {
       variants={fadeIn}
     >
       <ParticlesBackground />
+      <ParticlesBackground3D />
       <Navbar />
       <main>
         <Hero />
+        <div className="bg-dark-400 py-16">
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl font-bold mb-8 text-center">Interactive 3D Elements</h2>
+            <Interactive3D />
+          </div>
+        </div>
         <About />
         <Skills />
         <Projects />
