@@ -16,6 +16,7 @@ const Footer = lazy(() => import("@/components/Footer"));
 // Background components
 import ParticlesBackground from "@/components/ParticlesBackground";
 import MatrixBackgroundSection from "@/components/MatrixBackgroundSection";
+const ParticlesBackground3D = lazy(() => import("@/components/ParticlesBackground3D"));
 
 // Loading fallback component for lazy-loaded sections
 const SectionLoading = () => (
@@ -27,21 +28,10 @@ const SectionLoading = () => (
   </div>
 );
 
-// Using dynamic import with error boundary for 3D components
-const ParticlesBackground3D = lazy(() => 
-  import("@/components/ParticlesBackground3D")
-    .catch(() => {
-      console.warn("Failed to load 3D particles, using fallback");
-      // Return a mock component if 3D fails to load
-      return { default: () => null };
-    })
-);
-
 const Index = () => {
   // Track visit to show custom welcome effect
   const [showWelcomeEffect, setShowWelcomeEffect] = useState(true);
   const [isLowPowerMode, setIsLowPowerMode] = useState(false);
-  const [load3DEffects, setLoad3DEffects] = useState(false);
   
   // Check device capabilities
   useEffect(() => {
@@ -52,11 +42,6 @@ const Index = () => {
     
     setIsLowPowerMode(isLowPower);
     
-    // Load 3D effects after a short delay to prevent initial render blocking
-    const timer = setTimeout(() => {
-      setLoad3DEffects(true);
-    }, 1000);
-    
     // Log performance info
     console.log("Device info:", {
       isMobile,
@@ -64,8 +49,6 @@ const Index = () => {
       isLowPower,
       screenWidth: window.innerWidth
     });
-    
-    return () => clearTimeout(timer);
   }, []);
   
   // Optimized smooth scroll implementation
@@ -178,8 +161,8 @@ const Index = () => {
       {/* Global particles background with matrix rain effect - always enabled */}
       <ParticlesBackground />
       
-      {/* Conditionally render 3D particles based on device capability and delayed loading */}
-      {!isLowPowerMode && load3DEffects && (
+      {/* Conditionally render 3D particles based on device capability */}
+      {!isLowPowerMode && (
         <Suspense fallback={null}>
           <ParticlesBackground3D />
         </Suspense>
