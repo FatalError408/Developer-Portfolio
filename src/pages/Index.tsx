@@ -11,8 +11,6 @@ import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ParticlesBackground from "@/components/ParticlesBackground";
-import MatrixBackgroundSection from "@/components/MatrixBackgroundSection";
-import ParticlesBackground3D from "@/components/ParticlesBackground3D";
 
 const Index = () => {
   // Smooth scroll implementation
@@ -49,40 +47,17 @@ const Index = () => {
       animate="visible"
       variants={fadeIn}
     >
-      {/* Global particles background with matrix rain effect */}
       <ParticlesBackground />
-      
-      {/* 3D matrix background for additional effect */}
-      <ParticlesBackground3D />
-      
       <Navbar />
-      
-      <main className="relative z-10">
-        {/* Hero section with default particles */}
+      <main>
         <Hero />
-        
-        {/* About section with enhanced matrix background */}
-        <MatrixBackgroundSection intensity="medium" particleCount={35}>
-          <About />
-        </MatrixBackgroundSection>
-        
+        <About />
         <Skills />
-        
-        {/* Projects section with high intensity matrix effect */}
-        <MatrixBackgroundSection intensity="high" particleCount={40}>
-          <Projects />
-        </MatrixBackgroundSection>
-        
+        <Projects />
         <GitHubRepositories />
-        
-        {/* Experience section with medium matrix background */}
-        <MatrixBackgroundSection intensity="medium" particleCount={30}>
-          <Experience />
-        </MatrixBackgroundSection>
-        
+        <Experience />
         <Contact />
       </main>
-      
       <Footer />
     </motion.div>
   );

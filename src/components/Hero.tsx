@@ -4,11 +4,9 @@ import { ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useRef, useState, useEffect } from "react";
-import { Command, CommandInput, CommandList, CommandGroup, CommandItem } from "@/components/ui/command";
 
 const Hero = () => {
   const [isMobile, setIsMobile] = useState(false);
-  const [isCommandOpen, setIsCommandOpen] = useState(false);
   
   // Check for mobile viewport
   useEffect(() => {
@@ -20,22 +18,6 @@ const Hero = () => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // Handle keyboard shortcut for command menu
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        setIsCommandOpen(prev => !prev);
-      }
-      if (e.key === 'Escape' && isCommandOpen) {
-        setIsCommandOpen(false);
-      }
-    };
-    
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isCommandOpen]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -65,19 +47,8 @@ const Hero = () => {
 
   const imgRef = useRef<HTMLDivElement>(null);
   
-  const navigateTo = (section: string) => {
-    const element = document.getElementById(section);
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop - 80,
-        behavior: 'smooth'
-      });
-    }
-    setIsCommandOpen(false);
-  };
-  
   return (
-    <section className="relative min-h-[90vh] flex items-center pt-16 overflow-hidden bg-dark-500" id="home">
+    <section className="relative min-h-[90vh] flex items-center pt-16 overflow-hidden bg-dark-500">
       <div className="absolute inset-0 opacity-20 bg-noise mix-blend-overlay pointer-events-none"></div>
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-full filter blur-3xl opacity-30 animate-pulse-glow"></div>
       
@@ -93,9 +64,6 @@ const Hero = () => {
               variants={itemVariants}
               className="space-y-2"
             >
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm mb-4">
-                <span className="animate-pulse mr-1">●</span> Software Engineer & Web Developer
-              </div>
               <h1 className="text-4xl md:text-6xl font-bold leading-tight">
                 Hi, I'm <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Brendon Julian Lightfoot</span>
               </h1>
@@ -113,25 +81,11 @@ const Hero = () => {
               className="flex flex-wrap gap-4"
               variants={itemVariants}
             >
-              <Button 
-                className="bg-gradient-to-r from-blue-500 to-purple-500 hover:opacity-90 shadow-lg shadow-blue-500/20 transition-all duration-300 text-base py-6"
-                onClick={() => navigateTo('projects')}
-              >
+              <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:opacity-90 shadow-lg shadow-blue-500/20 transition-all duration-300 text-base py-6">
                 View My Work <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-              <Button 
-                variant="outline" 
-                className="border-blue-400/30 hover:border-blue-400/80 shadow-lg shadow-purple-500/10 transition-all duration-300 text-base py-6"
-                onClick={() => window.open('/resume.pdf', '_blank')}
-              >
+              <Button variant="outline" className="border-blue-400/30 hover:border-blue-400/80 shadow-lg shadow-purple-500/10 transition-all duration-300 text-base py-6">
                 Download CV
-              </Button>
-              <Button
-                variant="ghost"
-                className="text-muted-foreground hover:text-white hover:bg-dark-300/50 hidden md:flex"
-                onClick={() => setIsCommandOpen(true)}
-              >
-                Press <kbd className="px-2 py-0.5 text-xs bg-dark-300 rounded-md mx-1">⌘ K</kbd> to explore
               </Button>
             </motion.div>
 
@@ -223,25 +177,6 @@ const Hero = () => {
                   transition={{ duration: 10, repeat: Infinity }}
                 />
               </motion.div>
-
-              {/* Enhanced profile stats */}
-              <motion.div 
-                className="absolute -bottom-4 -right-4 px-4 py-2 bg-dark-300/90 backdrop-blur-md rounded-lg border border-blue-500/30"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 }}
-              >
-                <div className="text-sm font-medium text-blue-400">5+ years experience</div>
-              </motion.div>
-              
-              <motion.div 
-                className="absolute -top-6 -left-6 px-4 py-2 bg-dark-300/90 backdrop-blur-md rounded-lg border border-purple-500/30"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4 }}
-              >
-                <div className="text-sm font-medium text-purple-400">Full-Stack Developer</div>
-              </motion.div>
             </div>
           </motion.div>
         </motion.div>
@@ -261,53 +196,6 @@ const Hero = () => {
           <ChevronDown className="w-5 h-5 text-purple-400" />
         </motion.div>
       </div>
-
-      {/* Command Dialog */}
-      {isCommandOpen && (
-        <motion.div 
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setIsCommandOpen(false)}
-        >
-          <motion.div 
-            className="w-full max-w-md bg-dark-400/95 border border-dark-200 rounded-lg shadow-2xl overflow-hidden"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -20, opacity: 0 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Command className="border-none bg-transparent">
-              <CommandInput placeholder="Search sections..." />
-              <CommandList>
-                <CommandGroup heading="Navigate">
-                  {['home', 'about', 'skills', 'projects', 'experience', 'contact'].map((section) => (
-                    <CommandItem 
-                      key={section}
-                      onSelect={() => navigateTo(section)}
-                      className="cursor-pointer"
-                    >
-                      {section.charAt(0).toUpperCase() + section.slice(1)}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-                <CommandGroup heading="Actions">
-                  <CommandItem 
-                    onSelect={() => {
-                      window.open('/resume.pdf', '_blank');
-                      setIsCommandOpen(false);
-                    }}
-                    className="cursor-pointer"
-                  >
-                    Download Resume
-                  </CommandItem>
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </motion.div>
-        </motion.div>
-      )}
     </section>
   );
 };
