@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Github, Linkedin, Twitter, Heart, Mail, MapPin, Phone, ChevronUp, Code } from "lucide-react";
 import ScrollRevealWrapper from "./ScrollRevealWrapper";
@@ -35,17 +34,17 @@ const Footer = () => {
               <motion.div whileHover={{ x: 5 }} className="inline-block">
                 <a href="#" className="text-2xl font-bold text-white flex items-center">
                   <Code className="mr-2 text-blue" />
-                  <span>Julian<span className="text-blue">Artisan</span>408</span>
+                  <span>Dev<span className="text-blue">Portfolio</span></span>
                 </a>
               </motion.div>
               <p className="mt-4 text-muted-foreground max-w-xs">
-                A passionate software engineer specializing in creating exceptional digital experiences with expertise in modern web technologies.
+                A passionate software engineer specializing in creating exceptional digital experiences.
               </p>
               <div className="flex space-x-4 mt-6">
                 {[
-                  { icon: <Github size={20} />, url: "https://github.com/JulianArtisan408", label: "GitHub" },
-                  { icon: <Linkedin size={20} />, url: "https://linkedin.com/in/julianartisan408", label: "LinkedIn" },
-                  { icon: <Twitter size={20} />, url: "https://twitter.com/julianartisan408", label: "Twitter" }
+                  { icon: <Github size={20} />, url: "https://github.com", label: "GitHub" },
+                  { icon: <Linkedin size={20} />, url: "https://linkedin.com", label: "LinkedIn" },
+                  { icon: <Twitter size={20} />, url: "https://twitter.com", label: "Twitter" }
                 ].map((social, idx) => (
                   <motion.a
                     key={idx}
@@ -110,7 +109,7 @@ const Footer = () => {
                     <Mail className="w-4 h-4 text-blue" />
                   </div>
                   <a href="mailto:contact@example.com" className="text-muted-foreground hover:text-white transition-colors">
-                    julianartisan408@example.com
+                    contact@example.com
                   </a>
                 </motion.li>
                 <motion.li 
@@ -131,7 +130,7 @@ const Footer = () => {
         
         <div className="border-t border-dark-300 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-muted-foreground text-sm">
-            © {currentYear} JulianArtisan408. All rights reserved.
+            © {currentYear} Brendon Lightfoot. All rights reserved.
           </p>
           <p className="text-muted-foreground text-sm mt-4 md:mt-0 flex items-center">
             Designed & Built with 
@@ -142,7 +141,7 @@ const Footer = () => {
             >
               <Heart size={16} className="text-red-500" />
             </motion.div>
-            <span>by JulianArtisan408</span>
+            <span>by Brendon Lightfoot</span>
           </p>
         </div>
       </div>

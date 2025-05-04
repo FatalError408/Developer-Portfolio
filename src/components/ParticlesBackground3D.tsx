@@ -1,59 +1,32 @@
 
 import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
+import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
 interface PointsProps {
   count: number;
 }
 
-// Code-inspired particles that move in a matrix-like pattern
-function CodeParticles({ count = 3000 }: PointsProps) {
+function ParticlePoints({ count = 2000 }: PointsProps) {
   const points = useRef<THREE.Points>(null!);
   
-  // Create particles in code-like patterns (more rows, column-like arrangement)
+  // Create a buffer attribute for positions
   const positions = new Float32Array(count * 3);
-  const speeds = new Float32Array(count);
-  const sizes = new Float32Array(count);
-  
-  // Set up particles in a more structured grid-like pattern
   for (let i = 0; i < count; i++) {
-    // Create more defined "columns" of particles
-    positions[i * 3] = (Math.floor(i / 50) * 0.2) - 10 + (Math.random() * 0.1);
-    // Stagger vertical positions more like lines of text
-    positions[i * 3 + 1] = ((i % 50) * 0.3) - 7 + (Math.random() * 0.05);
-    // Add some depth variation
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 5;
-    
-    // Varying speeds for more natural flow, mostly moving downward
-    speeds[i] = 0.01 + Math.random() * 0.03;
-    // Varying sizes for visual interest
-    sizes[i] = Math.random() * 0.05 + 0.01;
+    positions[i * 3] = (Math.random() - 0.5) * 10;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
   }
 
-  useFrame(() => {
+  useFrame((state) => {
     if (!points.current) return;
-    
-    const positions = points.current.geometry.attributes.position.array as Float32Array;
-    
-    // Update positions to create flowing code effect
-    for (let i = 0; i < count; i++) {
-      // Move particles downward
-      positions[i * 3 + 1] -= speeds[i];
-      
-      // Reset particles when they go off screen
-      if (positions[i * 3 + 1] < -7) {
-        positions[i * 3 + 1] = 7;
-        // Give slight horizontal variation when recycling
-        positions[i * 3] = (Math.floor(i / 50) * 0.2) - 10 + (Math.random() * 0.1);
-      }
-    }
-    
-    points.current.geometry.attributes.position.needsUpdate = true;
+    points.current.rotation.x = state.clock.getElapsedTime() * 0.05;
+    points.current.rotation.y = state.clock.getElapsedTime() * 0.03;
   });
 
   return (
-    <points ref={points}>
+    <Points ref={points} limit={1500}>
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
@@ -61,30 +34,23 @@ function CodeParticles({ count = 3000 }: PointsProps) {
           count={count}
           itemSize={3}
         />
-        <bufferAttribute
-          attach="attributes-size"
-          array={sizes}
-          count={count}
-          itemSize={1}
-        />
       </bufferGeometry>
-      <pointsMaterial
+      <PointMaterial
+        transparent
         color="#3b82f6"
-        size={0.02}
+        size={0.03}
         sizeAttenuation={true}
-        transparent={true}
-        opacity={0.6}
         depthWrite={false}
       />
-    </points>
+    </Points>
   );
 }
 
 const ParticlesBackground3D = () => {
   return (
-    <div className="fixed inset-0 -z-10 opacity-60">
-      <Canvas camera={{ position: [0, 0, 10], fov: 60 }}>
-        <CodeParticles count={2500} />
+    <div className="fixed inset-0 -z-10 opacity-50">
+      <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
+        <ParticlePoints count={1500} />
       </Canvas>
     </div>
   );
