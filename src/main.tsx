@@ -21,11 +21,6 @@ const renderApp = () => {
 
     console.log("Found root element, mounting React app");
     
-    // Clean root element before mounting to prevent hydration issues
-    while (rootElement.firstChild && !(rootElement.firstChild instanceof Comment)) {
-      rootElement.removeChild(rootElement.firstChild);
-    }
-    
     const root = createRoot(rootElement);
     root.render(<App />);
     
@@ -63,9 +58,9 @@ const renderApp = () => {
   }
 };
 
-// Execute app mounting with a slight delay to ensure DOM is ready
+// Execute app mounting
 console.log("main.tsx executed, preparing to render app");
-setTimeout(renderApp, 10);
+renderApp();
 
 // Add additional window global
 declare global {
