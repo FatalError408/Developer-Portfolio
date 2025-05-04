@@ -10,85 +10,101 @@ interface PointsProps {
   count: number;
 }
 
-// Enhanced code-inspired particles with interactive elements
+// Performance-optimized particles with reduced CPU usage
 function CodeParticles({ count = 3000 }: PointsProps) {
   const points = useRef<THREE.Points>(null!);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0, z: 0 });
+  const frameCount = useRef(0);
   
-  // Track mouse position for interactive effect
+  // Track mouse position with throttled updates for better performance
   useEffect(() => {
+    let timeoutId: number;
     const handleMouseMove = (e: MouseEvent) => {
-      // Convert mouse position to normalized device coordinates (-1 to +1)
-      const x = (e.clientX / window.innerWidth) * 2 - 1;
-      const y = -(e.clientY / window.innerHeight) * 2 + 1;
-      setMousePosition({ x, y, z: 0 });
+      // Throttle mouse move events for better performance
+      if (timeoutId) return;
+      
+      timeoutId = window.setTimeout(() => {
+        // Convert mouse position to normalized device coordinates (-1 to +1)
+        const x = (e.clientX / window.innerWidth) * 2 - 1;
+        const y = -(e.clientY / window.innerHeight) * 2 + 1;
+        setMousePosition({ x, y, z: 0 });
+        timeoutId = 0;
+      }, 50); // Update at most every 50ms
     };
     
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      if (timeoutId) window.clearTimeout(timeoutId);
     };
   }, []);
   
-  // Create particles in code-like patterns with memo for better performance
+  // Create particles with memoization for better performance
   const { positions, speeds, sizes, colors } = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const speeds = new Float32Array(count);
     const sizes = new Float32Array(count);
     const colors = new Float32Array(count * 3);
     
-    // Set up particles in a more structured grid-like pattern
+    // Setup more efficient grid pattern
     for (let i = 0; i < count; i++) {
       // Create more defined "columns" of particles
       positions[i * 3] = (Math.floor(i / 50) * 0.2) - 10 + (Math.random() * 0.1);
-      // Stagger vertical positions more like lines of text
+      // Stagger vertical positions
       positions[i * 3 + 1] = ((i % 50) * 0.3) - 7 + (Math.random() * 0.05);
       // Add some depth variation
       positions[i * 3 + 2] = (Math.random() - 0.5) * 5;
       
-      // Varying speeds for more natural flow, mostly moving downward
+      // Varying speeds for natural flow
       speeds[i] = 0.01 + Math.random() * 0.03;
-      // Varying sizes for visual interest
-      sizes[i] = Math.random() * 0.05 + 0.01;
+      // Varying sizes for visual interest - smaller for better performance
+      sizes[i] = Math.random() * 0.04 + 0.01;
       
-      // Blue to purple color range with more vibrance
-      colors[i * 3] = 0.2 + Math.random() * 0.2; // r - increased range
-      colors[i * 3 + 1] = 0.3 + Math.random() * 0.3; // g - increased range
-      colors[i * 3 + 2] = 0.8 + Math.random() * 0.2; // b
+      // Blue to purple color range
+      colors[i * 3] = 0.2 + Math.random() * 0.2;
+      colors[i * 3 + 1] = 0.3 + Math.random() * 0.3;
+      colors[i * 3 + 2] = 0.8 + Math.random() * 0.2;
     }
     
     return { positions, speeds, sizes, colors };
   }, [count]);
 
-  // Animation effect
+  // Optimized animation - process fewer particles per frame
   useFrame((state) => {
     if (!points.current) return;
     
     const time = state.clock.getElapsedTime();
     const positions = points.current.geometry.attributes.position.array as Float32Array;
     
-    // Occasionally create a ripple effect
-    const createRipple = Math.random() > 0.997;
+    // Only create ripples occasionally to save on processing
+    const createRipple = Math.random() > 0.998;
     const rippleX = createRipple ? (Math.random() - 0.5) * 10 : 0;
     const rippleY = createRipple ? (Math.random() - 0.5) * 10 : 0;
     
-    // Update positions to create flowing code effect with mouse interaction
-    for (let i = 0; i < count; i++) {
+    // Increment frame counter for staggered updates
+    frameCount.current = (frameCount.current + 1) % 3;
+    
+    // Only update 1/3 of particles each frame for better performance
+    const startIdx = frameCount.current * (count / 3);
+    const endIdx = Math.min(startIdx + (count / 3), count);
+    
+    // Update only a subset of positions each frame
+    for (let i = startIdx; i < endIdx; i++) {
       const i3 = i * 3;
       
-      // Mouse influence - particles move slightly toward mouse
-      const mouseInfluence = 0.0005;
+      // Simpler mouse influence with distance check first for performance
       const dx = mousePosition.x * 10 - positions[i3];
       const dy = mousePosition.y * 10 - positions[i3 + 1];
       const distToMouse = Math.sqrt(dx * dx + dy * dy);
       
+      // Only apply mouse influence to nearby particles
       if (distToMouse < 5) {
-        // Particles close to mouse are pushed slightly away
+        const mouseInfluence = 0.0005;
         positions[i3] -= dx * mouseInfluence * 2;
         positions[i3 + 1] -= dy * mouseInfluence * 2;
       }
       
-      // Ripple effect
+      // Skip ripple effect calculations if no ripple is happening
       if (createRipple) {
         const dx = positions[i3] - rippleX;
         const dy = positions[i3 + 1] - rippleY;
@@ -101,25 +117,26 @@ function CodeParticles({ count = 3000 }: PointsProps) {
         }
       }
       
-      // Move particles downward with slight wobble
-      positions[i3 + 1] -= speeds[i] * (1 + 0.1 * Math.sin(time + i));
+      // Move particles downward with slight wobble - simplified calculation
+      positions[i3 + 1] -= speeds[i] * (1 + 0.05 * Math.sin(time + i));
       
-      // Add slight horizontal drift based on sine wave
-      positions[i3] += Math.sin(time * 0.5 + i * 0.1) * 0.002;
+      // Add simplified horizontal drift
+      if (i % 5 === 0) { // Only calculate sine for 20% of particles
+        positions[i3] += Math.sin(time * 0.5 + i * 0.1) * 0.002;
+      }
       
       // Reset particles when they go off screen
       if (positions[i3 + 1] < -7) {
         positions[i3 + 1] = 7;
-        // Give slight horizontal variation when recycling
         positions[i3] = (Math.floor(i / 50) * 0.2) - 10 + (Math.random() * 0.1);
       }
     }
     
     points.current.geometry.attributes.position.needsUpdate = true;
     
-    // Slowly rotate the entire points system for added depth
-    points.current.rotation.y = Math.sin(time * 0.1) * 0.05;
-    points.current.rotation.x = Math.cos(time * 0.1) * 0.03;
+    // Slower rotation for better performance
+    points.current.rotation.y = Math.sin(time * 0.05) * 0.05;
+    points.current.rotation.x = Math.cos(time * 0.05) * 0.03;
   });
 
   return (
@@ -145,10 +162,10 @@ function CodeParticles({ count = 3000 }: PointsProps) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.05} // Increased size for more visibility
+        size={0.05}
         sizeAttenuation={true}
         transparent={true}
-        opacity={0.85} // Increased opacity
+        opacity={0.8}
         depthWrite={false}
         vertexColors={true}
         blending={THREE.AdditiveBlending}
@@ -157,7 +174,7 @@ function CodeParticles({ count = 3000 }: PointsProps) {
   );
 }
 
-// Add subtle ambient light to enhance 3D effect
+// Add subtle ambient light
 function AmbientScene() {
   return (
     <>
@@ -168,19 +185,30 @@ function AmbientScene() {
 }
 
 const ParticlesBackground3D = () => {
-  // Use safe default for window check and adaptive particle count based on device capability
-  const [particleCount, setParticleCount] = useState(1000);
+  // More aggressive particle count adjustment based on device performance
+  const [particleCount, setParticleCount] = useState(500); // Start with lower default
   
   useEffect(() => {
     if (isBrowser) {
-      const hardwareConcurrency = navigator.hardwareConcurrency || 4;
+      // More aggressive device capability detection
+      const hardwareConcurrency = navigator.hardwareConcurrency || 2;
       const isHighPerformance = hardwareConcurrency > 4;
+      const isMediumPerformance = hardwareConcurrency > 2;
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const width = window.innerWidth;
       
-      setParticleCount(
-        isHighPerformance ?
-          (window.innerWidth > 768 ? 2000 : 1000) :
-          (window.innerWidth > 768 ? 1000 : 500)
-      );
+      // Determine particle count based on device capabilities
+      let count = 500; // Default low
+      
+      if (isHighPerformance && !isMobile && width > 1024) {
+        count = 2000;
+      } else if (isMediumPerformance && !isMobile && width > 768) {
+        count = 1000;
+      } else if (isMobile) {
+        count = 300; // Very low for mobile
+      }
+      
+      setParticleCount(count);
     }
   }, []);
   
@@ -188,20 +216,19 @@ const ParticlesBackground3D = () => {
     <div className="fixed inset-0 -z-10 opacity-80 pointer-events-none">
       <Canvas 
         camera={{ position: [0, 0, 10], fov: 60 }} 
-        dpr={[1, 1.5]} // More balanced performance setting
-        gl={{ alpha: true, antialias: false }} // Performance optimization
+        dpr={[0.6, 1.5]} // Lower DPR for better performance
+        gl={{ 
+          alpha: true, 
+          antialias: false,
+          powerPreference: 'high-performance',
+          depth: false, // Disable depth testing for better performance
+        }}
         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+        frameloop="demand" // Only render when needed
       >
         <AmbientScene />
         <CodeParticles count={particleCount} />
       </Canvas>
-      
-      {/* Easter egg: Hidden code comments that appear randomly */}
-      <div className="hidden">
-        // Future devs: This matrix isn't just for show.
-        // It contains encoded portfolio achievements.
-        // Can you decode the pattern?
-      </div>
     </div>
   );
 };
