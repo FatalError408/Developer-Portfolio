@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 
@@ -11,12 +10,12 @@ const ParticlesBackground = () => {
     let timeoutId: number | null = null;
     
     const handleMouseMove = (e: MouseEvent) => {
-      if (timeoutId) return;
+      if (timeoutId) return; // Skip if we're throttling
       
       timeoutId = window.setTimeout(() => {
         setMousePosition({ x: e.clientX, y: e.clientY });
         timeoutId = null;
-      }, 100);
+      }, 100); // Only update every 100ms
     };
     
     window.addEventListener("mousemove", handleMouseMove);
@@ -111,14 +110,7 @@ const ParticlesBackground = () => {
           // Regular characters
           const text = lastUpdatedChars[i];
           
-          // Add occasional glow for visual interest
-          if (Math.random() > 0.95) {
-            ctx.shadowColor = "rgba(155, 135, 245, 0.8)";
-            ctx.shadowBlur = 4;
-          } else {
-            ctx.shadowBlur = 0;
-          }
-          
+          ctx.shadowBlur = 0;
           ctx.fillStyle = colors[i];
           ctx.font = `${sizes[i]}px "Fira Code", monospace`;
           ctx.globalAlpha = Math.max(0.4, opacities[i]); // Ensure minimum opacity for visibility
@@ -186,37 +178,34 @@ const ParticlesBackground = () => {
         style={{ pointerEvents: "none" }} 
       />
       
-      {/* Enhanced floating particles with more variety and better animation */}
-      {Array.from({ length: window.innerWidth > 768 ? 60 : 40 }).map((_, i) => {
-        const size = Math.random() * 5 + 2;
+      {/* Fixed floating particles that DON'T react to mouse movement */}
+      {Array.from({ length: window.innerWidth > 768 ? 50 : 30 }).map((_, i) => {
+        const size = Math.random() * 4 + 1.5;
         
         // Better color distribution with enhanced palette
         const colorRoll = Math.random();
         let color;
         
-        if (colorRoll < 0.3) {
+        if (colorRoll < 0.4) {
           color = "#9b87f5"; // Primary Purple
-        } else if (colorRoll < 0.5) {
+        } else if (colorRoll < 0.6) {
           color = "#8B5CF6"; // Vivid Purple
-        } else if (colorRoll < 0.7) {
+        } else if (colorRoll < 0.8) {
           color = "#1EAEDB"; // Bright Blue
-        } else if (colorRoll < 0.85) {
-          color = "#6E59A5"; // Tertiary Purple
         } else {
-          // Occasionally add a bright highlight color
-          color = "#50E3C2"; // Bright Cyan
+          color = "#6E59A5"; // Tertiary Purple
         }
         
-        const opacity = Math.random() * 0.4 + 0.3; // Higher opacity for better visibility
+        const opacity = Math.random() * 0.35 + 0.25;
         
         // Fixed positions that don't change with mouse movement
         const top = `${Math.random() * 100}%`;
         const left = `${Math.random() * 100}%`;
         
         // More natural, varied movements that are completely independent from mouse position
-        const xMove = Math.random() * 200 - 100;
-        const yMove = Math.random() * 200 - 100;
-        const duration = Math.random() * 25 + 15; // Slower, more subtle movement
+        const xMove = Math.random() * 180 - 90;
+        const yMove = Math.random() * 180 - 90;
+        const duration = Math.random() * 20 + 15; // Slower, more subtle movement
         const delay = Math.random() * -15; // Random starting positions in animation cycle
         
         return (
@@ -231,7 +220,6 @@ const ParticlesBackground = () => {
               top: top,
               left: left,
               filter: `blur(${Math.random() > 0.7 ? 1 : 0}px)`,
-              boxShadow: Math.random() > 0.85 ? `0 0 8px 2px ${color}80` : 'none',
               pointerEvents: "none"
             }}
             initial={{ opacity: 0 }}
@@ -239,7 +227,6 @@ const ParticlesBackground = () => {
               x: [0, xMove, 0, -xMove / 1.5, 0], // More complex movement pattern
               y: [0, yMove, -yMove / 2, yMove / 1.5, 0],
               opacity: [opacity, opacity * 2, opacity * 1.5, opacity], // Subtle pulsing
-              scale: Math.random() > 0.8 ? [1, 1.2, 0.9, 1.1, 1] : [1, 1, 1, 1, 1],
             }}
             transition={{
               duration: duration,
@@ -252,17 +239,16 @@ const ParticlesBackground = () => {
         );
       })}
       
-      {/* Enhanced gradient orbs with smooth radial gradients */}
-      <div className="absolute top-1/4 -right-32 w-[30rem] h-[30rem] bg-gradient-radial from-blue-500/15 via-blue-600/5 to-transparent rounded-full filter blur-3xl animate-pulse-slow pointer-events-none" />
-      <div className="absolute bottom-1/4 -left-32 w-[28rem] h-[28rem] bg-gradient-radial from-purple-500/15 via-purple-600/5 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-1000 pointer-events-none" />
-      <div className="absolute top-2/3 right-1/4 w-[25rem] h-[25rem] bg-gradient-radial from-indigo-500/10 via-indigo-600/5 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-1500 pointer-events-none" />
-      <div className="absolute top-1/3 left-1/3 w-[20rem] h-[20rem] bg-gradient-radial from-cyan-500/8 via-cyan-600/3 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-2000 pointer-events-none" />
-      <div className="absolute bottom-1/3 right-1/3 w-[22rem] h-[22rem] bg-gradient-radial from-blue-400/10 via-blue-500/5 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-1200 pointer-events-none" />
-      <div className="absolute top-3/4 left-1/4 w-[18rem] h-[18rem] bg-gradient-radial from-purple-600/8 via-purple-700/3 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-1800 pointer-events-none" />
+      {/* Enhanced gradient orbs in background - not tied to mouse movement */}
+      <div className="absolute top-1/4 -right-32 w-96 h-96 bg-yellow-400/10 rounded-full filter blur-3xl animate-pulse-slow pointer-events-none" />
+      <div className="absolute bottom-1/4 -left-32 w-96 h-96 bg-blue-500/10 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1000 pointer-events-none" />
+      <div className="absolute top-2/3 right-1/4 w-80 h-80 bg-purple-500/8 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1500 pointer-events-none" />
+      <div className="absolute top-1/3 left-1/3 w-64 h-64 bg-indigo-600/5 rounded-full filter blur-3xl animate-pulse-slow animation-delay-2000 pointer-events-none" />
+      <div className="absolute bottom-1/3 right-1/3 w-72 h-72 bg-blue-400/8 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1200 pointer-events-none" />
+      <div className="absolute top-3/4 left-1/4 w-60 h-60 bg-purple-600/6 rounded-full filter blur-3xl animate-pulse-slow animation-delay-1800 pointer-events-none" />
       
-      {/* Additional large circular gradients for enhanced visual depth */}
-      <div className="absolute -top-64 -left-64 w-[45rem] h-[45rem] bg-gradient-radial from-blue-900/15 via-purple-900/8 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-2200 pointer-events-none" />
-      <div className="absolute -bottom-96 -right-64 w-[50rem] h-[50rem] bg-gradient-radial from-indigo-900/12 via-blue-900/6 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-2500 pointer-events-none" />
+      {/* Add an additional large circular gradient for enhanced visual depth */}
+      <div className="absolute -top-64 -left-64 w-[40rem] h-[40rem] bg-gradient-radial from-blue-900/10 via-purple-900/5 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-2200 pointer-events-none" />
     </div>
   );
 };

@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
 
 @tailwind base;
@@ -79,7 +80,7 @@
   .card-highlight {
     @apply bg-gradient-to-b from-dark-200 to-dark-300 backdrop-blur-sm 
     border border-dark-100 rounded-lg p-6 transition-all duration-300 
-    hover:border-blue/40 hover:shadow-glow;
+    hover:border-blue/30 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)];
   }
   
   .button-primary {
@@ -121,11 +122,11 @@
   }
   
   .glass-panel {
-    @apply bg-dark-400/30 backdrop-blur-md border border-white/5 rounded-xl shadow-soft;
+    @apply bg-dark-400/30 backdrop-blur-md border border-white/5 rounded-xl;
   }
   
   .hover-lift {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-glow;
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
   }
   
   .floating {
@@ -134,18 +135,6 @@
   
   .text-shadow {
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  }
-  
-  .text-shadow-glow {
-    text-shadow: 0 0 10px rgba(155, 135, 245, 0.6), 0 0 20px rgba(155, 135, 245, 0.3);
-  }
-  
-  .shadow-glow {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.25), 0 0 8px rgba(59, 130, 246, 0.15);
-  }
-  
-  .shadow-soft {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   }
 }
 
@@ -170,10 +159,6 @@
   animation: glow 3s infinite;
 }
 
-.animate-pulse-slow {
-  animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
 .animation-delay-500 {
   animation-delay: 500ms;
 }
@@ -184,21 +169,4 @@
 
 .animation-delay-1500 {
   animation-delay: 1500ms;
-}
-
-.animation-delay-2000 {
-  animation-delay: 2000ms;
-}
-
-.animation-delay-2500 {
-  animation-delay: 2500ms;
-}
-
-.animation-delay-3000 {
-  animation-delay: 3000ms;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(0.95); }
 }
