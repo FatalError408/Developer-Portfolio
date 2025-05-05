@@ -13,10 +13,18 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react({
-      // Configure React with SWC for better performance
-      plugins: [
-        ["@swc/plugin-react-remove-properties", { properties: ["^data-testid$"] }]
-      ]
+      // Configure SWC to resolve React Three Fiber compatibility issues
+      swcOptions: {
+        jsc: {
+          transform: {
+            react: {
+              runtime: "automatic",
+              development: mode === 'development',
+              refresh: mode === 'development'
+            }
+          }
+        }
+      }
     }),
     mode === 'development' &&
     componentTagger(),
@@ -42,7 +50,6 @@ export default defineConfig(({ mode }) => ({
       compress: {
         drop_console: mode === 'production',
         drop_debugger: true,
-        pure_funcs: mode === 'production' ? ['console.log', 'console.info', 'console.debug'] : [],
       },
     },
     rollupOptions: {
@@ -61,13 +68,5 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
     exclude: [] // Remove @react-three/fiber from exclusions to resolve dependencies properly
-  },
-  // Add esbuild options for better JS optimization
-  esbuild: {
-    jsxInject: "import React from 'react'",
-    legalComments: 'none',
-    treeShaking: true,
-    minifyIdentifiers: true,
-    minifySyntax: true,
   }
 }));
