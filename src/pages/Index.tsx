@@ -1,5 +1,5 @@
 
-import { useEffect, useState, useCallback, lazy, Suspense } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -15,7 +15,8 @@ const Footer = lazy(() => import("@/components/Footer"));
 
 // Background components
 import ParticlesBackground from "@/components/ParticlesBackground";
-import MatrixBackgroundSection from "@/components/MatrixBackgroundSection";
+const ParticlesBackground3D = lazy(() => import("@/components/ParticlesBackground3D"));
+const MatrixBackgroundSection = lazy(() => import("@/components/MatrixBackgroundSection"));
 
 // Loading fallback component for lazy-loaded sections
 const SectionLoading = () => (
@@ -25,16 +26,6 @@ const SectionLoading = () => (
       <div className="w-48 h-2 bg-blue/20 rounded"></div>
     </div>
   </div>
-);
-
-// Using dynamic import with error boundary for 3D components
-const ParticlesBackground3D = lazy(() => 
-  import("@/components/ParticlesBackground3D")
-    .catch(() => {
-      console.warn("Failed to load 3D particles, using fallback");
-      // Return a mock component if 3D fails to load
-      return { default: () => null };
-    })
 );
 
 const Index = () => {
@@ -56,14 +47,6 @@ const Index = () => {
     const timer = setTimeout(() => {
       setLoad3DEffects(true);
     }, 1000);
-    
-    // Log performance info
-    console.log("Device info:", {
-      isMobile,
-      cores: hardwareConcurrency,
-      isLowPower,
-      screenWidth: window.innerWidth
-    });
     
     return () => clearTimeout(timer);
   }, []);
@@ -192,36 +175,44 @@ const Index = () => {
         <Hero />
         
         {/* About section with matrix background */}
-        <MatrixBackgroundSection intensity={isLowPowerMode ? "low" : "medium"} particleCount={isLowPowerMode ? 20 : 40}>
-          <About />
-        </MatrixBackgroundSection>
+        <Suspense fallback={<SectionLoading />}>
+          <MatrixBackgroundSection intensity={isLowPowerMode ? "low" : "medium"} particleCount={isLowPowerMode ? 20 : 40}>
+            <About />
+          </MatrixBackgroundSection>
+        </Suspense>
         
         <Skills />
         
         {/* Projects section with high intensity matrix effect */}
-        <MatrixBackgroundSection intensity={isLowPowerMode ? "low" : "high"} particleCount={isLowPowerMode ? 25 : 50}>
-          <Suspense fallback={<SectionLoading />}>
-            <Projects />
-          </Suspense>
-        </MatrixBackgroundSection>
+        <Suspense fallback={<SectionLoading />}>
+          <MatrixBackgroundSection intensity={isLowPowerMode ? "low" : "high"} particleCount={isLowPowerMode ? 25 : 50}>
+            <Suspense fallback={<SectionLoading />}>
+              <Projects />
+            </Suspense>
+          </MatrixBackgroundSection>
+        </Suspense>
         
         <Suspense fallback={<SectionLoading />}>
           <GitHubRepositories />
         </Suspense>
         
         {/* Experience section with matrix background */}
-        <MatrixBackgroundSection intensity={isLowPowerMode ? "low" : "medium"} particleCount={isLowPowerMode ? 15 : 35}>
-          <Suspense fallback={<SectionLoading />}>
-            <Experience />
-          </Suspense>
-        </MatrixBackgroundSection>
+        <Suspense fallback={<SectionLoading />}>
+          <MatrixBackgroundSection intensity={isLowPowerMode ? "low" : "medium"} particleCount={isLowPowerMode ? 15 : 35}>
+            <Suspense fallback={<SectionLoading />}>
+              <Experience />
+            </Suspense>
+          </MatrixBackgroundSection>
+        </Suspense>
         
         {/* Contact section with low intensity background for readability */}
-        <MatrixBackgroundSection intensity="low" particleCount={isLowPowerMode ? 10 : 25}>
-          <Suspense fallback={<SectionLoading />}>
-            <Contact />
-          </Suspense>
-        </MatrixBackgroundSection>
+        <Suspense fallback={<SectionLoading />}>
+          <MatrixBackgroundSection intensity="low" particleCount={isLowPowerMode ? 10 : 25}>
+            <Suspense fallback={<SectionLoading />}>
+              <Contact />
+            </Suspense>
+          </MatrixBackgroundSection>
+        </Suspense>
       </main>
       
       <Suspense fallback={null}>
