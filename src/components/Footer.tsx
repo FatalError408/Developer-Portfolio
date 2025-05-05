@@ -1,10 +1,22 @@
 
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { Github, Linkedin, Twitter, Mail, MapPin, Phone, ChevronUp, Code } from "lucide-react";
 import ScrollRevealWrapper from "./ScrollRevealWrapper";
+import { useEffect, useState } from "react";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [isAvailableForWork, setIsAvailableForWork] = useState(true);
+  
+  // Load availability status from localStorage
+  useEffect(() => {
+    const savedStatus = localStorage.getItem("availability_status");
+    if (savedStatus) {
+      setIsAvailableForWork(savedStatus === "available");
+    }
+  }, []);
   
   const scrollToTop = () => {
     window.scrollTo({
@@ -41,6 +53,16 @@ const Footer = () => {
               <p className="mt-4 text-muted-foreground max-w-xs">
                 A passionate software engineer specializing in creating exceptional digital experiences with expertise in modern web technologies.
               </p>
+              <div className="flex items-center mt-4 space-x-2">
+                <Switch 
+                  checked={isAvailableForWork}
+                  disabled={true}
+                  id="available-mode-footer"
+                />
+                <Badge variant={isAvailableForWork ? "default" : "outline"} className={isAvailableForWork ? "bg-green-500" : "text-muted-foreground"}>
+                  {isAvailableForWork ? "Available for work" : "Currently unavailable"}
+                </Badge>
+              </div>
               <div className="flex space-x-4 mt-6">
                 {[
                   { icon: <Github size={20} />, url: "https://github.com/JulianArtisan408", label: "GitHub" },

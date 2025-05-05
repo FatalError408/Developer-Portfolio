@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Send, Mail, MapPin, Phone, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -16,6 +16,14 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAvailableForWork, setIsAvailableForWork] = useState(true);
+
+  // Load availability status from localStorage
+  useEffect(() => {
+    const savedStatus = localStorage.getItem("availability_status");
+    if (savedStatus) {
+      setIsAvailableForWork(savedStatus === "available");
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -60,7 +68,7 @@ const Contact = () => {
                 <div className="flex items-center space-x-2">
                   <Switch 
                     checked={isAvailableForWork}
-                    onCheckedChange={setIsAvailableForWork}
+                    disabled={true}
                     id="available-mode"
                   />
                   <Badge variant={isAvailableForWork ? "default" : "outline"} className={isAvailableForWork ? "bg-green-500" : "text-muted-foreground"}>

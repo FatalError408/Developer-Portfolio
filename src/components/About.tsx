@@ -4,10 +4,18 @@ import { Code, Briefcase, Trophy, Bookmark, Star, Heart } from "lucide-react";
 import ScrollRevealWrapper from "./ScrollRevealWrapper";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const About = () => {
   const [isAvailableForWork, setIsAvailableForWork] = useState(true);
+  
+  // Load availability status from localStorage
+  useEffect(() => {
+    const savedStatus = localStorage.getItem("availability_status");
+    if (savedStatus) {
+      setIsAvailableForWork(savedStatus === "available");
+    }
+  }, []);
   
   const bulletPoints = [
     "Building responsive and accessible web applications",
@@ -34,7 +42,7 @@ const About = () => {
             <div className="flex items-center space-x-2">
               <Switch 
                 checked={isAvailableForWork}
-                onCheckedChange={setIsAvailableForWork}
+                disabled={true}
                 id="available-mode"
               />
               <Badge variant={isAvailableForWork ? "default" : "outline"} className={isAvailableForWork ? "bg-green-500" : "text-muted-foreground"}>

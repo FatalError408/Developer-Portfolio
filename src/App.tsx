@@ -9,6 +9,7 @@ import { StrictMode, Suspense, lazy } from "react";
 
 // Lazy load pages for better initial loading
 const Index = lazy(() => import("./pages/Index"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Loading component for lazy-loaded routes
@@ -43,6 +44,7 @@ const App = () => (
             <Suspense fallback={<PageLoading />}>
               <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
