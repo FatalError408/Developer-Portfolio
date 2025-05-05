@@ -100,7 +100,7 @@ const Footer = () => {
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dark-300/80 backdrop-blur-sm flex items-center justify-center mr-3">
                     <MapPin className="w-4 h-4 text-blue" />
                   </div>
-                  <span className="text-muted-foreground">San Francisco, California</span>
+                  <span className="text-muted-foreground">South Africa, Eastern Cape, Uitenhage, 6229</span>
                 </motion.li>
                 <motion.li 
                   className="flex items-start"
@@ -109,8 +109,8 @@ const Footer = () => {
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dark-300/80 backdrop-blur-sm flex items-center justify-center mr-3">
                     <Mail className="w-4 h-4 text-blue" />
                   </div>
-                  <a href="mailto:contact@example.com" className="text-muted-foreground hover:text-white transition-colors">
-                    julianartisan408@example.com
+                  <a href="mailto:BrendonLightfoot408@Gmail.com" className="text-muted-foreground hover:text-white transition-colors">
+                    BrendonLightfoot408@Gmail.com
                   </a>
                 </motion.li>
                 <motion.li 
@@ -120,8 +120,8 @@ const Footer = () => {
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dark-300/80 backdrop-blur-sm flex items-center justify-center mr-3">
                     <Phone className="w-4 h-4 text-blue" />
                   </div>
-                  <a href="tel:+1234567890" className="text-muted-foreground hover:text-white transition-colors">
-                    +1 (234) 567-890
+                  <a href="tel:+27635242767" className="text-muted-foreground hover:text-white transition-colors">
+                    +27 63 524 2767
                   </a>
                 </motion.li>
               </ul>

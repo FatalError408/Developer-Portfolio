@@ -1,8 +1,48 @@
-# Welcome to your Lovable project
+
+# Brendon Julian Lightfoot - Software Engineer Portfolio
 
 ## Project info
 
 **URL**: https://lovable.dev/projects/6293c3c1-60d5-4745-8653-e43e48c1ef85
+
+## Overview
+
+This is the personal portfolio website for Brendon Julian Lightfoot (JulianArtisan408), a Software Engineer based in South Africa specializing in modern web technologies.
+
+## Contact Information
+
+- **Name**: Brendon Julian Lightfoot
+- **Professional Name**: JulianArtisan408
+- **Email**: BrendonLightfoot408@Gmail.com
+- **Company Email**: ContactJBLinxStudio@Gmail.com
+- **Phone**: +27 63 524 2767
+- **Location**: South Africa, Eastern Cape, Uitenhage, 6229
+- **Work Status**: Remote Worker
+
+## Technologies Used
+
+This project is built with the following technologies:
+
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+- Framer Motion
+- Three.js
+- React Three Fiber
+- Lucide React icons
+
+## Features
+
+- Interactive 3D background effects
+- Responsive design for all device sizes
+- Availability status indicator
+- Matrix-inspired animations
+- GitHub repository showcase with language details
+- Dark theme with modern UI components
+- Command palette (⌘+K) for quick navigation
+- Optimized performance with lazy loading
 
 ## How can I edit this code?
 
@@ -36,34 +76,25 @@ npm i
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/6293c3c1-60d5-4745-8653-e43e48c1ef85) and click on Share -> Publish.
 
-## I want to use a custom domain - is that possible?
+## Project Structure
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+- `/src/components` - UI components
+- `/src/components/ui` - shadcn UI components
+- `/src/components/matrix` - Matrix animation related components
+- `/src/components/particles` - 3D particle effects
+- `/src/hooks` - Custom React hooks
+- `/src/pages` - Page components
+- `/src/lib` - Utility functions
+
+## Performance Optimization
+
+This project implements several performance optimizations:
+- Lazy loading for components lower in the page
+- Device capability detection to adjust effects
+- Optimized 3D rendering with React Three Fiber
+- Code splitting
+- Image optimization

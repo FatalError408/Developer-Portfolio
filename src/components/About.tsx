@@ -2,8 +2,13 @@
 import { motion } from "framer-motion";
 import { Code, Briefcase, Trophy, Bookmark, Star, Heart } from "lucide-react";
 import ScrollRevealWrapper from "./ScrollRevealWrapper";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 
 const About = () => {
+  const [isAvailableForWork, setIsAvailableForWork] = useState(true);
+  
   const bulletPoints = [
     "Building responsive and accessible web applications",
     "Developing RESTful and GraphQL APIs",
@@ -22,9 +27,21 @@ const About = () => {
       
       <div className="section-container relative z-10">
         <ScrollRevealWrapper>
-          <h2 className="section-title">
-            About <span className="text-gradient-blue">Me</span>
-          </h2>
+          <div className="flex justify-between items-center">
+            <h2 className="section-title">
+              About <span className="text-gradient-blue">Me</span>
+            </h2>
+            <div className="flex items-center space-x-2">
+              <Switch 
+                checked={isAvailableForWork}
+                onCheckedChange={setIsAvailableForWork}
+                id="available-mode"
+              />
+              <Badge variant={isAvailableForWork ? "default" : "outline"} className={isAvailableForWork ? "bg-green-500" : "text-muted-foreground"}>
+                {isAvailableForWork ? "Available for work" : "Currently unavailable"}
+              </Badge>
+            </div>
+          </div>
           <p className="section-subtitle">
             I'm a passionate software engineer with a focus on creating efficient, scalable, and user-friendly applications.
           </p>
@@ -79,10 +96,10 @@ const About = () => {
                   <Bookmark className="mr-2 text-blue" /> My Journey
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  I began my coding journey at the age of 14, tinkering with HTML and CSS to create simple websites. This early passion evolved into a career in software engineering after completing my Computer Science degree.
+                  I began my coding journey at the age of 14, tinkering with HTML and CSS to create simple websites. This early passion evolved into a career in software engineering after completing my Computer Science studies.
                 </p>
                 <p className="text-muted-foreground">
-                  Over the years, I've worked with startups and established companies, building everything from e-commerce platforms to complex enterprise systems. I'm constantly learning and adapting to new technologies to deliver the best solutions.
+                  Based in South Africa, I work remotely with clients globally, building everything from e-commerce platforms to complex enterprise systems. I'm constantly learning and adapting to new technologies to deliver the best solutions.
                 </p>
                 
                 <motion.div 
@@ -102,10 +119,10 @@ const About = () => {
                         <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> Coffee enthusiast with a home brewing station
                       </li>
                       <li className="flex items-start">
-                        <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> Amateur photographer on weekends
+                        <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> Running JBLinx Studio for freelance development
                       </li>
                       <li className="flex items-start">
-                        <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> Contributed to 3 open source projects
+                        <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> Contributing to open source projects in my free time
                       </li>
                     </ul>
                   </div>
@@ -147,17 +164,17 @@ const About = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   <div className="relative">
                     <h4 className="text-lg font-semibold mb-2 flex items-center">
-                      <Trophy className="w-4 h-4 mr-2 text-yellow" /> Achievements
+                      <Trophy className="w-4 h-4 mr-2 text-yellow" /> Professional Highlights
                     </h4>
                     <ul className="space-y-2 text-sm">
                       <li className="flex items-start">
-                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Led development of an app with 50k+ users
+                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Working with global clients from South Africa
                       </li>
                       <li className="flex items-start">
-                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Reduced API response time by 40% through optimization
+                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Remote work specialist with excellent communication
                       </li>
                       <li className="flex items-start">
-                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Speaker at regional web development conference
+                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Founded JBLinx Studio for freelance development
                       </li>
                     </ul>
                   </div>

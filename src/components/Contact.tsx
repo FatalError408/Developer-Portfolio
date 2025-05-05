@@ -1,8 +1,10 @@
 
 import { useState } from "react";
-import { Send, Mail, MapPin, Phone } from "lucide-react";
+import { Send, Mail, MapPin, Phone, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -13,6 +15,7 @@ const Contact = () => {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAvailableForWork, setIsAvailableForWork] = useState(true);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -52,7 +55,19 @@ const Contact = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-10">
           <div>
             <div className="card-highlight h-full">
-              <h3 className="text-2xl font-semibold mb-6">Contact Information</h3>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-semibold">Contact Information</h3>
+                <div className="flex items-center space-x-2">
+                  <Switch 
+                    checked={isAvailableForWork}
+                    onCheckedChange={setIsAvailableForWork}
+                    id="available-mode"
+                  />
+                  <Badge variant={isAvailableForWork ? "default" : "outline"} className={isAvailableForWork ? "bg-green-500" : "text-muted-foreground"}>
+                    {isAvailableForWork ? "Available for work" : "Currently unavailable"}
+                  </Badge>
+                </div>
+              </div>
               
               <div className="space-y-6">
                 <div className="flex items-start">
@@ -62,11 +77,20 @@ const Contact = () => {
                   <div>
                     <h4 className="text-lg font-medium">Email</h4>
                     <a 
-                      href="mailto:contact@example.com" 
+                      href="mailto:BrendonLightfoot408@Gmail.com" 
                       className="text-muted-foreground hover:text-blue transition-colors"
                     >
-                      contact@example.com
+                      BrendonLightfoot408@Gmail.com
                     </a>
+                    <div className="mt-1">
+                      <h4 className="text-sm font-medium">Company Email</h4>
+                      <a 
+                        href="mailto:ContactJBLinxStudio@Gmail.com" 
+                        className="text-muted-foreground hover:text-blue transition-colors text-sm"
+                      >
+                        ContactJBLinxStudio@Gmail.com
+                      </a>
+                    </div>
                   </div>
                 </div>
                 
@@ -77,7 +101,11 @@ const Contact = () => {
                   <div>
                     <h4 className="text-lg font-medium">Location</h4>
                     <p className="text-muted-foreground">
-                      San Francisco, California
+                      South Africa, Eastern Cape, Uitenhage, 6229
+                    </p>
+                    <p className="text-muted-foreground mt-1 flex items-center">
+                      <Briefcase className="h-4 w-4 mr-1 text-blue" />
+                      <span>Working Remotely</span>
                     </p>
                   </div>
                 </div>
@@ -89,10 +117,10 @@ const Contact = () => {
                   <div>
                     <h4 className="text-lg font-medium">Phone</h4>
                     <a 
-                      href="tel:+1234567890" 
+                      href="tel:+27635242767" 
                       className="text-muted-foreground hover:text-blue transition-colors"
                     >
-                      +1 (234) 567-890
+                      +27 63 524 2767
                     </a>
                   </div>
                 </div>
@@ -101,13 +129,19 @@ const Contact = () => {
               <div className="mt-10">
                 <h4 className="text-lg font-medium mb-4">Follow Me</h4>
                 <div className="flex space-x-4">
-                  {['GitHub', 'LinkedIn', 'Twitter', 'Instagram'].map((platform) => (
+                  {[
+                    { name: 'GitHub', url: 'https://github.com/JulianArtisan408' },
+                    { name: 'LinkedIn', url: 'https://linkedin.com/in/julianartisan408' },
+                    { name: 'Twitter', url: 'https://twitter.com/julianartisan408' }
+                  ].map((platform) => (
                     <a 
-                      key={platform} 
-                      href="#" 
+                      key={platform.name} 
+                      href={platform.url} 
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="bg-dark-300 hover:bg-dark-200 px-4 py-2 rounded-md text-sm transition-colors"
                     >
-                      {platform}
+                      {platform.name}
                     </a>
                   ))}
                 </div>

@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useRef, useState, useEffect } from "react";
 import { Command, CommandInput, CommandList, CommandGroup, CommandItem } from "@/components/ui/command";
+import { Badge } from "@/components/ui/badge";
 
 const Hero = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isCommandOpen, setIsCommandOpen] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(true); // State for availability status
   
   // Check for mobile viewport
   useEffect(() => {
@@ -99,7 +101,12 @@ const Hero = () => {
               <h1 className="text-4xl md:text-6xl font-bold leading-tight">
                 Hi, I'm <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Brendon Julian Lightfoot</span>
               </h1>
-              <span className="block mt-2 text-2xl md:text-3xl font-medium text-white/90">Software Engineer, 28</span>
+              <div className="flex flex-wrap items-center gap-2 mt-2">
+                <span className="text-2xl md:text-3xl font-medium text-white/90">Software Engineer, 28</span>
+                <Badge variant={isAvailable ? "default" : "outline"} className={`ml-2 ${isAvailable ? "bg-green-500" : "text-muted-foreground"}`}>
+                  {isAvailable ? "Available for work" : "Currently unavailable"}
+                </Badge>
+              </div>
             </motion.div>
             
             <motion.p 

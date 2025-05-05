@@ -1,11 +1,12 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Github, Star, GitFork, ExternalLink } from 'lucide-react';
+import { Github, Star, GitFork, ExternalLink, Code } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/components/ui/use-toast";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Repository {
   id: number;
@@ -16,6 +17,7 @@ interface Repository {
   stargazers_count: number;
   forks_count: number;
   language: string | null;
+  languages_url: string;
   topics: string[];
   owner: {
     login: string;
@@ -23,8 +25,13 @@ interface Repository {
   };
 }
 
+interface LanguageData {
+  [key: string]: number;
+}
+
 const GitHubRepositories = () => {
   const [repositories, setRepositories] = useState<Repository[]>([]);
+  const [repoLanguages, setRepoLanguages] = useState<{[key: string]: LanguageData}>({});
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -41,6 +48,25 @@ const GitHubRepositories = () => {
         
         const data: Repository[] = await response.json();
         setRepositories(data);
+        
+        // Fetch languages for each repository
+        const languagesPromises = data.map(async (repo) => {
+          const langResponse = await fetch(repo.languages_url);
+          if (!langResponse.ok) return null;
+          const langData = await langResponse.json();
+          return { repoId: repo.id, languages: langData };
+        });
+        
+        const languagesResults = await Promise.all(languagesPromises);
+        const languagesMap: {[key: string]: LanguageData} = {};
+        
+        languagesResults.forEach((result) => {
+          if (result) {
+            languagesMap[result.repoId] = result.languages;
+          }
+        });
+        
+        setRepoLanguages(languagesMap);
       } catch (error) {
         console.error('Error fetching GitHub repositories:', error);
         toast({
@@ -94,6 +120,18 @@ const GitHubRepositories = () => {
     };
     
     return language ? colors[language] || 'bg-gray-500' : 'bg-gray-400';
+  };
+  
+  // Calculate language percentages
+  const getLanguagePercentages = (languages: LanguageData) => {
+    if (!languages) return [];
+    
+    const total = Object.values(languages).reduce((sum, value) => sum + value, 0);
+    
+    return Object.entries(languages).map(([name, bytes]) => {
+      const percentage = Math.round((bytes / total) * 100);
+      return { name, percentage };
+    }).sort((a, b) => b.percentage - a.percentage);
   };
 
   return (
@@ -160,6 +198,40 @@ const GitHubRepositories = () => {
                       <CardDescription className="text-gray-300 line-clamp-3">
                         {repo.description || "No description provided"}
                       </CardDescription>
+                      
+                      {/* Display language breakdown */}
+                      {repoLanguages[repo.id] && (
+                        <div className="mt-4">
+                          <p className="text-sm text-gray-400 mb-1 flex items-center">
+                            <Code className="h-3 w-3 mr-1" /> Languages:
+                          </p>
+                          <div className="h-2 w-full bg-dark-400 rounded-full overflow-hidden flex">
+                            {getLanguagePercentages(repoLanguages[repo.id]).map((lang, idx) => (
+                              <TooltipProvider key={idx}>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <div 
+                                      className={`h-full ${getLanguageColor(lang.name)}`}
+                                      style={{ width: `${lang.percentage}%` }}
+                                    ></div>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>{lang.name}: {lang.percentage}%</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            ))}
+                          </div>
+                          <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2">
+                            {getLanguagePercentages(repoLanguages[repo.id]).slice(0, 3).map((lang, idx) => (
+                              <span key={idx} className="text-xs text-gray-400 flex items-center">
+                                <span className={`inline-block w-2 h-2 rounded-full mr-1 ${getLanguageColor(lang.name)}`}></span>
+                                {lang.name} {lang.percentage}%
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                       
                       <div className="flex flex-wrap gap-2 mt-4">
                         {repo.topics && repo.topics.slice(0, 3).map((topic, index) => (
