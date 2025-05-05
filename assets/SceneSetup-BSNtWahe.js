@@ -1,1 +1,0 @@
-import{j as t}from"./ui-mbOQ0UrO.js";import"./vendor-APk6H_Kk.js";const s=({children:i})=>t.jsxs(t.Fragment,{children:[t.jsx("ambientLight",{intensity:.1}),t.jsx("directionalLight",{position:[0,10,5],intensity:.2}),i]});export{s as default};
