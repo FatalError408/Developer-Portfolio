@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from "react";
 import useMatrixSettings, { IntensityLevel } from "./useMatrixSettings";
 
@@ -8,7 +7,7 @@ interface MatrixCanvasProps {
 
 const MatrixCanvas = ({ intensity }: MatrixCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const interactionRef = useRef<HTMLDivElement | null>(null);
+  const interactionRef = useRef<HTMLElement | null>(null);
   const settings = useMatrixSettings(intensity);
   
   // Matrix rain effect with performance optimization

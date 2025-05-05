@@ -1,5 +1,6 @@
 
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
+import useDeviceCapabilities from '../particles/useDeviceCapabilities';
 
 export type IntensityLevel = "low" | "medium" | "high";
 
@@ -11,8 +12,11 @@ interface MatrixSettings {
 }
 
 export const useMatrixSettings = (intensity: IntensityLevel): MatrixSettings => {
-  return useMemo(() => {
-    switch(intensity) {
+  const { isLowPowerMode } = useDeviceCapabilities();
+  
+  // Get base settings based on intensity
+  const getBaseSettings = useCallback((level: IntensityLevel): MatrixSettings => {
+    switch(level) {
       case "low":
         return { opacity: 0.4, speed: 0.4, density: 0.6, glow: 2 };
       case "high":
@@ -21,7 +25,24 @@ export const useMatrixSettings = (intensity: IntensityLevel): MatrixSettings => 
       default:
         return { opacity: 0.6, speed: 0.65, density: 1.0, glow: 3 };
     }
-  }, [intensity]);
+  }, []);
+  
+  // Apply device-specific adjustments
+  return useMemo(() => {
+    const baseSettings = getBaseSettings(intensity);
+    
+    // Reduce effects for low power devices
+    if (isLowPowerMode) {
+      return {
+        opacity: baseSettings.opacity * 0.8,
+        speed: baseSettings.speed * 0.7,
+        density: baseSettings.density * 0.6,
+        glow: Math.max(1, baseSettings.glow * 0.5)
+      };
+    }
+    
+    return baseSettings;
+  }, [intensity, isLowPowerMode, getBaseSettings]);
 };
 
 export default useMatrixSettings;

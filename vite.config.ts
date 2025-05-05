@@ -11,20 +11,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   plugins: [
-    react({
-      // Configure SWC with compatible options
-      swcOptions: {
-        jsc: {
-          transform: {
-            react: {
-              runtime: "automatic",
-              development: mode === 'development',
-              refresh: mode === 'development'
-            }
-          }
-        }
-      }
-    }),
+    react(),
   ],
   resolve: {
     alias: {

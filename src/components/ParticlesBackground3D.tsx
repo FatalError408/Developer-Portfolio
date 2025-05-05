@@ -1,5 +1,5 @@
 
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, memo } from "react";
 import { Canvas } from "@react-three/fiber";
 import useMousePosition from "./particles/useMousePosition";
 import useDeviceCapabilities from "./particles/useDeviceCapabilities";
@@ -17,23 +17,33 @@ const ParticlesBackground3D = () => {
     return null;
   }
   
+  // Adjust DPR based on device capabilities for better performance
+  const dprRange = isLowPowerMode ? [0.5, 1.0] : [0.6, 1.5];
+  const frameloop = isLowPowerMode ? "demand" : "demand";
+  
   return (
     <div className="fixed inset-0 -z-10 opacity-80 pointer-events-none">
       <Canvas 
         camera={{ position: [0, 0, 10], fov: 60 }} 
-        dpr={[0.6, 1.5]} // Lower DPR for better performance
+        dpr={dprRange} 
         gl={{ 
           alpha: true, 
           antialias: false,
           powerPreference: 'high-performance',
-          depth: false, // Disable depth testing for better performance
+          depth: false, 
+          stencil: false, // Disable stencil buffer for performance
+          precision: isLowPowerMode ? 'lowp' : 'mediump', // Lower precision on low-power devices
         }}
         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-        frameloop="demand" // Only render when needed
+        frameloop={frameloop}
+        performance={{ min: 0.1 }} // Allow frame rate to drop in background
       >
         <Suspense fallback={null}>
           <SceneSetup>
-            <ParticlesMaterial count={particleCount} mousePosition={mousePosition} />
+            <ParticlesMaterial 
+              count={particleCount} 
+              mousePosition={mousePosition} 
+            />
           </SceneSetup>
         </Suspense>
       </Canvas>
@@ -41,4 +51,5 @@ const ParticlesBackground3D = () => {
   );
 };
 
-export default ParticlesBackground3D;
+// Prevent unnecessary re-renders
+export default memo(ParticlesBackground3D);
