@@ -1,5 +1,5 @@
 
-import { Suspense, lazy, memo } from "react";
+import { Suspense, lazy, memo, useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
 import useMousePosition from "./particles/useMousePosition";
 import useDeviceCapabilities from "./particles/useDeviceCapabilities";
@@ -17,8 +17,8 @@ const ParticlesBackground3D = () => {
     return null;
   }
   
-  // Adjust DPR based on device capabilities for better performance
-  const dprRange = isLowPowerMode ? [0.5, 1.0] : [0.6, 1.5];
+  // Correctly type DPR as tuple with exactly two elements for min/max
+  const dprRange: [number, number] = isLowPowerMode ? [0.5, 1.0] : [0.6, 1.5];
   const frameloop = isLowPowerMode ? "demand" : "demand";
   
   return (

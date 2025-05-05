@@ -1,5 +1,5 @@
 
-import { ReactNode, memo } from "react";
+import { ReactNode, memo, useEffect } from "react";
 import { useThree } from "@react-three/fiber";
 
 interface SceneSetupProps {
@@ -13,9 +13,25 @@ const SceneSetup = ({
   ambientIntensity = 0.1,
   directionalIntensity = 0.2
 }: SceneSetupProps) => {
-  // Performance optimization with gl.autoClear
-  const { gl } = useThree();
-  gl.autoClear = false;
+  const { gl, camera } = useThree();
+  
+  // Apply performance optimizations
+  useEffect(() => {
+    // Disable autoClear for improved performance
+    gl.autoClear = false;
+    
+    // Optimize camera settings
+    if (camera) {
+      camera.near = 0.1;
+      camera.far = 100;
+      camera.updateProjectionMatrix();
+    }
+    
+    return () => {
+      // Reset when unmounting
+      gl.autoClear = true;
+    };
+  }, [gl, camera]);
   
   return (
     <>

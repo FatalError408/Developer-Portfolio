@@ -1,234 +1,222 @@
-import { useEffect, useRef } from "react";
-import useMatrixSettings, { IntensityLevel } from "./useMatrixSettings";
+
+import { useEffect, useRef, useState } from "react";
+import { IntensityLevel } from "./useMatrixSettings";
+import useMatrixSettings from "./useMatrixSettings";
+import useDeviceDetection from "@/hooks/use-device-detection";
 
 interface MatrixCanvasProps {
-  intensity: IntensityLevel;
+  intensity?: IntensityLevel;
 }
 
-const MatrixCanvas = ({ intensity }: MatrixCanvasProps) => {
+const MatrixCanvas = ({ intensity = "medium" }: MatrixCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const interactionRef = useRef<HTMLElement | null>(null);
-  const settings = useMatrixSettings(intensity);
+  const { opacity, speed, density, glow } = useMatrixSettings(intensity);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const deviceInfo = useDeviceDetection();
   
-  // Matrix rain effect with performance optimization
+  // Track mouse position with throttling for performance
+  useEffect(() => {
+    let timeoutId: number | null = null;
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      if (timeoutId) return;
+      
+      timeoutId = window.setTimeout(() => {
+        setMousePos({ x: e.clientX, y: e.clientY });
+        timeoutId = null;
+      }, deviceInfo.isLowPerformance ? 150 : 100); // More aggressive throttling on low-end devices
+    };
+    
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, [deviceInfo.isLowPerformance]);
+
+  // Matrix rain effect
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d', { 
+
+    const ctx = canvas.getContext('2d', {
       alpha: true,
       desynchronized: true, // Hardware acceleration where available
+      willReadFrequently: false // Optimization hint
     });
     if (!ctx) return;
-    
-    // Set canvas dimensions
+
+    // Set canvas dimensions with device pixel ratio for crisp rendering
     const setCanvasDimensions = () => {
-      if (!canvas || !canvas.parentElement) return;
-      
-      const rect = canvas.parentElement.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      
-      // Set actual dimensions accounting for device pixel ratio
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      
-      // Set display size
-      canvas.style.width = `${rect.width}px`;
-      canvas.style.height = `${rect.height}px`;
-      
-      // Scale context for hi-DPI displays
+      if (!canvas) return;
+
+      // Limit DPR for performance on weaker devices
+      const dpr = Math.min(window.devicePixelRatio || 1, deviceInfo.isLowPerformance ? 1.5 : 2);
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
       ctx.scale(dpr, dpr);
-      
-      // Clear canvas when resizing
-      ctx.clearRect(0, 0, rect.width, rect.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
-    
+
     setCanvasDimensions();
-    
-    // Debounce resize for better performance
+
+    // Debounced resize handler
     let resizeTimer: number;
     const handleResize = () => {
       clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(setCanvasDimensions, 200);
     };
-    
-    window.addEventListener('resize', handleResize);
-    
-    // Matrix rain effect content
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<>/?{}[]()=+-*&^%$#@!;:,.\\|~`'\"";
+
+    window.addEventListener('resize', handleResize, { passive: true });
+
+    // Matrix characters and code snippets - adjusted for theme
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<>/?{}[]()=+-*&^%$#@!;:,.\\|";
     const codeSnippets = [
       "function()", "const", "let", "var", "=>", "class", "import", "export",
-      "return", "async", "await", "try", "catch", "if", "else", "for", "while",
-      "<div>", "</div>", "<span>", "{props}", "useState", "useEffect", "<Code/>"
+      "return", "async", "await", "try", "catch", "if", "else", "for", "while"
     ];
-    
-    // Track interaction events for responsive matrix effect
-    let mouseX = -1;
-    let mouseY = -1;
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseX = e.clientX - rect.left;
-      mouseY = e.clientY - rect.top;
-    };
-    
-    const handleMouseLeave = () => {
-      mouseX = -1;
-      mouseY = -1;
-    };
-    
-    interactionRef.current = canvas.parentElement;
-    if (interactionRef.current) {
-      interactionRef.current.addEventListener('mousemove', handleMouseMove);
-      interactionRef.current.addEventListener('mouseleave', handleMouseLeave);
-    }
-    
-    // Optimize columns based on screen width and performance
-    const columnWidth = Math.max(14, Math.floor(window.innerWidth / 120));
-    const columns = Math.ceil((canvas.width / window.devicePixelRatio) / columnWidth);
-    
+
+    // Adjust column density based on performance capability
+    const baseColumnWidth = Math.max(14, Math.floor(window.innerWidth / (100 * density)));
+    const columnWidth = deviceInfo.isLowPerformance ? baseColumnWidth * 1.5 : baseColumnWidth;
+    const columns = Math.ceil(window.innerWidth / columnWidth);
+
     // Pre-allocate arrays for better performance
-    const drops = new Array(columns).fill(0).map(() => Math.random() * -100);
-    const speeds = new Array(columns).fill(0).map(() => Math.random() * settings.speed + 0.35);
-    
-    // Enhanced color range - more vivid blues and purples
-    const colors = new Array(columns).fill('').map(() => {
-      // Choose between different color palettes for more visual interest
+    const drops: number[] = new Array(columns).fill(0).map(() => Math.random() * -100);
+    const baseSpeed = speed * (deviceInfo.isLowPerformance ? 0.8 : 1);
+    const speeds: number[] = new Array(columns).fill(0).map(() => 
+      baseSpeed * (Math.random() * 0.5 + 0.5)
+    );
+
+    // Enhanced color palette with proper typing and performance optimizations
+    const colors: string[] = new Array(columns).fill('').map(() => {
       const colorType = Math.random();
       
       if (colorType > 0.7) {
-        // Vivid purple
-        const hue = Math.random() * 30 + 260; 
-        const saturation = Math.random() * 30 + 70;
-        const lightness = Math.random() * 20 + 60;
-        return `hsla(${hue}, ${saturation}%, ${lightness}%, ${settings.opacity})`;
-      } else if (colorType > 0.4) {
+        // Vivid purple-blue
+        const hue = Math.random() * 30 + 250; 
+        const saturation = Math.random() * 30 + 80;
+        const lightness = Math.random() * 20 + 65;
+        return `hsla(${hue}, ${saturation}%, ${lightness}%, ${opacity})`;
+      } else if (colorType > 0.45) {
         // Bright blue
         const hue = Math.random() * 30 + 210;
-        const saturation = Math.random() * 40 + 80;
+        const saturation = Math.random() * 30 + 80;
         const lightness = Math.random() * 20 + 65;
-        return `hsla(${hue}, ${saturation}%, ${lightness}%, ${settings.opacity})`;
+        return `hsla(${hue}, ${saturation}%, ${lightness}%, ${opacity})`;
       } else {
-        // Cyan highlight
+        // Cyan
         const hue = Math.random() * 20 + 180;
-        const saturation = Math.random() * 30 + 70;
-        const lightness = Math.random() * 25 + 60;
-        return `hsla(${hue}, ${saturation}%, ${lightness}%, ${settings.opacity})`;
+        const saturation = Math.random() * 30 + 80;
+        const lightness = Math.random() * 20 + 65;
+        return `hsla(${hue}, ${saturation}%, ${lightness}%, ${opacity})`;
       }
     });
     
-    const sizes = new Array(columns).fill(0).map(() => [12, 14, 16][Math.floor(Math.random() * 3)]);
-    const textTypes = new Array(columns).fill(0).map(() => Math.random() > 0.8 ? 1 : 0);
-    const chars_to_draw = new Array(columns).fill('').map(() => chars[Math.floor(Math.random() * chars.length)]);
-    
-    // Easter egg: Special rare characters that contain hidden messages
-    const easterEggMessages = [
-      "YOU FOUND ME", "SECRET", "HIDDEN TALENT", "EASTER EGG",
-      "HIRE ME", "MAGIC", "PORTFOLIO SECRET"
-    ];
-    
-    // Show easter egg message very rarely (0.1% chance per character)
-    const showEasterEgg = () => {
-      return Math.random() > 0.999;
-    };
-    
+    const sizes: number[] = new Array(columns).fill(0).map(() => [12, 14, 16][Math.floor(Math.random() * 3)]);
+    const textTypes: number[] = new Array(columns).fill(0).map(() => Math.random() > 0.8 ? 1 : 0);
+    const chars_to_draw: string[] = new Array(columns).fill('').map(() => 
+      chars[Math.floor(Math.random() * chars.length)]
+    );
+
+    // Optimized draw function
     const draw = () => {
-      // Semi-transparent background for trail effect - adjusted for visibility
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
-      ctx.fillRect(0, 0, canvas.width / window.devicePixelRatio, canvas.height / window.devicePixelRatio);
+      // Semi-transparent background for trail effect
+      ctx.fillStyle = `rgba(0, 0, 0, ${deviceInfo.isLowPerformance ? 0.05 : 0.03})`;
+      ctx.fillRect(0, 0, canvas.width / (window.devicePixelRatio || 1), 
+        canvas.height / (window.devicePixelRatio || 1));
       
-      // Draw each column
-      for (let i = 0; i < drops.length; i++) {
+      // Draw each column, but skip some on low performance devices
+      const skipFactor = deviceInfo.isLowPerformance ? 2 : 1;
+      
+      for (let i = 0; i < drops.length; i += skipFactor) {
         const x = i * columnWidth;
         const y = drops[i] * sizes[i];
         
-        // Use pre-calculated characters for better performance, update occasionally
+        // Choose character/code snippet to draw - update less frequently
+        let text = '';
+        
+        // Only update characters occasionally to improve performance
         if (Math.random() > 0.95) {
           chars_to_draw[i] = chars[Math.floor(Math.random() * chars.length)];
         }
         
-        // Choose what to draw - code snippet, character or easter egg
-        let text;
-        let isEasterEgg = showEasterEgg();
-        
-        if (isEasterEgg) {
-          text = easterEggMessages[Math.floor(Math.random() * easterEggMessages.length)];
-          ctx.font = `bold ${sizes[i]}px "Fira Code", monospace`;
-          ctx.fillStyle = `hsla(60, 100%, 70%, 0.9)`;  // Golden color for easter eggs
-          ctx.shadowColor = `hsla(60, 100%, 70%, 0.9)`;
-          ctx.shadowBlur = 10;
+        if (textTypes[i] === 0) {
+          text = chars_to_draw[i];
         } else {
-          if (textTypes[i] === 1) {
-            text = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
-          } else {
-            text = chars_to_draw[i];
-          }
-          
-          // Mouse proximity effect for standard characters
-          const distX = Math.abs(x - mouseX);
-          const distY = Math.abs(y - mouseY);
+          text = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+        }
+        
+        // Mouse proximity effect - more efficient calculation
+        const distX = Math.abs(x - mousePos.x);
+        const distY = Math.abs(y - mousePos.y);
+        
+        // Skip expensive calculations if obviously far from mouse
+        if (distX < 200 && distY < 200) {
           const dist = Math.sqrt(distX * distX + distY * distY);
-          const proximity = dist < 100 ? (100 - dist) / 100 : 0;
+          const proximity = dist < 150 ? (150 - dist) / 150 : 0;
           
-          // Enhanced glow effect for better visibility
-          if (proximity > 0.3 || Math.random() > 0.85) {
-            const glowColor = colors[i].replace('rgba', 'rgba').replace(/[\d.]+\)$/, '0.9)');
-            ctx.shadowColor = glowColor;
-            ctx.shadowBlur = settings.glow + (proximity * 5) + (Math.random() * 3);
+          // Apply glow effect based on intensity setting
+          if (proximity > 0.3 || Math.random() > 0.9) {
+            ctx.shadowColor = colors[i];
+            ctx.shadowBlur = glow + (proximity * 4);
           } else {
             ctx.shadowBlur = 0;
           }
           
-          // Brighten color near mouse position
+          // Adjust speed based on proximity
+          speeds[i] = baseSpeed * (Math.random() * 0.5 + 0.5) * (1 + (proximity * 1.5));
+          
+          // Brighter colors near mouse
           if (proximity > 0.3) {
             const colorParts = colors[i].match(/hsla\((\d+),\s*(\d+)%,\s*(\d+)%,\s*([\d.]+)\)/);
             if (colorParts) {
               const h = parseInt(colorParts[1]);
               const s = parseInt(colorParts[2]);
-              const l = Math.min(85, parseInt(colorParts[3]) + (proximity * 15));
-              ctx.fillStyle = `hsla(${h}, ${s}%, ${l}%, ${settings.opacity + (proximity * 0.2)})`;
+              const l = Math.min(90, parseInt(colorParts[3]) + (proximity * 15)); 
+              ctx.fillStyle = `hsla(${h}, ${s}%, ${l}%, ${opacity + (proximity * 0.1)})`;
             } else {
               ctx.fillStyle = colors[i];
             }
           } else {
             ctx.fillStyle = colors[i];
           }
-          
-          ctx.font = `${textTypes[i] === 1 ? 'bold ' : ''}${sizes[i]}px "Fira Code", monospace`;
+        } else {
+          // Default style when far from mouse
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = colors[i];
         }
         
+        // Draw text
+        ctx.font = `${textTypes[i] === 1 ? 'bold ' : ''}${sizes[i]}px "Fira Code", monospace`;
         ctx.fillText(text, x, y);
         
         // Reset when off screen
-        if (y > canvas.height / window.devicePixelRatio && Math.random() > 0.98) {
+        if (y > canvas.height / (window.devicePixelRatio || 1) && Math.random() > 0.98) {
           drops[i] = 0;
         }
         
-        // Increment Y coordinate with adjusted speed near mouse
-        if (mouseX > 0 && mouseY > 0) {
-          const distX = Math.abs(x - mouseX);
-          const distY = Math.abs(y - mouseY);
-          const dist = Math.sqrt(distX * distX + distY * distY);
-          const proximity = dist < 100 ? (100 - dist) / 100 : 0;
-          
-          // Increase speed near mouse
-          drops[i] += speeds[i] * (1 + proximity);
-        } else {
-          drops[i] += speeds[i];
-        }
+        // Increment Y coordinate
+        drops[i] += speeds[i];
       }
     };
-    
-    // Animation loop with optimized framerate
+
+    // Animation loop with adaptive framerate
     let animationFrameId: number;
     let lastTime = 0;
-    const fps = window.innerWidth > 768 ? 30 : 20; // Lower FPS on mobile devices
+    
+    // Adaptive frame rate based on device capabilities
+    const fps = deviceInfo.isHighPerformance ? 30 : 
+               deviceInfo.isMediumPerformance ? 24 : 18;
     const fpsInterval = 1000 / fps;
     
     const animate = (currentTime: number) => {
       animationFrameId = requestAnimationFrame(animate);
       
-      // Throttle frame rate for performance
+      // Throttle frame rate
       const elapsed = currentTime - lastTime;
       if (elapsed > fpsInterval) {
         lastTime = currentTime - (elapsed % fpsInterval);
@@ -238,21 +226,19 @@ const MatrixCanvas = ({ intensity }: MatrixCanvasProps) => {
     
     animate(0);
     
+    // Clean up
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
-      if (interactionRef.current) {
-        interactionRef.current.removeEventListener('mousemove', handleMouseMove);
-        interactionRef.current.removeEventListener('mouseleave', handleMouseLeave);
-      }
       clearTimeout(resizeTimer);
     };
-  }, [intensity, settings]);
-
+  }, [opacity, speed, density, glow, mousePos, deviceInfo]);
+  
   return (
     <canvas 
-      ref={canvasRef}
-      className="absolute inset-0 opacity-90 pointer-events-none"
+      ref={canvasRef} 
+      className="absolute inset-0 w-full h-full"
+      style={{ opacity: opacity * 2, pointerEvents: "none" }}
     />
   );
 };

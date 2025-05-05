@@ -14,7 +14,7 @@ interface MatrixSettings {
 export const useMatrixSettings = (intensity: IntensityLevel): MatrixSettings => {
   const { isLowPowerMode } = useDeviceCapabilities();
   
-  // Get base settings based on intensity
+  // Get base settings based on intensity - memoize the function
   const getBaseSettings = useCallback((level: IntensityLevel): MatrixSettings => {
     switch(level) {
       case "low":
@@ -27,17 +27,17 @@ export const useMatrixSettings = (intensity: IntensityLevel): MatrixSettings => 
     }
   }, []);
   
-  // Apply device-specific adjustments
+  // Apply device-specific adjustments - memoize the result
   return useMemo(() => {
     const baseSettings = getBaseSettings(intensity);
     
-    // Reduce effects for low power devices
+    // More aggressive reduction for low power devices
     if (isLowPowerMode) {
       return {
-        opacity: baseSettings.opacity * 0.8,
-        speed: baseSettings.speed * 0.7,
-        density: baseSettings.density * 0.6,
-        glow: Math.max(1, baseSettings.glow * 0.5)
+        opacity: baseSettings.opacity * 0.75,
+        speed: baseSettings.speed * 0.65,
+        density: baseSettings.density * 0.5, // More significant density reduction
+        glow: Math.max(1, baseSettings.glow * 0.4) // Reduce glow further
       };
     }
     
