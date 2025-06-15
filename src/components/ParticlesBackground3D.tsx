@@ -12,37 +12,81 @@ const ParticlesBackground3D = () => {
   const mousePosition = useMousePosition();
   const { particleCount, isLowPowerMode } = useDeviceCapabilities();
   
-  // Skip rendering entirely for very low-end devices
-  if (isLowPowerMode && particleCount < 250) {
+  // Enhanced performance settings based on device capabilities
+  const performanceConfig = useMemo(() => {
+    if (isLowPowerMode) {
+      return {
+        dpr: [0.5, 1.0] as [number, number],
+        frameloop: "demand" as const,
+        precision: "lowp" as const,
+        antialias: false,
+        alpha: true,
+        depth: false,
+        stencil: false,
+        powerPreference: "low-power" as const,
+        failIfMajorPerformanceCaveat: true,
+      };
+    }
+    
+    return {
+      dpr: [0.8, 1.5] as [number, number],
+      frameloop: "always" as const,
+      precision: "mediump" as const,
+      antialias: true,
+      alpha: true,
+      depth: false,
+      stencil: false,
+      powerPreference: "high-performance" as const,
+      failIfMajorPerformanceCaveat: false,
+    };
+  }, [isLowPowerMode]);
+  
+  // Skip rendering for very low-end devices or very small particle counts
+  if (isLowPowerMode && particleCount < 200) {
     return null;
   }
   
-  // Correctly type DPR as tuple with exactly two elements for min/max
-  const dprRange: [number, number] = isLowPowerMode ? [0.5, 1.0] : [0.6, 1.5];
-  const frameloop = isLowPowerMode ? "demand" : "demand";
-  
   return (
-    <div className="fixed inset-0 -z-10 opacity-80 pointer-events-none">
+    <div className="fixed inset-0 -z-10 opacity-90 pointer-events-none">
       <Canvas 
-        camera={{ position: [0, 0, 10], fov: 60 }} 
-        dpr={dprRange} 
-        gl={{ 
-          alpha: true, 
-          antialias: false,
-          powerPreference: 'high-performance',
-          depth: false, 
-          stencil: false, // Disable stencil buffer for performance
-          precision: isLowPowerMode ? 'lowp' : 'mediump', // Lower precision on low-power devices
+        camera={{ 
+          position: [0, 0, 10], 
+          fov: 60,
+          near: 0.1,
+          far: 100
+        }} 
+        dpr={performanceConfig.dpr}
+        gl={{
+          alpha: performanceConfig.alpha,
+          antialias: performanceConfig.antialias,
+          powerPreference: performanceConfig.powerPreference,
+          depth: performanceConfig.depth,
+          stencil: performanceConfig.stencil,
+          precision: performanceConfig.precision,
+          preserveDrawingBuffer: false,
+          failIfMajorPerformanceCaveat: performanceConfig.failIfMajorPerformanceCaveat,
         }}
-        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-        frameloop={frameloop}
-        performance={{ min: 0.1 }} // Allow frame rate to drop in background
+        style={{ 
+          position: 'absolute', 
+          top: 0, 
+          left: 0, 
+          width: '100%', 
+          height: '100%' 
+        }}
+        frameloop={performanceConfig.frameloop}
+        performance={{ 
+          min: isLowPowerMode ? 0.2 : 0.5,
+          max: 1,
+          debounce: isLowPowerMode ? 500 : 200
+        }}
+        shadows={!isLowPowerMode}
+        flat={isLowPowerMode}
       >
         <Suspense fallback={null}>
           <SceneSetup>
             <ParticlesMaterial 
               count={particleCount} 
-              mousePosition={mousePosition} 
+              mousePosition={mousePosition}
             />
           </SceneSetup>
         </Suspense>
@@ -51,5 +95,5 @@ const ParticlesBackground3D = () => {
   );
 };
 
-// Prevent unnecessary re-renders
+// Prevent unnecessary re-renders with enhanced memoization
 export default memo(ParticlesBackground3D);
