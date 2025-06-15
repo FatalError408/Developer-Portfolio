@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -15,6 +14,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import DashboardLink from "./DashboardLink";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -278,6 +278,7 @@ const Navbar = () => {
             >
               <Twitter size={20} />
             </motion.a>
+            <DashboardLink />
           </div>
         </div>
 
