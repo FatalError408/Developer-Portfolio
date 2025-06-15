@@ -1,325 +1,204 @@
 
-import { useEffect, useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const ParticlesBackground = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  
-  // Performance-optimized mouse movement tracking
-  useEffect(() => {
-    let timeoutId: number | null = null;
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      if (timeoutId) return;
-      
-      timeoutId = window.setTimeout(() => {
-        setMousePosition({ x: e.clientX, y: e.clientY });
-        timeoutId = null;
-      }, 100);
-    };
-    
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      if (timeoutId) window.clearTimeout(timeoutId);
-    };
-  }, []);
-  
-  // Optimized matrix rain effect with memory usage improvements
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d', { 
-      alpha: true, 
-      desynchronized: true, // Hardware acceleration where available
-      willReadFrequently: false // Optimization hint
-    });
-    if (!ctx) return;
-    
-    // Set canvas dimensions with device pixel ratio for crisp rendering
-    const setCanvasDimensions = () => {
-      if (!canvas) return;
-      
-      // Calculate dimensions
-      const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x for performance
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      
-      // Set display size
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
-      
-      // Scale for hi-DPI displays
-      ctx.scale(dpr, dpr);
-      
-      // Clear canvas and reset all parameters
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    };
-    
-    setCanvasDimensions();
-    
-    // Add resize listener but debounce it for performance
-    let resizeTimer: number;
-    const handleResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(setCanvasDimensions, 200);
-    };
-    
-    window.addEventListener('resize', handleResize);
-    
-    // Define characters for the matrix rain
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<>/?{}[]()=+-*&^%$#@!;:,.\\|~`'\"";
-    const codeSnippets = [
-      "function()", "const", "let", "var", "=>", "class", "import", "export",
-      "return", "async", "await", "try", "catch", "if", "else", "for", "while",
-      "<div>", "</div>", "<span>", "{props}", "useState", "useEffect", "()",
-      "=>", "==", "===", "&&", "||", "map", "filter", "reduce", "<Matrix/>", "<Code/>"
-    ];
-    
-    // Optimize the number of columns based on screen size and performance
-    const columnWidth = Math.max(14, Math.floor(window.innerWidth / 100));
-    const columns = Math.ceil(window.innerWidth / columnWidth);
-    
-    // Arrays for tracking column data - pre-allocate
-    const drops: number[] = new Array(columns).fill(0).map(() => Math.random() * -100);
-    const speeds: number[] = new Array(columns).fill(0).map(() => Math.random() * 0.5 + 0.5);
-    
-    // Enhanced color palette with more vibrance
-    const colors: string[] = new Array(columns).fill('').map(() => {
-      const colorType = Math.random();
-      
-      if (colorType > 0.7) {
-        // Vivid purple-blue
-        const hue = Math.random() * 30 + 250; 
-        const saturation = Math.random() * 30 + 80;
-        const lightness = Math.random() * 20 + 65;
-        return `hsla(${hue}, ${saturation}%, ${lightness}%, 0.95)`;
-      } else if (colorType > 0.45) {
-        // Bright blue
-        const hue = Math.random() * 30 + 210;
-        const saturation = Math.random() * 30 + 80;
-        const lightness = Math.random() * 20 + 65;
-        return `hsla(${hue}, ${saturation}%, ${lightness}%, 0.95)`;
-      } else if (colorType > 0.25) {
-        // Cyan
-        const hue = Math.random() * 20 + 180;
-        const saturation = Math.random() * 30 + 80;
-        const lightness = Math.random() * 20 + 65;
-        return `hsla(${hue}, ${saturation}%, ${lightness}%, 0.95)`;
-      } else {
-        // Magenta highlights (rare)
-        const hue = Math.random() * 20 + 290;
-        const saturation = Math.random() * 30 + 80;
-        const lightness = Math.random() * 20 + 65;
-        return `hsla(${hue}, ${saturation}%, ${lightness}%, 0.95)`;
-      }
-    });
-    
-    const sizes: number[] = new Array(columns).fill(0).map(() => [12, 14, 16][Math.floor(Math.random() * 3)]);
-    const textTypes: number[] = new Array(columns).fill(0).map(() => Math.random() > 0.8 ? 1 : 0);
-    const chars_to_draw: string[] = new Array(columns).fill('').map(() => chars[Math.floor(Math.random() * chars.length)]);
-    
-    // Track mouse position to create a subtle interactive effect
-    let lastMouseX = 0;
-    let lastMouseY = 0;
-    canvas.addEventListener('mousemove', (e) => {
-      lastMouseX = e.clientX;
-      lastMouseY = e.clientY;
-    });
-    
-    // Optimized draw function with reduced memory allocations
-    const draw = () => {
-      // Semi-transparent background for trail effect - adjust for better visibility
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
-      ctx.fillRect(0, 0, canvas.width / window.devicePixelRatio, canvas.height / window.devicePixelRatio);
-      
-      // Draw each column
-      for (let i = 0; i < drops.length; i++) {
-        const x = i * columnWidth;
-        const y = drops[i] * sizes[i];
-        
-        // Choose character/code snippet to draw
-        let text = '';
-        
-        // Only update characters occasionally to improve performance
-        if (Math.random() > 0.95) {
-          chars_to_draw[i] = chars[Math.floor(Math.random() * chars.length)];
-        }
-        
-        if (textTypes[i] === 0) {
-          text = chars_to_draw[i];
-        } else {
-          text = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
-        }
-        
-        // Mouse proximity effect - increase glow and speed when near mouse
-        const distX = Math.abs(x - lastMouseX);
-        const distY = Math.abs(y - lastMouseY);
-        const dist = Math.sqrt(distX * distX + distY * distY);
-        const proximity = dist < 150 ? (150 - dist) / 150 : 0;
-        
-        // Enhanced glow effect with mouse interaction
-        if (proximity > 0.3 || Math.random() > 0.9) {
-          const glowColor = colors[i].replace('hsla', 'hsla');
-          ctx.shadowColor = glowColor;
-          ctx.shadowBlur = 6 + (proximity * 4); // Increased glow near mouse
-        } else {
-          ctx.shadowBlur = 0;
-        }
-        
-        // Adjust character color based on mouse proximity
-        if (proximity > 0.3) {
-          // Brighter colors near mouse
-          const colorParts = colors[i].match(/hsla\((\d+),\s*(\d+)%,\s*(\d+)%,\s*([\d.]+)\)/);
-          if (colorParts) {
-            const h = parseInt(colorParts[1]);
-            const s = parseInt(colorParts[2]);
-            const l = Math.min(90, parseInt(colorParts[3]) + (proximity * 15)); // Brighter
-            ctx.fillStyle = `hsla(${h}, ${s}%, ${l}%, ${0.95 + (proximity * 0.05)})`;
-          } else {
-            ctx.fillStyle = colors[i];
-          }
-        } else {
-          ctx.fillStyle = colors[i];
-        }
-        
-        // Adjust speed based on mouse proximity
-        const currentSpeed = speeds[i] * (1 + (proximity * 1.5));
-        
-        ctx.font = `${textTypes[i] === 1 ? 'bold ' : ''}${sizes[i]}px "Fira Code", monospace`;
-        ctx.fillText(text, x, y);
-        
-        // Reset when off screen
-        if (y > canvas.height / window.devicePixelRatio && Math.random() > 0.98) {
-          drops[i] = 0;
-          // Occasionally change parameters for continued variety
-          if (Math.random() > 0.8) {
-            speeds[i] = Math.random() * 0.5 + 0.5;
-            textTypes[i] = Math.random() > 0.8 ? 1 : 0;
-          }
-        }
-        
-        // Increment Y coordinate using the potentially adjusted speed
-        drops[i] += currentSpeed;
-      }
-    };
-    
-    // Animation loop with optimized framerate using requestAnimationFrame
-    let animationFrameId: number;
-    let lastTime = 0;
-    // Adaptive frame rate based on device capabilities
-    const fps = navigator.hardwareConcurrency > 4 ? 
-                (window.innerWidth > 768 ? 30 : 24) : 
-                (window.innerWidth > 768 ? 24 : 18);
-    const fpsInterval = 1000 / fps;
-    
-    const animate = (currentTime: number) => {
-      animationFrameId = requestAnimationFrame(animate);
-      
-      // Throttle frame rate
-      const elapsed = currentTime - lastTime;
-      if (elapsed > fpsInterval) {
-        lastTime = currentTime - (elapsed % fpsInterval);
-        draw();
-      }
-    };
-    
-    animate(0);
-    
-    // Clean up function
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', handleResize);
-      canvas.removeEventListener('mousemove', () => {});
-      clearTimeout(resizeTimer);
-    };
-  }, []);
-  
-  // Determine particle count based on viewport width and device capabilities
-  const particleCount = typeof window !== 'undefined' ? 
-    (navigator.hardwareConcurrency > 4 ?
-      (window.innerWidth > 1200 ? 60 : window.innerWidth > 768 ? 50 : 30) :
-      (window.innerWidth > 1200 ? 40 : window.innerWidth > 768 ? 30 : 20)) : 30;
-  
+// Orb colors to match gradient theme
+const ORB_COLORS = [
+  "from-blue-500/40 to-transparent",
+  "from-purple-500/25 to-transparent",
+  "from-fuchsia-400/15 to-transparent",
+  "from-cyan-400/15 to-transparent",
+  "from-pink-400/15 to-transparent",
+];
+
+// Simple floating gradient orbs with touch/mouse glow interactivity
+const AnimatedOrbs = () => {
+  // Track which orb is hovered/touched for glow fx
+  const [activeOrb, setActiveOrb] = useState<number | null>(null);
+
+  // Responsive orb positions
+  const ORBS = [
+    {
+      className:
+        "absolute top-1/4 left-1/2 w-[40rem] h-[40rem] -translate-x-1/2 blur-3xl",
+      color: ORB_COLORS[0],
+      style: { zIndex: 0 },
+      id: 0,
+    },
+    {
+      className:
+        "absolute bottom-1/4 left-1/3 w-[32rem] h-[32rem] blur-3xl",
+      color: ORB_COLORS[1],
+      style: { zIndex: 0, animationDelay: "0.8s" },
+      id: 1,
+    },
+    {
+      className:
+        "absolute top-2/3 right-12 w-[18rem] h-[18rem] blur-3xl",
+      color: ORB_COLORS[2],
+      style: { zIndex: 0, animationDelay: "1.2s" },
+      id: 2,
+    },
+    {
+      className:
+        "absolute top-[15%] right-[5%] w-[22rem] h-[22rem] blur-3xl",
+      color: ORB_COLORS[3],
+      style: { zIndex: 0, animationDelay: "1.6s" },
+      id: 3,
+    },
+    {
+      className:
+        "absolute bottom-[22%] left-[5%] w-[19rem] h-[19rem] blur-3xl",
+      color: ORB_COLORS[4],
+      style: { zIndex: 0, animationDelay: "2s" },
+      id: 4,
+    },
+  ];
+
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* Matrix rain canvas with improved visibility */}
-      <canvas 
-        ref={canvasRef} 
-        className="absolute inset-0 opacity-80" 
-        style={{ pointerEvents: "none" }} 
-      />
-      
-      {/* Enhanced floating particles with better performance */}
-      {Array.from({ length: Math.min(particleCount, 60) }).map((_, i) => {
-        const size = Math.random() * 6 + 3; // Larger particles
-        const colorRoll = Math.random();
-        let color;
-        
-        if (colorRoll < 0.2) {
-          color = "#9b87f5"; // Primary Purple
-        } else if (colorRoll < 0.4) {
-          color = "#8B5CF6"; // Vivid Purple
-        } else if (colorRoll < 0.6) {
-          color = "#1EAEDB"; // Bright Blue
-        } else if (colorRoll < 0.75) {
-          color = "#6E59A5"; // Tertiary Purple
-        } else if (colorRoll < 0.9) {
-          color = "#50E3C2"; // Bright Cyan
-        } else {
-          color = "#D946EF"; // Magenta Pink - new color for pops
-        }
-        
-        const opacity = Math.random() * 0.5 + 0.4; // Higher opacity
-        const top = `${Math.random() * 100}%`;
-        const left = `${Math.random() * 100}%`;
-        
-        // More varied movements that are more efficient
-        const xMove = Math.random() * 120 - 60; // Wider movement range
-        const yMove = Math.random() * 120 - 60;
-        const duration = Math.random() * 25 + 15;
-        const delay = Math.random() * -15;
-        
-        return (
-          <motion.div
-            key={i}
-            className="absolute rounded-full pointer-events-none"
-            style={{
-              width: `${size}px`,
-              height: `${size}px`,
-              background: color,
-              opacity: opacity,
-              top: top,
-              left: left,
-              filter: `blur(${Math.random() > 0.7 ? 1 : 0}px)`,
-              boxShadow: Math.random() > 0.75 ? `0 0 15px 6px ${color}90` : 'none', // Enhanced glow
-            }}
-            initial={{ opacity: 0 }}
-            animate={{
-              x: [0, xMove, 0, -xMove / 1.5, 0],
-              y: [0, yMove, -yMove / 2, yMove / 1.5, 0],
-              opacity: [opacity, opacity * 1.8, opacity], // More dramatic opacity shift
-              scale: [1, Math.random() > 0.6 ? 1.4 : 1, 1] // Add occasional pulsing
-            }}
-            transition={{
-              duration: duration,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: delay,
-            }}
-          />
-        );
-      })}
-      
-      {/* Enhanced gradient orbs - larger and more vibrant */}
-      <div className="absolute top-1/4 -right-32 w-[40rem] h-[40rem] bg-gradient-radial from-blue-500/20 to-transparent rounded-full filter blur-3xl animate-pulse-slow pointer-events-none" />
-      <div className="absolute bottom-1/3 -left-32 w-[35rem] h-[35rem] bg-gradient-radial from-purple-500/25 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-1500 pointer-events-none" />
-      <div className="absolute top-2/3 left-1/4 w-[30rem] h-[30rem] bg-gradient-radial from-cyan-400/15 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-2000 pointer-events-none" />
-      <div className="absolute top-1/3 left-1/2 w-[25rem] h-[25rem] bg-gradient-radial from-pink-500/10 to-transparent rounded-full filter blur-3xl animate-pulse-slow animation-delay-1000 pointer-events-none" />
-    </div>
+    <>
+      {ORBS.map((orb, i) => (
+        <motion.div
+          key={i}
+          className={`pointer-events-auto rounded-full bg-gradient-radial animate-pulse-slow ${orb.className} ${activeOrb === i ? "shadow-[0_0_60px_32px_rgba(139,92,246,0.17)] scale-[1.04]" : ""}`}
+          style={orb.style}
+          onPointerEnter={() => setActiveOrb(i)}
+          onPointerLeave={() => setActiveOrb(null)}
+          onTouchStart={() => setActiveOrb(i)}
+          onTouchEnd={() => setActiveOrb(null)}
+          whileHover={{ scale: 1.05 }}
+          animate={{
+            y: [
+              0,
+              (i % 2 === 0 ? 1 : -1) * 14,
+              0,
+              (i % 2 === 0 ? -1 : 1) * 10,
+              0,
+            ],
+            x: [
+              0,
+              (i % 3 ? 1 : -1) * 8,
+              0,
+              (i % 3 ? -1 : 1) * 6,
+              0,
+            ],
+          }}
+          transition={{
+            duration: 18 + i * 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i
+          }}
+        />
+      ))}
+    </>
   );
 };
+
+// Interactive floating dots (user can hover/tap for color pop)
+const InteractiveDots = () => {
+  // Track which dot is hovering/tapped
+  const [hovered, setHovered] = useState<number | null>(null);
+  // Maps to make dot positions stable
+  const [dots, setDots] = useState(
+    Array.from({ length: 14 }).map((_, i) => {
+      // Staggered base positions for harmony
+      const baseLeft = 8 + (82 * (i % 7)) / 6 + (i > 6 ? 7 : 0);
+      const baseTop = 12 + (76 * Math.floor(i / 7)) / 2 + (i % 2 ? 4 : -2);
+      return {
+        id: i,
+        color: [
+          "#8B5CF6",
+          "#1EAEDB",
+          "#D946EF",
+          "#50E3C2",
+          "#6366f1",
+          "#a21caf",
+        ][i % 6],
+        left: `${baseLeft + Math.random() * 3 - 1.5}%`,
+        top: `${baseTop + Math.random() * 4 - 2}%`,
+        size: Math.random() * 5 + 4,
+        blur: Math.random() > 0.82 ? 2 : 0,
+      };
+    })
+  );
+
+  useEffect(() => {
+    // Optional: Animate dot base positions gently for subtle movement
+    const timer = setInterval(() => {
+      setDots((dots) =>
+        dots.map((dot) => ({
+          ...dot,
+          left: `${parseFloat(dot.left) + Math.sin(Date.now() / 7000 + dot.id) * 0.5}%`,
+          top: `${parseFloat(dot.top) + Math.cos(Date.now() / 5900 + dot.id * 1.8) * 0.3}%`,
+        }))
+      );
+    }, 12000); // Very slow drift
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <>
+      {dots.map((dot, i) => (
+        <motion.div
+          key={dot.id}
+          className="absolute pointer-events-auto"
+          style={{
+            left: dot.left,
+            top: dot.top,
+            width: `${dot.size}px`,
+            height: `${dot.size}px`,
+            borderRadius: "9999px",
+            background: hovered === i ? "#f9a8d4" : dot.color,
+            filter: `blur(${dot.blur}px)`,
+            boxShadow:
+              hovered === i
+                ? `0 0 10px 0 #f9a8d4, 0 0 18px 4px ${dot.color}AA`
+                : dot.blur
+                ? `0 0 8px 2px ${dot.color}66`
+                : undefined,
+            opacity: hovered === i ? 0.98 : 0.7,
+            zIndex: 1,
+            transition: "box-shadow 0.2s, background 0.2s",
+            cursor: "pointer",
+          }}
+          whileHover={{
+            scale: 1.72,
+            opacity: 1,
+            y: -12,
+          }}
+          onPointerEnter={() => setHovered(i)}
+          onPointerLeave={() => setHovered(null)}
+          onTouchStart={() => setHovered(i)}
+          onTouchEnd={() => setHovered(null)}
+          animate={{
+            y: [
+              0,
+              (i % 2 === 0 ? -1 : 1) * Math.random() * 6,
+              0,
+              (i % 2 === 0 ? 1 : -1) * Math.random() * 4,
+              0
+            ],
+            scale: hovered === i ? 1.26 : 1,
+          }}
+          transition={{
+            duration: 10 + i * 0.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.7
+          }}
+        />
+      ))}
+    </>
+  );
+};
+
+// Main export
+const ParticlesBackground = () => (
+  <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    <AnimatedOrbs />
+    <InteractiveDots />
+  </div>
+);
 
 export default ParticlesBackground;
