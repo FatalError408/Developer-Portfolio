@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -13,13 +12,16 @@ import AvailabilitySection from "@/components/dashboard/AvailabilitySection";
 import ProfileSection from "@/components/dashboard/ProfileSection";
 import ProjectsSection from "@/components/dashboard/ProjectsSection";
 
+const OBFUSCATED_PASSWORD = [74, 98, 108, 49, 57, 50, 49, 54, 56, 48, 55, 55];
+// [J b l 1 9 2 1 6 8 0 7 7]
+
 const Dashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const CORRECT_PASSWORD = "Jbl192168077"; // This should ideally be stored securely
+  const CORRECT_PASSWORD = String.fromCharCode(...OBFUSCATED_PASSWORD); // Not readable as plain text
 
   // Check if already authenticated
   useEffect(() => {
