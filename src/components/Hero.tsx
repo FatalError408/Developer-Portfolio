@@ -12,28 +12,15 @@ const Hero = () => {
   const [isCommandOpen, setIsCommandOpen] = useState(false);
   const [isAvailable, setIsAvailable] = useState(true); // State for availability status
   
+  // Check for mobile viewport
   useEffect(() => {
-    // Load availability only (don't allow public toggling)
-    const savedStatus = localStorage.getItem("availability_status");
-    setIsAvailable(!savedStatus || savedStatus === "available");
-    // Watch for changes to availability status (cross-tab sync)
-    const onChange = (e: StorageEvent) => {
-      if (e.key === "availability_status") {
-        setIsAvailable(!e.newValue || e.newValue === "available");
-      }
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
     };
-    window.addEventListener("storage", onChange);
-    // Custom cross-tab event support
-    const onCustom = (e: any) => {
-      if (e.detail?.key === "availability_status") {
-        setIsAvailable(e.detail.value === "available");
-      }
-    };
-    window.addEventListener("availabilityStatusChange", onCustom);
-    return () => {
-      window.removeEventListener("storage", onChange);
-      window.removeEventListener("availabilityStatusChange", onCustom);
-    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // Handle keyboard shortcut for command menu
