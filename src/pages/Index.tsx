@@ -1,3 +1,4 @@
+
 import { useEffect, useState, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
@@ -12,10 +13,8 @@ const Experience = lazy(() => import("@/components/Experience"));
 const Contact = lazy(() => import("@/components/Contact"));
 const Footer = lazy(() => import("@/components/Footer"));
 
-// Background components
-import ParticlesBackground from "@/components/ParticlesBackground";
-const ParticlesBackground3D = lazy(() => import("@/components/ParticlesBackground3D"));
-import MatrixBackgroundSection from "@/components/MatrixBackgroundSection";
+// New minimal, aesthetic background
+import BackgroundGradientOrbs from "@/components/BackgroundGradientOrbs";
 
 // Loading fallback component for lazy-loaded sections
 const SectionLoading = () => (
@@ -28,29 +27,10 @@ const SectionLoading = () => (
 );
 
 const Index = () => {
-  // Track visit to show custom welcome effect
+  // Hide welcome effect after 3 seconds
   const [showWelcomeEffect, setShowWelcomeEffect] = useState(true);
-  const [isLowPowerMode, setIsLowPowerMode] = useState(false);
-  const [load3DEffects, setLoad3DEffects] = useState(false);
-  
-  // Check device capabilities
-  useEffect(() => {
-    // Detect low-power devices
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const hardwareConcurrency = navigator.hardwareConcurrency || 2;
-    const isLowPower = isMobile || hardwareConcurrency <= 2;
-    
-    setIsLowPowerMode(isLowPower);
-    
-    // Load 3D effects after a short delay to prevent initial render blocking
-    const timer = setTimeout(() => {
-      setLoad3DEffects(true);
-    }, 1000);
-    
-    return () => clearTimeout(timer);
-  }, []);
-  
-  // Optimized smooth scroll implementation
+
+  // Smooth anchor scrolling
   useEffect(() => {
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -67,51 +47,46 @@ const Index = () => {
       }
     };
 
-    // Use passive event listener for better performance
     document.addEventListener('click', handleAnchorClick, { passive: false });
-    
-    // Hide welcome effect after 3 seconds for faster interaction
+
     const timer = setTimeout(() => setShowWelcomeEffect(false), 3000);
-    
     return () => {
       document.removeEventListener('click', handleAnchorClick);
       clearTimeout(timer);
     };
   }, []);
 
-  // Memoized animation variants
   const fadeIn = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.6 } } // Faster fade for better UX
+    visible: { opacity: 1, transition: { duration: 0.6 } }
   };
-  
-  // Memoized typing effect
+
   const typingEffect = {
     hidden: { width: "0%" },
-    visible: { 
+    visible: {
       width: "100%",
-      transition: { 
-        duration: 1.2, // Faster typing
-        ease: "easeInOut" 
-      } 
+      transition: {
+        duration: 1.2,
+        ease: "easeInOut"
+      }
     }
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="min-h-screen bg-dark-500 text-white"
       initial="hidden"
       animate="visible"
       variants={fadeIn}
     >
-      {/* Welcome Easter Egg - optimized */}
+      {/* Welcome Easter Egg */}
       {showWelcomeEffect && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-dark-500 bg-opacity-95 pointer-events-none">
-          <motion.div 
+          <motion.div
             className="text-center"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4 }} // Faster animation
+            transition={{ duration: 0.4 }}
           >
             <div className="font-mono text-3xl md:text-5xl text-blue-light mb-4">
               <motion.div
@@ -119,93 +94,78 @@ const Index = () => {
                 variants={typingEffect}
               >
                 <span className="block whitespace-nowrap">
-                  <span className="text-yellow">&gt;</span> Matrix initialized...
+                  <span className="text-yellow">&gt;</span> Portfolio initialized...
                 </span>
               </motion.div>
             </div>
-            
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.2, duration: 0.4 }} // Faster fade-in
+              transition={{ delay: 1.2, duration: 0.4 }}
               className="font-mono text-lg text-muted-foreground"
             >
-              Welcome to the developer matrix
+              Welcome to my modern portfolio
             </motion.div>
-            
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.6, duration: 0.4 }} // Faster animation
+              transition={{ delay: 1.6, duration: 0.4 }}
               className="mt-8 text-muted-foreground text-sm"
             >
-              Activating interactive background...
+              Activating lightning-fast background...
             </motion.div>
-            
-            <motion.div 
+            <motion.div
               className="mt-4 h-1 w-64 bg-dark-300 rounded-full mx-auto overflow-hidden"
               initial={{ width: "64px" }}
             >
-              <motion.div 
-                className="h-full bg-blue" 
+              <motion.div
+                className="h-full bg-blue"
                 initial={{ width: "0%" }}
                 animate={{ width: "100%" }}
-                transition={{ delay: 1.8, duration: 1.2 }} // Faster loading
+                transition={{ delay: 1.8, duration: 1.2 }}
               />
             </motion.div>
           </motion.div>
         </div>
       )}
-      
-      {/* Global particles background - keep performant */}
-      <ParticlesBackground />
-      
-      {/* Conditionally render 3D particles based on device capability and delayed loading */}
-      {!isLowPowerMode && load3DEffects && (
-        <Suspense fallback={null}>
-          <ParticlesBackground3D />
-        </Suspense>
-      )}
-      
+
+      {/* Ultra-fast, beautiful background */}
+      <BackgroundGradientOrbs />
+
       <Navbar />
-      
+
       <main className="relative z-10">
-        {/* Hero section with default particles */}
-        <Hero />
-        
-        {/* About section with performant background */}
-        <MatrixBackgroundSection intensity={isLowPowerMode ? "low" : "medium"} particleCount={isLowPowerMode ? 20 : 40}>
+        <section className="pt-2 pb-12 md:pb-20">
+          <Hero />
+        </section>
+        <section className="py-12 md:py-20">
           <About />
-        </MatrixBackgroundSection>
-        
-        <Skills />
-        
-        {/* Projects section with performant background */}
-        <MatrixBackgroundSection intensity={isLowPowerMode ? "low" : "high"} particleCount={isLowPowerMode ? 25 : 50}>
+        </section>
+        <section className="py-12 md:py-20">
+          <Skills />
+        </section>
+        <section className="py-12 md:py-20">
           <Suspense fallback={<SectionLoading />}>
             <Projects />
           </Suspense>
-        </MatrixBackgroundSection>
-        
-        <Suspense fallback={<SectionLoading />}>
-          <GitHubRepositories />
-        </Suspense>
-        
-        {/* Experience section with performant background */}
-        <MatrixBackgroundSection intensity={isLowPowerMode ? "low" : "medium"} particleCount={isLowPowerMode ? 15 : 35}>
+        </section>
+        <section className="py-12 md:py-20">
+          <Suspense fallback={<SectionLoading />}>
+            <GitHubRepositories />
+          </Suspense>
+        </section>
+        <section className="py-12 md:py-20">
           <Suspense fallback={<SectionLoading />}>
             <Experience />
           </Suspense>
-        </MatrixBackgroundSection>
-        
-        {/* Contact section with low intensity background for readability */}
-        <MatrixBackgroundSection intensity="low" particleCount={isLowPowerMode ? 10 : 25}>
+        </section>
+        <section className="py-12 md:py-20">
           <Suspense fallback={<SectionLoading />}>
             <Contact />
           </Suspense>
-        </MatrixBackgroundSection>
+        </section>
       </main>
-      
+
       <Suspense fallback={null}>
         <Footer />
       </Suspense>
