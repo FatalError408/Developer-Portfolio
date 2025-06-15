@@ -186,7 +186,7 @@ const Footer = () => {
                 Designed & Built by <span className="text-blue font-semibold">Brendon Julian Lightfoot</span>
               </p>
               <p className="text-muted-foreground text-xs mt-1">
-                JulianArtisan408 • Made with ❤️ in South Africa 🇿🇦
+                JulianArtisan408 • Powered by JBLinx Studio 🇿🇦
               </p>
             </div>
           </div>

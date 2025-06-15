@@ -207,10 +207,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **JBLinx Studio** - Development and design
 - **Open Source Community** - For the amazing tools and libraries
 - **React Team** - For the incredible framework
-- **Vercel** - For inspiring modern web development practices
+- **Modern Web Standards** - For inspiring development practices
 
 ---
 
 **© 2024 JBLinx Studio. All rights reserved.**
 
-Built with ❤️ in South Africa 🇿🇦
+Powered by JBLinx Studio 🇿🇦
