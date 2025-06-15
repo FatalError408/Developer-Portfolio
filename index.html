@@ -5,56 +5,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brendon Julian Lightfoot | Software Engineer Portfolio</title>
-    <meta name="description" content="Professional portfolio of Brendon Julian Lightfoot (JulianArtisan408), a Software Engineer specializing in modern web technologies from South Africa">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1005/1005141.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <meta name="description" content="Professional portfolio of Brendon Julian Lightfoot (JulianArtisan408), a Software Engineer specializing in modern web technologies from South Africa. Developed by JBLinx Studio.">
+    <meta name="keywords" content="Software Engineer, Web Developer, React, TypeScript, Portfolio, South Africa, JBLinx Studio, JulianArtisan408">
+    <meta name="author" content="JBLinx Studio">
+    <meta name="robots" content="index, follow">
     
-    <!-- Debug script to help identify loading issues -->
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Brendon Julian Lightfoot | Software Engineer Portfolio">
+    <meta property="og:description" content="Professional portfolio showcasing modern web development skills and projects. Developed by JBLinx Studio.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://julianartisan408.github.io/Developer-Portfolio/">
+    <meta property="og:image" content="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-1170x780.jpg">
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Brendon Julian Lightfoot | Software Engineer Portfolio">
+    <meta name="twitter:description" content="Professional portfolio showcasing modern web development skills and projects. Developed by JBLinx Studio.">
+    <meta name="twitter:image" content="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-1170x780.jpg">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-1170x780.jpg" as="image">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Person",
+      "name": "Brendon Julian Lightfoot",
+      "alternateName": "JulianArtisan408",
+      "jobTitle": "Software Engineer",
+      "email": "BrendonLightfoot408@Gmail.com",
+      "telephone": "+27635242767",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Uitenhage",
+        "addressRegion": "Eastern Cape",
+        "postalCode": "6229",
+        "addressCountry": "South Africa"
+      },
+      "worksFor": {
+        "@type": "Organization",
+        "name": "JBLinx Studio",
+        "email": "ContactJBLinxStudio@Gmail.com"
+      },
+      "url": "https://julianartisan408.github.io/Developer-Portfolio/",
+      "sameAs": [
+        "https://github.com/JulianArtisan408",
+        "https://linkedin.com/in/julianartisan408"
+      ]
+    }
+    </script>
+    
+    <!-- Performance and Error Tracking -->
     <script type="text/javascript">
-      console.log('HTML document loading at:', new Date().toISOString());
-      console.log('Base path: /Developer-Portfolio/');
+      console.log('Portfolio loading - JBLinx Studio © 2024');
+      console.log('Developer: Brendon Julian Lightfoot (JulianArtisan408)');
       
-      // Enable more verbose error reporting
+      // Enhanced error reporting
       window.onerror = function(message, source, lineno, colno, error) {
-        console.error('JavaScript error:', { message, source, lineno, colno, error });
+        console.error('Application error:', { message, source, lineno, colno, error });
         document.getElementById('error-display').style.display = 'block';
         document.getElementById('error-message').textContent = message;
       };
       
       window.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM content loaded at:', new Date().toISOString());
+        console.log('DOM loaded successfully at:', new Date().toISOString());
       });
       
       window.addEventListener('load', function() {
-        console.log('Window loaded at:', new Date().toISOString());
-        console.log('Base URL:', document.baseURI);
+        console.log('Application loaded successfully');
         
-        // Add visible error display if React fails to load
+        // Check if React loaded properly
         setTimeout(function() {
           var root = document.getElementById('root');
-          if (root && root.children.length === 0 && !window.reactLoaded) {
+          if (root && root.children.length === 0) {
             document.getElementById('error-display').style.display = 'block';
           }
-        }, 5000); // Wait 5 seconds to check if React loaded
+        }, 3000);
       });
     </script>
 </head>
 <body class="dark-theme">
     <!-- Loading indicator -->
-    <div id="loading-indicator" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: #121212; color: white; z-index: 9999;">
+    <div id="loading-indicator" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%); color: white; z-index: 9999;">
         <div style="text-align: center;">
-            <div style="border: 5px solid #333; border-radius: 50%; border-top: 5px solid #3498db; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-            <p style="margin-top: 20px;">Loading portfolio...</p>
+            <div style="border: 3px solid #333; border-radius: 50%; border-top: 3px solid #3B82F6; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+            <p style="margin-top: 16px; font-family: 'Inter', sans-serif; font-size: 14px; opacity: 0.8;">Loading Portfolio...</p>
+            <p style="margin-top: 8px; font-family: 'Inter', sans-serif; font-size: 12px; opacity: 0.6;">JBLinx Studio</p>
         </div>
     </div>
     
     <!-- Error display container -->
-    <div id="error-display" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: #121212; color: white; z-index: 9998; padding: 20px; overflow: auto;">
-        <h1 style="color: #e74c3c;">Application Error</h1>
-        <p>The application failed to load properly.</p>
-        <p>Error message: <span id="error-message">Unknown error</span></p>
-        <p>Try refreshing the page. If the problem persists, please check the browser console for more details.</p>
+    <div id="error-display" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%); color: white; z-index: 9998; padding: 20px; overflow: auto; font-family: 'Inter', sans-serif;">
+        <div style="max-width: 600px; margin: 50px auto; text-align: center;">
+            <h1 style="color: #ef4444; font-size: 24px; margin-bottom: 16px;">Application Error</h1>
+            <p style="margin-bottom: 12px; opacity: 0.8;">The application failed to load properly.</p>
+            <p style="margin-bottom: 20px; opacity: 0.6;">Error: <span id="error-message">Unknown error</span></p>
+            <p style="margin-bottom: 20px; opacity: 0.6;">Please try refreshing the page. If the problem persists, contact support.</p>
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333; opacity: 0.5;">
+                <p style="font-size: 12px;">© 2024 JBLinx Studio - Brendon Julian Lightfoot</p>
+            </div>
+        </div>
     </div>
     
     <style>
@@ -62,15 +122,27 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+            min-height: 100vh;
+        }
     </style>
+    
     <script>
         window.addEventListener('load', function() {
             setTimeout(function() {
                 const loadingIndicator = document.getElementById('loading-indicator');
                 if (loadingIndicator) {
-                    loadingIndicator.style.display = 'none';
+                    loadingIndicator.style.opacity = '0';
+                    loadingIndicator.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => {
+                        loadingIndicator.style.display = 'none';
+                    }, 500);
                 }
-            }, 1000);
+            }, 800);
         });
     </script>
 

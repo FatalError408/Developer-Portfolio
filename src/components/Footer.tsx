@@ -1,6 +1,6 @@
 
 import { motion, useAnimation } from "framer-motion";
-import { Github, Linkedin, Twitter, Mail, MapPin, Phone, ChevronUp, Code } from "lucide-react";
+import { Github, Linkedin, Twitter, Mail, MapPin, Phone, ChevronUp, Code, Building2 } from "lucide-react";
 import ScrollRevealWrapper from "./ScrollRevealWrapper";
 import { useEffect, useState } from "react";
 import { Switch } from "@/components/ui/switch";
@@ -63,6 +63,21 @@ const Footer = () => {
                   {isAvailableForWork ? "Available for work" : "Currently unavailable"}
                 </Badge>
               </div>
+              
+              {/* JBLinx Studio branding */}
+              <motion.div 
+                className="mt-6 p-3 rounded-lg bg-dark-300/40 border border-dark-200/50"
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className="flex items-center space-x-2 mb-2">
+                  <Building2 className="w-4 h-4 text-blue" />
+                  <span className="text-sm font-semibold text-white">JBLinx Studio</span>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Professional web development company specializing in modern applications and digital solutions.
+                </p>
+              </motion.div>
+              
               <div className="flex space-x-4 mt-6">
                 {[
                   { icon: <Github size={20} />, url: "https://github.com/JulianArtisan408", label: "GitHub" },
@@ -131,9 +146,14 @@ const Footer = () => {
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dark-300/80 backdrop-blur-sm flex items-center justify-center mr-3">
                     <Mail className="w-4 h-4 text-blue" />
                   </div>
-                  <a href="mailto:BrendonLightfoot408@Gmail.com" className="text-muted-foreground hover:text-white transition-colors">
-                    BrendonLightfoot408@Gmail.com
-                  </a>
+                  <div className="flex flex-col space-y-1">
+                    <a href="mailto:BrendonLightfoot408@Gmail.com" className="text-muted-foreground hover:text-white transition-colors text-sm">
+                      BrendonLightfoot408@Gmail.com
+                    </a>
+                    <a href="mailto:ContactJBLinxStudio@Gmail.com" className="text-muted-foreground hover:text-white transition-colors text-sm">
+                      ContactJBLinxStudio@Gmail.com
+                    </a>
+                  </div>
                 </motion.li>
                 <motion.li 
                   className="flex items-start"
@@ -151,13 +171,25 @@ const Footer = () => {
           </ScrollRevealWrapper>
         </div>
         
-        <div className="border-t border-dark-300 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-muted-foreground text-sm">
-            © {currentYear} JulianArtisan408. All rights reserved.
-          </p>
-          <p className="text-muted-foreground text-sm mt-4 md:mt-0">
-            Designed & Built by Brendon Julian Lightfoot
-          </p>
+        <div className="border-t border-dark-300 mt-12 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div className="text-center md:text-left">
+              <p className="text-muted-foreground text-sm">
+                © {currentYear} JBLinx Studio. All rights reserved.
+              </p>
+              <p className="text-muted-foreground text-xs mt-1">
+                Licensed under MIT License
+              </p>
+            </div>
+            <div className="text-center md:text-right">
+              <p className="text-muted-foreground text-sm">
+                Designed & Built by <span className="text-blue font-semibold">Brendon Julian Lightfoot</span>
+              </p>
+              <p className="text-muted-foreground text-xs mt-1">
+                JulianArtisan408 • Made with ❤️ in South Africa 🇿🇦
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
