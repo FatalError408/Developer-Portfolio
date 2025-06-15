@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -77,6 +76,9 @@ const Hero = () => {
     }
     setIsCommandOpen(false);
   };
+
+  // Coding symbols for floating animation
+  const codingSymbols = ['<>', '//', '{}', '()', '[];', '/*', '*/', '&&', '||', '===', '!=', '=>', '<html>', '</div>', 'npm', 'git', 'css', 'js'];
   
   return (
     <section className="relative min-h-[90vh] flex items-center pt-16 overflow-hidden bg-dark-500" id="home">
@@ -162,7 +164,7 @@ const Hero = () => {
           </div>
           
           <motion.div 
-            className="w-full md:w-5/12 flex justify-center"
+            className="w-full md:w-5/12 flex justify-center relative"
             variants={itemVariants}
             ref={imgRef}
             whileHover={{ scale: 1.05 }}
@@ -186,12 +188,38 @@ const Hero = () => {
               >
                 <Avatar className="w-full h-full">
                   <AvatarImage 
-                    src="https://photos.fife.usercontent.google.com/pw/AP1GczMBaB7Xu7DTbn77bFtxDvKvppBFrkcyIeQHiGFxZd91Okx5N3ZNlbR6=w696-h928-s-no-gm?authuser=0" 
+                    src="https://photos.fife.usercontent.google.com/pw/AP1GczP1HwibmE7-e2Pq4WoVnZreEtPyeb6xXbB5xtuY1mypr72SA1sYs5yM=w696-h928-s-no-gm?authuser=0" 
                     alt="Brendon Julian Lightfoot"
                     className="w-full h-full object-cover"
                   />
                   <AvatarFallback className="text-4xl bg-gradient-to-br from-blue-900 to-purple-900">BJL</AvatarFallback>
                 </Avatar>
+                
+                {/* Animated coding symbols floating over the image */}
+                {codingSymbols.map((symbol, index) => (
+                  <motion.div
+                    key={`${symbol}-${index}`}
+                    className="absolute text-blue-400/70 font-mono text-sm pointer-events-none"
+                    style={{
+                      left: `${15 + (index * 7) % 70}%`,
+                      top: `${10 + (index * 11) % 80}%`,
+                    }}
+                    animate={{
+                      y: [-5, 5, -5],
+                      x: [-3, 3, -3],
+                      opacity: [0.3, 0.8, 0.3],
+                      scale: [0.8, 1.1, 0.8],
+                    }}
+                    transition={{
+                      duration: 3 + (index % 3),
+                      repeat: Infinity,
+                      delay: index * 0.2,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    {symbol}
+                  </motion.div>
+                ))}
                 
                 {/* Enhanced animated decorative elements */}
                 <motion.div 
