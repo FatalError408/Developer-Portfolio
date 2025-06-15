@@ -98,7 +98,7 @@ const Index = () => {
       {/* Enhanced welcome effect */}
       {showWelcomeEffect && (
         <motion.div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-white pointer-events-none"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-white pointer-events-none"
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -169,9 +169,9 @@ const Index = () => {
 
       <Navbar />
 
-      <main className="relative z-10">
+      <main className="relative z-10 bg-white">
         <motion.section 
-          className="pt-4 pb-16 md:pb-24"
+          className="pt-4 pb-16 md:pb-24 bg-white"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: showWelcomeEffect ? 3.5 : 0, duration: 0.8 }}
@@ -179,33 +179,33 @@ const Index = () => {
           <Hero />
         </motion.section>
         
-        <section className="py-16 md:py-24">
+        <section className="py-16 md:py-24 bg-white">
           <About />
         </section>
         
-        <section className="py-16 md:py-24">
+        <section className="py-16 md:py-24 bg-white">
           <Skills />
         </section>
         
-        <section className="py-16 md:py-24">
+        <section className="py-16 md:py-24 bg-white">
           <Suspense fallback={<SectionLoading />}>
             <Projects />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24">
+        <section className="py-16 md:py-24 bg-white">
           <Suspense fallback={<SectionLoading />}>
             <GitHubRepositories />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24">
+        <section className="py-16 md:py-24 bg-white">
           <Suspense fallback={<SectionLoading />}>
             <Experience />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24">
+        <section className="py-16 md:py-24 bg-white">
           <Suspense fallback={<SectionLoading />}>
             <Contact />
           </Suspense>
