@@ -5,26 +5,26 @@ import { useState, useEffect } from "react";
 const isBrowser = typeof window !== 'undefined';
 
 const useDeviceCapabilities = () => {
-  const [particleCount, setParticleCount] = useState(200); // Much lower default
+  const [particleCount, setParticleCount] = useState(500); 
   
   useEffect(() => {
     if (isBrowser) {
-      // Aggressive performance optimization
+      // More aggressive device capability detection
       const hardwareConcurrency = navigator.hardwareConcurrency || 2;
-      const isHighPerformance = hardwareConcurrency > 6;
-      const isMediumPerformance = hardwareConcurrency > 3;
+      const isHighPerformance = hardwareConcurrency > 4;
+      const isMediumPerformance = hardwareConcurrency > 2;
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       const width = window.innerWidth;
       
-      // Much lower particle counts for better performance
-      let count = 150; // Very conservative default
+      // Determine particle count based on device capabilities
+      let count = 500; // Default low
       
-      if (isHighPerformance && !isMobile && width > 1200) {
-        count = 300; // Reduced significantly
+      if (isHighPerformance && !isMobile && width > 1024) {
+        count = 1500; // Reduced from 2000 for better performance
       } else if (isMediumPerformance && !isMobile && width > 768) {
-        count = 200; // Reduced significantly
+        count = 800; // Reduced from 1000 for better performance
       } else if (isMobile) {
-        count = 50; // Extremely low for mobile
+        count = 200; // Very low for mobile
       }
       
       setParticleCount(count);
@@ -36,7 +36,7 @@ const useDeviceCapabilities = () => {
     
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const hardwareConcurrency = navigator.hardwareConcurrency || 2;
-    return isMobile || hardwareConcurrency <= 3; // More conservative threshold
+    return isMobile || hardwareConcurrency <= 2;
   };
 
   return { 
