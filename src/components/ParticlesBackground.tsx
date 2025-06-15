@@ -2,84 +2,59 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-// Professional white particle system
-const AnimatedOrbs = () => {
-  const [activeOrb, setActiveOrb] = useState<number | null>(null);
+// Lightweight white particle system with DNA connections
+const DNAVertexParticles = () => {
+  const [activeVertex, setActiveVertex] = useState<number | null>(null);
 
-  const ORBS = [
+  // Minimal vertex configuration for performance
+  const VERTICES = [
     {
-      className: "absolute top-1/4 left-1/2 w-[45rem] h-[45rem] -translate-x-1/2 blur-3xl",
-      gradient: "from-white/6 via-gray-100/3 to-transparent",
-      shadow: "0 0 120px 50px rgba(255, 255, 255, 0.02)",
+      className: "absolute top-1/4 left-1/2 w-[30rem] h-[30rem] -translate-x-1/2 blur-2xl",
+      gradient: "from-white/5 via-gray-100/2 to-transparent",
+      shadow: "0 0 60px 20px rgba(255, 255, 255, 0.02)",
       id: 0,
     },
     {
-      className: "absolute bottom-1/4 left-1/3 w-[38rem] h-[38rem] blur-3xl",
-      gradient: "from-gray-200/5 via-white/2 to-transparent",
-      shadow: "0 0 100px 40px rgba(200, 200, 200, 0.015)",
+      className: "absolute bottom-1/3 left-1/4 w-[25rem] h-[25rem] blur-2xl",
+      gradient: "from-gray-200/4 via-white/2 to-transparent",
+      shadow: "0 0 50px 15px rgba(200, 200, 200, 0.015)",
       id: 1,
     },
     {
-      className: "absolute top-2/3 right-12 w-[25rem] h-[25rem] blur-3xl",
-      gradient: "from-white/4 via-gray-50/2 to-transparent",
-      shadow: "0 0 80px 30px rgba(255, 255, 255, 0.01)",
+      className: "absolute top-1/2 right-1/4 w-[20rem] h-[20rem] blur-2xl",
+      gradient: "from-white/3 via-gray-50/1 to-transparent",
+      shadow: "0 0 40px 12px rgba(255, 255, 255, 0.01)",
       id: 2,
-    },
-    {
-      className: "absolute top-[15%] right-[5%] w-[30rem] h-[30rem] blur-3xl",
-      gradient: "from-gray-100/3 via-white/1 to-transparent",
-      shadow: "0 0 90px 35px rgba(240, 240, 240, 0.012)",
-      id: 3,
-    },
-    {
-      className: "absolute bottom-[22%] left-[5%] w-[26rem] h-[26rem] blur-3xl",
-      gradient: "from-white/3 via-gray-200/1 to-transparent",
-      shadow: "0 0 70px 25px rgba(255, 255, 255, 0.008)",
-      id: 4,
     },
   ];
 
   return (
     <>
-      {ORBS.map((orb, i) => (
+      {VERTICES.map((vertex, i) => (
         <motion.div
           key={i}
-          className={`pointer-events-auto rounded-full bg-gradient-radial ${orb.className} ${orb.gradient} ${
-            activeOrb === i ? "scale-105" : ""
+          className={`pointer-events-auto rounded-full bg-gradient-radial ${vertex.className} ${vertex.gradient} ${
+            activeVertex === i ? "scale-110" : ""
           }`}
           style={{ 
-            boxShadow: activeOrb === i 
-              ? `${orb.shadow}, 0 0 150px 60px rgba(255, 255, 255, 0.04)` 
-              : orb.shadow,
+            boxShadow: activeVertex === i 
+              ? `${vertex.shadow}, 0 0 80px 30px rgba(255, 255, 255, 0.03)` 
+              : vertex.shadow,
             zIndex: 0 
           }}
-          onPointerEnter={() => setActiveOrb(i)}
-          onPointerLeave={() => setActiveOrb(null)}
-          onTouchStart={() => setActiveOrb(i)}
-          onTouchEnd={() => setActiveOrb(null)}
-          whileHover={{ scale: 1.02 }}
+          onPointerEnter={() => setActiveVertex(i)}
+          onPointerLeave={() => setActiveVertex(null)}
+          whileHover={{ scale: 1.05 }}
           animate={{
-            y: [
-              0,
-              (i % 2 === 0 ? 1 : -1) * 8,
-              0,
-              (i % 2 === 0 ? -1 : 1) * 6,
-              0,
-            ],
-            x: [
-              0,
-              (i % 3 ? 1 : -1) * 5,
-              0,
-              (i % 3 ? -1 : 1) * 4,
-              0,
-            ],
-            opacity: [0.6, 0.8, 0.6],
+            y: [0, (i % 2 === 0 ? 1 : -1) * 6, 0],
+            x: [0, (i % 3 ? 1 : -1) * 4, 0],
+            opacity: [0.4, 0.6, 0.4],
           }}
           transition={{
-            duration: 20 + i * 2,
+            duration: 25 + i * 3,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: i * 1.5
+            delay: i * 2
           }}
         />
       ))}
@@ -87,86 +62,93 @@ const AnimatedOrbs = () => {
   );
 };
 
-// Professional white interactive dots
-const InteractiveDots = () => {
+// Lightweight interactive dots with DNA connections
+const DNAConnectedDots = () => {
   const [hovered, setHovered] = useState<number | null>(null);
-  const [dots, setDots] = useState(
-    Array.from({ length: 80 }, (_, i) => {
-      // More sophisticated distribution pattern
-      const angle = (i * 137.5) * (Math.PI / 180); // Golden angle
-      const radius = Math.sqrt(i) * 3;
-      const x = 50 + Math.cos(angle) * (radius % 35);
-      const y = 50 + Math.sin(angle) * (radius % 35);
+  
+  // Reduced particle count for better performance
+  const dots = useState(
+    Array.from({ length: 20 }, (_, i) => {
+      // DNA helix positioning
+      const t = (i / 20) * Math.PI * 3;
+      const radius = 25;
+      const x = 50 + Math.cos(t) * radius;
+      const y = 25 + (i / 20) * 50;
       
       return {
         id: i,
-        left: `${Math.max(5, Math.min(95, x))}%`,
-        top: `${Math.max(5, Math.min(95, y))}%`,
-        size: Math.random() * 3 + 1,
-        opacity: Math.random() * 0.4 + 0.2,
-        blur: Math.random() > 0.8 ? Math.random() * 0.5 + 0.2 : 0,
-        intensity: Math.random() * 0.3 + 0.1,
+        left: `${Math.max(10, Math.min(90, x))}%`,
+        top: `${Math.max(10, Math.min(90, y))}%`,
+        size: Math.random() * 3 + 2,
+        opacity: Math.random() * 0.5 + 0.3,
+        intensity: Math.random() * 0.4 + 0.2,
+        helix: t,
       };
     })
-  );
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setDots((dots) =>
-        dots.map((dot) => ({
-          ...dot,
-          left: `${parseFloat(dot.left) + Math.sin(Date.now() / 8000 + dot.id) * 0.2}%`,
-          top: `${parseFloat(dot.top) + Math.cos(Date.now() / 6000 + dot.id * 1.5) * 0.15}%`,
-        }))
-      );
-    }, 15000);
-    return () => clearInterval(timer);
-  }, []);
+  )[0];
 
   return (
     <>
+      {/* Connection lines between nearby dots */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
+        {dots.map((dot, i) => {
+          if (i === 0) return null;
+          const prevDot = dots[i - 1];
+          return (
+            <motion.line
+              key={`line-${i}`}
+              x1={dot.left}
+              y1={dot.top}
+              x2={prevDot.left}
+              y2={prevDot.top}
+              stroke="rgba(255, 255, 255, 0.15)"
+              strokeWidth="0.5"
+              strokeDasharray="1,2"
+              animate={{
+                opacity: [0.1, 0.3, 0.1],
+              }}
+              transition={{
+                duration: 8 + i,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: i * 0.5,
+              }}
+            />
+          );
+        })}
+      </svg>
+
+      {/* DNA vertex dots */}
       {dots.map((dot, i) => (
         <motion.div
           key={dot.id}
-          className="absolute pointer-events-auto rounded-full bg-white"
+          className="absolute pointer-events-auto rounded-full bg-white cursor-pointer"
           style={{
             left: dot.left,
             top: dot.top,
             width: `${dot.size}px`,
             height: `${dot.size}px`,
-            filter: `blur(${dot.blur}px)`,
             boxShadow: hovered === i
-              ? `0 0 20px 5px rgba(255, 255, 255, 0.4), 0 0 40px 10px rgba(255, 255, 255, 0.2), inset 0 0 ${dot.size}px rgba(255, 255, 255, 0.6)`
-              : `0 0 ${dot.size * 3}px 1px rgba(255, 255, 255, ${dot.intensity}), inset 0 0 ${dot.size}px rgba(255, 255, 255, 0.3)`,
+              ? `0 0 15px 3px rgba(255, 255, 255, 0.5), 0 0 30px 6px rgba(255, 255, 255, 0.2)`
+              : `0 0 ${dot.size * 2}px 1px rgba(255, 255, 255, ${dot.intensity})`,
             opacity: hovered === i ? 0.9 : dot.opacity,
-            zIndex: 1,
-            cursor: "pointer",
+            zIndex: 2,
           }}
           whileHover={{
-            scale: 2,
+            scale: 1.8,
             opacity: 1,
-            y: -8,
           }}
           onPointerEnter={() => setHovered(i)}
           onPointerLeave={() => setHovered(null)}
-          onTouchStart={() => setHovered(i)}
-          onTouchEnd={() => setHovered(null)}
           animate={{
-            y: [
-              0,
-              (i % 2 === 0 ? -1 : 1) * Math.random() * 4,
-              0,
-              (i % 2 === 0 ? 1 : -1) * Math.random() * 3,
-              0
-            ],
-            scale: hovered === i ? 1.8 : 1,
-            opacity: [dot.opacity * 0.7, dot.opacity, dot.opacity * 0.8, dot.opacity],
+            y: [0, Math.sin(dot.helix) * 3, 0],
+            opacity: [dot.opacity * 0.8, dot.opacity, dot.opacity * 0.9],
           }}
           transition={{
-            duration: 15 + i * 0.3,
+            duration: 20 + i * 0.5,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: i * 0.4
+            delay: i * 0.3
           }}
         />
       ))}
@@ -177,8 +159,8 @@ const InteractiveDots = () => {
 // Main export with pitch black background
 const ParticlesBackground = () => (
   <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-black">
-    <AnimatedOrbs />
-    <InteractiveDots />
+    <DNAVertexParticles />
+    <DNAConnectedDots />
   </div>
 );
 

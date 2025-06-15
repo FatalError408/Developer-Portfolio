@@ -5,26 +5,26 @@ import { useState, useEffect } from "react";
 const isBrowser = typeof window !== 'undefined';
 
 const useDeviceCapabilities = () => {
-  const [particleCount, setParticleCount] = useState(500); 
+  const [particleCount, setParticleCount] = useState(200); // Much lower default
   
   useEffect(() => {
     if (isBrowser) {
-      // More aggressive device capability detection
+      // Aggressive performance optimization
       const hardwareConcurrency = navigator.hardwareConcurrency || 2;
-      const isHighPerformance = hardwareConcurrency > 4;
-      const isMediumPerformance = hardwareConcurrency > 2;
+      const isHighPerformance = hardwareConcurrency > 6;
+      const isMediumPerformance = hardwareConcurrency > 3;
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       const width = window.innerWidth;
       
-      // Determine particle count based on device capabilities
-      let count = 500; // Default low
+      // Much lower particle counts for better performance
+      let count = 150; // Very conservative default
       
-      if (isHighPerformance && !isMobile && width > 1024) {
-        count = 1500; // Reduced from 2000 for better performance
+      if (isHighPerformance && !isMobile && width > 1200) {
+        count = 300; // Reduced significantly
       } else if (isMediumPerformance && !isMobile && width > 768) {
-        count = 800; // Reduced from 1000 for better performance
+        count = 200; // Reduced significantly
       } else if (isMobile) {
-        count = 200; // Very low for mobile
+        count = 50; // Extremely low for mobile
       }
       
       setParticleCount(count);
@@ -36,7 +36,7 @@ const useDeviceCapabilities = () => {
     
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const hardwareConcurrency = navigator.hardwareConcurrency || 2;
-    return isMobile || hardwareConcurrency <= 2;
+    return isMobile || hardwareConcurrency <= 3; // More conservative threshold
   };
 
   return { 

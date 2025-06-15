@@ -7,92 +7,89 @@ interface FloatingParticlesProps {
 }
 
 const FloatingParticles = ({ particleCount }: FloatingParticlesProps) => {
-  // Professional white particles with DNA vertex patterns
+  // Optimized DNA vertex particles with connections
   const particles = useMemo(() => {
-    return Array.from({ length: Math.min(particleCount, 60) }).map((_, i) => {
-      const size = Math.random() * 4 + 2;
+    // Limit particles for better performance
+    const count = Math.min(particleCount, 15);
+    
+    return Array.from({ length: count }).map((_, i) => {
+      const size = Math.random() * 3 + 2;
       
       // DNA double helix positioning
-      const helixIndex = i % 20;
-      const helixT = (helixIndex / 20) * Math.PI * 6;
-      const helixRadius = 8;
-      
-      let baseLeft, baseTop;
-      
-      if (i < 20) {
-        // First DNA strand
-        baseLeft = 25 + Math.cos(helixT) * helixRadius;
-        baseTop = 20 + (helixIndex / 20) * 60;
-      } else if (i < 40) {
-        // Second DNA strand (complementary)
-        baseLeft = 75 + Math.cos(helixT + Math.PI) * helixRadius;
-        baseTop = 20 + (helixIndex / 20) * 60;
-      } else {
-        // Random floating particles
-        const phi = (1 + Math.sqrt(5)) / 2;
-        const angle = i * 2 * Math.PI / phi;
-        const radius = Math.sqrt(i) * 8;
-        
-        baseLeft = 50 + Math.cos(angle) * (radius % 30);
-        baseTop = 50 + Math.sin(angle) * (radius % 30);
-      }
-      
-      // Enhanced movement patterns for DNA vertex effect
-      const movementType = i % 5;
-      let movementPattern = {};
-      
-      switch (movementType) {
-        case 0: // DNA helix motion
-          movementPattern = {
-            x: Array.from({ length: 8 }, (_, j) => Math.cos(j * Math.PI / 4 + helixT) * 12),
-            y: Array.from({ length: 8 }, (_, j) => j * 2 - 6),
-          };
-          break;
-        case 1: // Complementary helix
-          movementPattern = {
-            x: Array.from({ length: 8 }, (_, j) => Math.cos(j * Math.PI / 4 + helixT + Math.PI) * 12),
-            y: Array.from({ length: 8 }, (_, j) => j * 2 - 6),
-          };
-          break;
-        case 2: // Vertex connection pattern
-          movementPattern = {
-            x: Array.from({ length: 6 }, (_, j) => Math.sin(j * Math.PI / 3) * 20),
-            y: Array.from({ length: 6 }, (_, j) => Math.cos(j * Math.PI / 3) * 15),
-          };
-          break;
-        case 3: // Orbital motion
-          movementPattern = {
-            x: Array.from({ length: 10 }, (_, j) => Math.cos(j * Math.PI / 5) * (10 + j)),
-            y: Array.from({ length: 10 }, (_, j) => Math.sin(j * Math.PI / 5) * (10 + j)),
-          };
-          break;
-        default: // Gentle drift
-          movementPattern = {
-            x: [0, Math.random() * 20 - 10, 0, Math.random() * 15 - 7.5, 0],
-            y: [0, Math.random() * 20 - 10, 0, Math.random() * 15 - 7.5, 0],
-          };
-      }
+      const t = (i / count) * Math.PI * 2.5;
+      const radius = 20;
+      const baseLeft = 50 + Math.cos(t) * radius;
+      const baseTop = 30 + (i / count) * 40;
       
       return {
         id: i,
         size,
-        left: Math.max(5, Math.min(95, baseLeft)),
-        top: Math.max(5, Math.min(95, baseTop)),
-        blur: Math.random() > 0.8 ? Math.random() * 1 + 0.5 : 0,
-        opacity: Math.random() * 0.6 + 0.3,
-        intensity: Math.random() * 0.4 + 0.2,
-        duration: 18 + Math.random() * 12,
-        delay: i * 0.2,
-        movementPattern,
-        rotationSpeed: Math.random() * 180 + 90,
-        isHelixParticle: i < 40,
-        glowSize: Math.random() * 15 + 10,
+        left: Math.max(15, Math.min(85, baseLeft)),
+        top: Math.max(15, Math.min(85, baseTop)),
+        opacity: Math.random() * 0.6 + 0.4,
+        intensity: Math.random() * 0.5 + 0.3,
+        duration: 18 + Math.random() * 8,
+        delay: i * 0.8,
+        helix: t,
+        glowSize: Math.random() * 10 + 8,
       };
     });
   }, [particleCount]);
 
+  // Connection lines between particles
+  const connections = useMemo(() => {
+    const lines = [];
+    for (let i = 0; i < particles.length - 1; i++) {
+      const start = particles[i];
+      const end = particles[i + 1];
+      const distance = Math.sqrt(
+        Math.pow(end.left - start.left, 2) + Math.pow(end.top - start.top, 2)
+      );
+      
+      // Only connect nearby particles to avoid visual clutter
+      if (distance < 25) {
+        lines.push({
+          id: `connection-${i}`,
+          x1: start.left,
+          y1: start.top,
+          x2: end.left,
+          y2: end.top,
+          opacity: 0.2 + Math.random() * 0.1,
+        });
+      }
+    }
+    return lines;
+  }, [particles]);
+
   return (
     <>
+      {/* DNA connection lines */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none">
+        {connections.map((connection) => (
+          <motion.line
+            key={connection.id}
+            x1={`${connection.x1}%`}
+            y1={`${connection.y1}%`}
+            x2={`${connection.x2}%`}
+            y2={`${connection.y2}%`}
+            stroke="rgba(255, 255, 255, 0.2)"
+            strokeWidth="1"
+            strokeDasharray="2,3"
+            animate={{
+              opacity: [0, connection.opacity, 0],
+              strokeDashoffset: [0, -10, 0],
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: Math.random() * 3,
+            }}
+          />
+        ))}
+      </svg>
+
+      {/* DNA vertex particles */}
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
@@ -103,92 +100,57 @@ const FloatingParticles = ({ particleCount }: FloatingParticlesProps) => {
             opacity: particle.opacity,
             left: `${particle.left}%`,
             top: `${particle.top}%`,
-            filter: `blur(${particle.blur}px)`,
-            boxShadow: particle.isHelixParticle
-              ? `0 0 ${particle.glowSize}px ${particle.glowSize/3}px rgba(255, 255, 255, 0.4), 
-                 0 0 ${particle.size * 2}px 1px rgba(255, 255, 255, 0.6),
-                 inset 0 0 ${particle.size}px rgba(255, 255, 255, 0.8)`
-              : `0 0 ${particle.glowSize}px ${particle.glowSize/4}px rgba(255, 255, 255, ${particle.intensity}), 
-                 inset 0 0 ${particle.size}px rgba(255, 255, 255, 0.5)`,
+            boxShadow: `0 0 ${particle.glowSize}px ${particle.glowSize/4}px rgba(255, 255, 255, 0.4), 
+                       0 0 ${particle.size * 2}px 1px rgba(255, 255, 255, 0.6),
+                       inset 0 0 ${particle.size}px rgba(255, 255, 255, 0.8)`,
           }}
           initial={{ 
             opacity: 0,
             scale: 0,
-            rotate: 0
           }}
           animate={{
-            opacity: [0, particle.opacity, particle.opacity * 1.3, particle.opacity, 0.4],
-            scale: [0.5, 1, 1.2, 1, 0.9],
-            rotate: [0, particle.rotationSpeed],
-            ...particle.movementPattern,
+            opacity: [0, particle.opacity, particle.opacity * 1.2, particle.opacity],
+            scale: [0.5, 1, 1.1, 1],
+            x: [0, Math.cos(particle.helix) * 10, 0],
+            y: [0, Math.sin(particle.helix) * 8, 0],
           }}
           transition={{
             duration: particle.duration,
             repeat: Infinity,
             ease: "easeInOut",
             delay: particle.delay,
-            times: [0, 0.2, 0.5, 0.8, 1],
           }}
           whileHover={{
-            scale: 1.8,
+            scale: 1.5,
             opacity: 0.9,
             transition: { duration: 0.3 }
           }}
         />
       ))}
       
-      {/* Enhanced DNA connection lines */}
-      {Array.from({ length: Math.min(particleCount / 8, 10) }).map((_, i) => (
-        <motion.div
-          key={`connection-${i}`}
-          className="absolute pointer-events-none"
-          style={{
-            width: `2px`,
-            height: `40px`,
-            background: `linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent, rgba(255, 255, 255, 0.3))`,
-            left: `${30 + i * 8}%`,
-            top: `${25 + i * 6}%`,
-            transformOrigin: 'center',
-            filter: 'blur(0.5px)',
-          }}
-          animate={{
-            opacity: [0.2, 0.6, 0.2],
-            scaleY: [0.8, 1.2, 0.8],
-            rotate: [0, 5, -5, 0],
-          }}
-          transition={{
-            duration: 8 + i * 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: i * 1.5,
-          }}
-        />
-      ))}
-      
-      {/* Ambient depth particles */}
-      {Array.from({ length: Math.min(particleCount / 6, 20) }).map((_, i) => (
+      {/* Minimal ambient depth particles */}
+      {Array.from({ length: Math.min(particleCount / 10, 5) }).map((_, i) => (
         <motion.div
           key={`ambient-${i}`}
-          className="absolute rounded-full pointer-events-none opacity-30 bg-white"
+          className="absolute rounded-full pointer-events-none opacity-25 bg-white"
           style={{
-            width: `${Math.random() * 2 + 0.5}px`,
-            height: `${Math.random() * 2 + 0.5}px`,
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            width: `${Math.random() * 2 + 1}px`,
+            height: `${Math.random() * 2 + 1}px`,
+            left: `${Math.random() * 80 + 10}%`,
+            top: `${Math.random() * 80 + 10}%`,
             filter: "blur(0.5px)",
-            boxShadow: `0 0 ${Math.random() * 8 + 4}px 1px rgba(255, 255, 255, 0.2)`,
+            boxShadow: `0 0 ${Math.random() * 6 + 3}px 1px rgba(255, 255, 255, 0.2)`,
           }}
           animate={{
-            opacity: [0.1, 0.5, 0.1],
-            scale: [0.5, 1.1, 0.5],
-            y: [0, -Math.random() * 30 - 10, 0],
-            x: [0, Math.random() * 20 - 10, 0],
+            opacity: [0.1, 0.4, 0.1],
+            scale: [0.8, 1.2, 0.8],
+            y: [0, -Math.random() * 20 - 5, 0],
           }}
           transition={{
-            duration: 25 + Math.random() * 15,
+            duration: 20 + Math.random() * 10,
             repeat: Infinity,
             ease: "linear",
-            delay: i * 1.8,
+            delay: i * 3,
           }}
         />
       ))}
