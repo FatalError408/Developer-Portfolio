@@ -9,8 +9,20 @@ import { Badge } from "@/components/ui/badge";
 const Hero = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isCommandOpen, setIsCommandOpen] = useState(false);
-  const [isAvailable, setIsAvailable] = useState(true); // State for availability status
+  const [isAvailable, setIsAvailable] = useState(true);
+  const [profileImageUrl, setProfileImageUrl] = useState("");
   
+  // Load profile image from localStorage
+  useEffect(() => {
+    const savedImageUrl = localStorage.getItem('profile_image_url');
+    if (savedImageUrl) {
+      setProfileImageUrl(savedImageUrl);
+    } else {
+      // Default to your Google Photos URL
+      setProfileImageUrl("https://photos.fife.usercontent.google.com/pw/AP1GczP1HwibmE7-e2Pq4WoVnZreEtPyeb6xXbB5xtuY1mypr72SA1sYs5yM=w696-h928-s-no-gm?authuser=0");
+    }
+  }, []);
+
   // Check for mobile viewport
   useEffect(() => {
     const checkMobile = () => {
@@ -188,9 +200,13 @@ const Hero = () => {
               >
                 <Avatar className="w-full h-full">
                   <AvatarImage 
-                    src="https://photos.fife.usercontent.google.com/pw/AP1GczP1HwibmE7-e2Pq4WoVnZreEtPyeb6xXbB5xtuY1mypr72SA1sYs5yM=w696-h928-s-no-gm?authuser=0" 
+                    src={profileImageUrl} 
                     alt="Brendon Julian Lightfoot"
                     className="w-full h-full object-cover"
+                    onError={() => {
+                      console.log('Image failed to load, using fallback');
+                      // You could set a fallback image here if needed
+                    }}
                   />
                   <AvatarFallback className="text-4xl bg-gradient-to-br from-blue-900 to-purple-900">BJL</AvatarFallback>
                 </Avatar>

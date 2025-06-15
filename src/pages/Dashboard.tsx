@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -12,6 +11,7 @@ import { Lock, Unlock, Settings, User, Edit } from "lucide-react";
 import AvailabilitySection from "@/components/dashboard/AvailabilitySection";
 import ProfileSection from "@/components/dashboard/ProfileSection";
 import ProjectsSection from "@/components/dashboard/ProjectsSection";
+import ProfileImageSection from "@/components/dashboard/ProfileImageSection";
 
 const Dashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -177,10 +177,11 @@ const Dashboard = () => {
         </div>
         
         <Tabs defaultValue="availability" className="bg-dark-400/50 backdrop-blur-sm rounded-xl border border-dark-200 p-4 md:p-6 shadow-xl">
-          <TabsList className="grid grid-cols-3 mb-6">
-            <TabsTrigger value="availability">Availability Status</TabsTrigger>
-            <TabsTrigger value="profile">Profile Info</TabsTrigger>
-            <TabsTrigger value="projects">Projects & Skills</TabsTrigger>
+          <TabsList className="grid grid-cols-4 mb-6">
+            <TabsTrigger value="availability">Availability</TabsTrigger>
+            <TabsTrigger value="profile">Profile</TabsTrigger>
+            <TabsTrigger value="image">Image</TabsTrigger>
+            <TabsTrigger value="projects">Projects</TabsTrigger>
           </TabsList>
           
           <TabsContent value="availability" className="outline-none">
@@ -189,6 +190,10 @@ const Dashboard = () => {
           
           <TabsContent value="profile" className="outline-none">
             <ProfileSection />
+          </TabsContent>
+          
+          <TabsContent value="image" className="outline-none">
+            <ProfileImageSection />
           </TabsContent>
           
           <TabsContent value="projects" className="outline-none">
