@@ -2,55 +2,39 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-// Orb colors to match gradient theme
-const ORB_COLORS = [
-  "from-blue-500/40 to-transparent",
-  "from-purple-500/25 to-transparent",
-  "from-fuchsia-400/15 to-transparent",
-  "from-cyan-400/15 to-transparent",
-  "from-pink-400/15 to-transparent",
-];
-
-// Simple floating gradient orbs with touch/mouse glow interactivity
+// Professional white particle system
 const AnimatedOrbs = () => {
-  // Track which orb is hovered/touched for glow fx
   const [activeOrb, setActiveOrb] = useState<number | null>(null);
 
-  // Responsive orb positions
   const ORBS = [
     {
-      className:
-        "absolute top-1/4 left-1/2 w-[40rem] h-[40rem] -translate-x-1/2 blur-3xl",
-      color: ORB_COLORS[0],
-      style: { zIndex: 0 },
+      className: "absolute top-1/4 left-1/2 w-[45rem] h-[45rem] -translate-x-1/2 blur-3xl",
+      gradient: "from-white/6 via-gray-100/3 to-transparent",
+      shadow: "0 0 120px 50px rgba(255, 255, 255, 0.02)",
       id: 0,
     },
     {
-      className:
-        "absolute bottom-1/4 left-1/3 w-[32rem] h-[32rem] blur-3xl",
-      color: ORB_COLORS[1],
-      style: { zIndex: 0, animationDelay: "0.8s" },
+      className: "absolute bottom-1/4 left-1/3 w-[38rem] h-[38rem] blur-3xl",
+      gradient: "from-gray-200/5 via-white/2 to-transparent",
+      shadow: "0 0 100px 40px rgba(200, 200, 200, 0.015)",
       id: 1,
     },
     {
-      className:
-        "absolute top-2/3 right-12 w-[18rem] h-[18rem] blur-3xl",
-      color: ORB_COLORS[2],
-      style: { zIndex: 0, animationDelay: "1.2s" },
+      className: "absolute top-2/3 right-12 w-[25rem] h-[25rem] blur-3xl",
+      gradient: "from-white/4 via-gray-50/2 to-transparent",
+      shadow: "0 0 80px 30px rgba(255, 255, 255, 0.01)",
       id: 2,
     },
     {
-      className:
-        "absolute top-[15%] right-[5%] w-[22rem] h-[22rem] blur-3xl",
-      color: ORB_COLORS[3],
-      style: { zIndex: 0, animationDelay: "1.6s" },
+      className: "absolute top-[15%] right-[5%] w-[30rem] h-[30rem] blur-3xl",
+      gradient: "from-gray-100/3 via-white/1 to-transparent",
+      shadow: "0 0 90px 35px rgba(240, 240, 240, 0.012)",
       id: 3,
     },
     {
-      className:
-        "absolute bottom-[22%] left-[5%] w-[19rem] h-[19rem] blur-3xl",
-      color: ORB_COLORS[4],
-      style: { zIndex: 0, animationDelay: "2s" },
+      className: "absolute bottom-[22%] left-[5%] w-[26rem] h-[26rem] blur-3xl",
+      gradient: "from-white/3 via-gray-200/1 to-transparent",
+      shadow: "0 0 70px 25px rgba(255, 255, 255, 0.008)",
       id: 4,
     },
   ];
@@ -60,34 +44,42 @@ const AnimatedOrbs = () => {
       {ORBS.map((orb, i) => (
         <motion.div
           key={i}
-          className={`pointer-events-auto rounded-full bg-gradient-radial animate-pulse-slow ${orb.className} ${activeOrb === i ? "shadow-[0_0_60px_32px_rgba(139,92,246,0.17)] scale-[1.04]" : ""}`}
-          style={orb.style}
+          className={`pointer-events-auto rounded-full bg-gradient-radial ${orb.className} ${orb.gradient} ${
+            activeOrb === i ? "scale-105" : ""
+          }`}
+          style={{ 
+            boxShadow: activeOrb === i 
+              ? `${orb.shadow}, 0 0 150px 60px rgba(255, 255, 255, 0.04)` 
+              : orb.shadow,
+            zIndex: 0 
+          }}
           onPointerEnter={() => setActiveOrb(i)}
           onPointerLeave={() => setActiveOrb(null)}
           onTouchStart={() => setActiveOrb(i)}
           onTouchEnd={() => setActiveOrb(null)}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.02 }}
           animate={{
             y: [
               0,
-              (i % 2 === 0 ? 1 : -1) * 14,
+              (i % 2 === 0 ? 1 : -1) * 8,
               0,
-              (i % 2 === 0 ? -1 : 1) * 10,
+              (i % 2 === 0 ? -1 : 1) * 6,
               0,
             ],
             x: [
               0,
-              (i % 3 ? 1 : -1) * 8,
+              (i % 3 ? 1 : -1) * 5,
               0,
-              (i % 3 ? -1 : 1) * 6,
+              (i % 3 ? -1 : 1) * 4,
               0,
             ],
+            opacity: [0.6, 0.8, 0.6],
           }}
           transition={{
-            duration: 18 + i * 2,
+            duration: 20 + i * 2,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: i
+            delay: i * 1.5
           }}
         />
       ))}
@@ -95,45 +87,39 @@ const AnimatedOrbs = () => {
   );
 };
 
-// Interactive floating dots (user can hover/tap for color pop)
+// Professional white interactive dots
 const InteractiveDots = () => {
-  // Track which dot is hovering/tapped
   const [hovered, setHovered] = useState<number | null>(null);
-  // Maps to make dot positions stable
   const [dots, setDots] = useState(
-    Array.from({ length: 14 }).map((_, i) => {
-      // Staggered base positions for harmony
-      const baseLeft = 8 + (82 * (i % 7)) / 6 + (i > 6 ? 7 : 0);
-      const baseTop = 12 + (76 * Math.floor(i / 7)) / 2 + (i % 2 ? 4 : -2);
+    Array.from({ length: 80 }, (_, i) => {
+      // More sophisticated distribution pattern
+      const angle = (i * 137.5) * (Math.PI / 180); // Golden angle
+      const radius = Math.sqrt(i) * 3;
+      const x = 50 + Math.cos(angle) * (radius % 35);
+      const y = 50 + Math.sin(angle) * (radius % 35);
+      
       return {
         id: i,
-        color: [
-          "#8B5CF6",
-          "#1EAEDB",
-          "#D946EF",
-          "#50E3C2",
-          "#6366f1",
-          "#a21caf",
-        ][i % 6],
-        left: `${baseLeft + Math.random() * 3 - 1.5}%`,
-        top: `${baseTop + Math.random() * 4 - 2}%`,
-        size: Math.random() * 5 + 4,
-        blur: Math.random() > 0.82 ? 2 : 0,
+        left: `${Math.max(5, Math.min(95, x))}%`,
+        top: `${Math.max(5, Math.min(95, y))}%`,
+        size: Math.random() * 3 + 1,
+        opacity: Math.random() * 0.4 + 0.2,
+        blur: Math.random() > 0.8 ? Math.random() * 0.5 + 0.2 : 0,
+        intensity: Math.random() * 0.3 + 0.1,
       };
     })
   );
 
   useEffect(() => {
-    // Optional: Animate dot base positions gently for subtle movement
     const timer = setInterval(() => {
       setDots((dots) =>
         dots.map((dot) => ({
           ...dot,
-          left: `${parseFloat(dot.left) + Math.sin(Date.now() / 7000 + dot.id) * 0.5}%`,
-          top: `${parseFloat(dot.top) + Math.cos(Date.now() / 5900 + dot.id * 1.8) * 0.3}%`,
+          left: `${parseFloat(dot.left) + Math.sin(Date.now() / 8000 + dot.id) * 0.2}%`,
+          top: `${parseFloat(dot.top) + Math.cos(Date.now() / 6000 + dot.id * 1.5) * 0.15}%`,
         }))
       );
-    }, 12000); // Very slow drift
+    }, 15000);
     return () => clearInterval(timer);
   }, []);
 
@@ -142,30 +128,24 @@ const InteractiveDots = () => {
       {dots.map((dot, i) => (
         <motion.div
           key={dot.id}
-          className="absolute pointer-events-auto"
+          className="absolute pointer-events-auto rounded-full bg-white"
           style={{
             left: dot.left,
             top: dot.top,
             width: `${dot.size}px`,
             height: `${dot.size}px`,
-            borderRadius: "9999px",
-            background: hovered === i ? "#f9a8d4" : dot.color,
             filter: `blur(${dot.blur}px)`,
-            boxShadow:
-              hovered === i
-                ? `0 0 10px 0 #f9a8d4, 0 0 18px 4px ${dot.color}AA`
-                : dot.blur
-                ? `0 0 8px 2px ${dot.color}66`
-                : undefined,
-            opacity: hovered === i ? 0.98 : 0.7,
+            boxShadow: hovered === i
+              ? `0 0 20px 5px rgba(255, 255, 255, 0.4), 0 0 40px 10px rgba(255, 255, 255, 0.2), inset 0 0 ${dot.size}px rgba(255, 255, 255, 0.6)`
+              : `0 0 ${dot.size * 3}px 1px rgba(255, 255, 255, ${dot.intensity}), inset 0 0 ${dot.size}px rgba(255, 255, 255, 0.3)`,
+            opacity: hovered === i ? 0.9 : dot.opacity,
             zIndex: 1,
-            transition: "box-shadow 0.2s, background 0.2s",
             cursor: "pointer",
           }}
           whileHover={{
-            scale: 1.72,
+            scale: 2,
             opacity: 1,
-            y: -12,
+            y: -8,
           }}
           onPointerEnter={() => setHovered(i)}
           onPointerLeave={() => setHovered(null)}
@@ -174,18 +154,19 @@ const InteractiveDots = () => {
           animate={{
             y: [
               0,
-              (i % 2 === 0 ? -1 : 1) * Math.random() * 6,
+              (i % 2 === 0 ? -1 : 1) * Math.random() * 4,
               0,
-              (i % 2 === 0 ? 1 : -1) * Math.random() * 4,
+              (i % 2 === 0 ? 1 : -1) * Math.random() * 3,
               0
             ],
-            scale: hovered === i ? 1.26 : 1,
+            scale: hovered === i ? 1.8 : 1,
+            opacity: [dot.opacity * 0.7, dot.opacity, dot.opacity * 0.8, dot.opacity],
           }}
           transition={{
-            duration: 10 + i * 0.5,
+            duration: 15 + i * 0.3,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: i * 0.7
+            delay: i * 0.4
           }}
         />
       ))}
@@ -193,9 +174,9 @@ const InteractiveDots = () => {
   );
 };
 
-// Main export
+// Main export with pitch black background
 const ParticlesBackground = () => (
-  <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+  <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-black">
     <AnimatedOrbs />
     <InteractiveDots />
   </div>

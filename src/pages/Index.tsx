@@ -93,15 +93,15 @@ const Index = () => {
 
   return (
     <motion.div
-      className="min-h-screen bg-dark-500 text-white overflow-hidden"
+      className="min-h-screen bg-black text-white overflow-hidden"
       initial="hidden"
       animate="visible"
       variants={fadeIn}
     >
-      {/* Enhanced welcome effect */}
+      {/* Enhanced welcome effect with pitch black background */}
       {showWelcomeEffect && (
         <motion.div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-dark-500 via-dark-400 to-dark-500 pointer-events-none"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black pointer-events-none"
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -170,7 +170,7 @@ const Index = () => {
         </motion.div>
       )}
 
-      {/* Enhanced background system */}
+      {/* Enhanced background system with pitch black base */}
       <BackgroundGradientOrbs />
 
       <Navbar />
