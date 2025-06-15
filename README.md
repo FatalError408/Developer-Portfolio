@@ -1,216 +1,100 @@
 
 # Brendon Julian Lightfoot - Software Engineer Portfolio
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Built with React](https://img.shields.io/badge/Built%20with-React-61DAFB.svg)](https://reactjs.org/)
-[![Powered by TypeScript](https://img.shields.io/badge/Powered%20by-TypeScript-3178C6.svg)](https://www.typescriptlang.org/)
+## Project info
 
-## 🚀 About
+**URL**: https://lovable.dev/projects/6293c3c1-60d5-4745-8653-e43e48c1ef85
 
-This is the professional portfolio website for **Brendon Julian Lightfoot** (JulianArtisan408), a passionate Software Engineer based in South Africa. The portfolio showcases modern web development skills, projects, and professional experience with cutting-edge technologies.
+## Overview
 
-**🏢 Developed by:** [JBLinx Studio](mailto:ContactJBLinxStudio@Gmail.com)
+This is the personal portfolio website for Brendon Julian Lightfoot (JulianArtisan408), a Software Engineer based in South Africa specializing in modern web technologies.
 
-## 👨‍💻 Developer Information
+## Contact Information
 
-- **Name:** Brendon Julian Lightfoot
-- **Professional Alias:** JulianArtisan408
-- **Email:** [BrendonLightfoot408@Gmail.com](mailto:BrendonLightfoot408@Gmail.com)
-- **Company:** JBLinx Studio
-- **Company Email:** [ContactJBLinxStudio@Gmail.com](mailto:ContactJBLinxStudio@Gmail.com)
-- **Phone:** +27 63 524 2767
-- **Location:** Uitenhage, Eastern Cape, South Africa (6229)
-- **Work Status:** Available for Remote Work
+- **Name**: Brendon Julian Lightfoot
+- **Professional Name**: JulianArtisan408
+- **Email**: BrendonLightfoot408@Gmail.com
+- **Company Email**: ContactJBLinxStudio@Gmail.com
+- **Phone**: +27 63 524 2767
+- **Location**: South Africa, Eastern Cape, Uitenhage, 6229
+- **Work Status**: Remote Worker
 
-## 🛠️ Technology Stack
+## Technologies Used
 
-### Frontend Technologies
-- **React 18** - Modern component-based UI library
-- **TypeScript** - Type-safe JavaScript development
-- **Vite** - Lightning-fast build tool and dev server
-- **Tailwind CSS** - Utility-first CSS framework
-- **Framer Motion** - Production-ready motion library
+This project is built with the following technologies:
 
-### UI Components & Libraries
-- **shadcn/ui** - High-quality, accessible UI components
-- **Radix UI** - Low-level UI primitives
-- **Lucide React** - Beautiful & consistent icon library
-- **React Hook Form** - Performant forms with easy validation
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+- Framer Motion
+- Three.js
+- React Three Fiber
+- Lucide React icons
 
-### 3D Graphics & Animations
-- **Three.js** - Cross-browser 3D graphics library
-- **React Three Fiber** - React renderer for Three.js
-- **React Three Drei** - Useful helpers for React Three Fiber
+## Features
 
-### Data & State Management
-- **TanStack Query** - Powerful data synchronization
-- **React Router DOM** - Declarative routing
+- Interactive 3D background effects
+- Responsive design for all device sizes
+- Availability status indicator
+- Matrix-inspired animations
+- GitHub repository showcase with language details
+- Dark theme with modern UI components
+- Command palette (⌘+K) for quick navigation
+- Optimized performance with lazy loading
 
-### Development & Build Tools
-- **ESLint** - Code linting and quality assurance
-- **PostCSS** - CSS transformation tool
-- **Terser** - JavaScript minification
+## How can I edit this code?
 
-## ✨ Key Features
+There are several ways of editing your application.
 
-### 🎨 Visual Excellence
-- **Interactive 3D Background** - Immersive particle systems with device-optimized performance
-- **Matrix-Inspired Animations** - Dynamic visual effects with floating particles
-- **Responsive Design** - Seamless experience across all device sizes
-- **Dark Theme** - Modern, professional appearance
+**Use Lovable**
 
-### ⚡ Performance Optimizations
-- **Lazy Loading** - Components load on demand for faster initial load times
-- **Device Capability Detection** - Adaptive rendering based on hardware capabilities
-- **Code Splitting** - Optimized bundle loading for better performance
-- **Image Optimization** - Efficient asset delivery
+Simply visit the [Lovable Project](https://lovable.dev/projects/6293c3c1-60d5-4745-8653-e43e48c1ef85) and start prompting.
 
-### 🔧 Interactive Elements
-- **Command Palette** - Quick navigation with keyboard shortcuts (⌘+K / Ctrl+K)
-- **Availability Status** - Real-time work availability indicator
-- **GitHub Integration** - Live repository showcase with language statistics
-- **Smooth Scrolling** - Enhanced user experience with fluid navigation
+Changes made via Lovable will be committed automatically to this repo.
 
-### 📱 User Experience
-- **Progressive Enhancement** - Works great even without JavaScript
-- **Accessibility** - WCAG compliant with keyboard navigation support
-- **SEO Optimized** - Proper meta tags and semantic HTML structure
+**Use your preferred IDE**
 
-## 🚀 Getting Started
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
-### Prerequisites
-- **Node.js** (v16 or higher) - [Install with NVM](https://github.com/nvm-sh/nvm#installing-and-updating)
-- **npm** or **yarn** package manager
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-### Installation & Development
+Follow these steps:
 
-```bash
-# Clone the repository
-git clone https://github.com/JulianArtisan408/Developer-Portfolio.git
+```sh
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
 
-# Navigate to project directory
-cd Developer-Portfolio
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
 
-# Install dependencies
-npm install
+# Step 3: Install the necessary dependencies.
+npm i
 
-# Start development server
+# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
 ```
 
-### Available Scripts
+## How can I deploy this project?
 
-```bash
-npm run dev          # Start development server with hot reload
-npm run build        # Create optimized production build
-npm run preview      # Preview production build locally
-npm run lint         # Run ESLint for code quality checks
-npm run deploy       # Deploy to GitHub Pages
-```
+Simply open [Lovable](https://lovable.dev/projects/6293c3c1-60d5-4745-8653-e43e48c1ef85) and click on Share -> Publish.
 
-## 📁 Project Structure
+## Project Structure
 
-```
-src/
-├── components/           # Reusable UI components
-│   ├── ui/              # shadcn/ui components
-│   ├── matrix/          # Matrix animation components
-│   └── particles/       # 3D particle system components
-├── hooks/               # Custom React hooks
-├── pages/               # Route components
-├── lib/                 # Utility functions and constants
-└── main.tsx            # Application entry point
-```
+- `/src/components` - UI components
+- `/src/components/ui` - shadcn UI components
+- `/src/components/matrix` - Matrix animation related components
+- `/src/components/particles` - 3D particle effects
+- `/src/hooks` - Custom React hooks
+- `/src/pages` - Page components
+- `/src/lib` - Utility functions
 
-## 🎯 Core Components
+## Performance Optimization
 
-### Essential Pages
-- **Hero Section** - Dynamic introduction with 3D effects
-- **About** - Professional background and personal story
-- **Skills** - Technical expertise with visual proficiency indicators
-- **Projects** - Portfolio showcase with live demos
-- **Experience** - Professional journey and achievements
-- **Contact** - Multiple ways to get in touch
-
-### Interactive Features
-- **3D Particle Background** - Hardware-accelerated visual effects
-- **Command Palette** - Instant navigation and search
-- **GitHub Repository Display** - Live project showcase
-- **Availability Toggle** - Real-time status updates
-
-## 🚀 Deployment
-
-### Automatic Deployment
-This project uses GitHub Actions for automatic deployment to GitHub Pages. Every push to the main branch triggers a new deployment.
-
-### Manual Deployment
-```bash
-# Build and deploy to GitHub Pages
-npm run deploy
-```
-
-### Custom Domain Setup
-1. Add your domain to the repository settings
-2. Update the `base` path in `vite.config.ts`
-3. Configure DNS settings with your domain provider
-
-## 🔧 Customization
-
-### Environment Variables
-Create a `.env` file in the root directory:
-
-```env
-VITE_GITHUB_USERNAME=your-github-username
-VITE_CONTACT_EMAIL=your-email@domain.com
-```
-
-### Performance Tuning
-The application automatically detects device capabilities and adjusts:
-- Particle count based on hardware performance
-- Frame rates for smooth animations
-- Rendering quality for optimal experience
-
-## 📄 Browser Support
-
-- ✅ Chrome (latest)
-- ✅ Firefox (latest)
-- ✅ Safari (latest)
-- ✅ Edge (latest)
-- ⚠️ Internet Explorer (not supported)
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/JulianArtisan408/Developer-Portfolio/issues).
-
-## 📞 Support & Contact
-
-### Professional Inquiries
-- **Email:** [BrendonLightfoot408@Gmail.com](mailto:BrendonLightfoot408@Gmail.com)
-- **Company:** [ContactJBLinxStudio@Gmail.com](mailto:ContactJBLinxStudio@Gmail.com)
-- **Phone:** +27 63 524 2767
-
-### Development Team
-**JBLinx Studio** - Full-service web development company specializing in modern web applications, responsive design, and performance optimization.
-
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **JBLinx Studio** - Development and design
-- **Open Source Community** - For the amazing tools and libraries
-- **React Team** - For the incredible framework
-- **Vercel** - For inspiring modern web development practices
-
----
-
-**© 2024 JBLinx Studio. All rights reserved.**
-
-Built with ❤️ in South Africa 🇿🇦
+This project implements several performance optimizations:
+- Lazy loading for components lower in the page
+- Device capability detection to adjust effects
+- Optimized 3D rendering with React Three Fiber
+- Code splitting
+- Image optimization
