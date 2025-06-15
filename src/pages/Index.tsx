@@ -13,6 +13,9 @@ const Experience = lazy(() => import("@/components/Experience"));
 const Contact = lazy(() => import("@/components/Contact"));
 const Footer = lazy(() => import("@/components/Footer"));
 
+// Enhanced background component
+import BackgroundGradientOrbs from "@/components/BackgroundGradientOrbs";
+
 // Optimized loading component
 const SectionLoading = () => (
   <div className="w-full h-[50vh] flex items-center justify-center">
@@ -90,15 +93,15 @@ const Index = () => {
 
   return (
     <motion.div
-      className="min-h-screen bg-white text-black overflow-hidden"
+      className="min-h-screen bg-dark-500 text-white overflow-hidden"
       initial="hidden"
       animate="visible"
       variants={fadeIn}
     >
-      {/* Enhanced welcome effect with white background */}
+      {/* Enhanced welcome effect */}
       {showWelcomeEffect && (
         <motion.div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-white pointer-events-none"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-dark-500 via-dark-400 to-dark-500 pointer-events-none"
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -108,16 +111,16 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <div className="font-mono text-2xl md:text-4xl lg:text-5xl text-blue-600 mb-6">
+            <div className="font-mono text-2xl md:text-4xl lg:text-5xl text-blue-light mb-6">
               <motion.div
                 className="overflow-hidden inline-block"
                 variants={typingEffect}
               >
                 <span className="block whitespace-nowrap">
-                  <span className="text-cyan-600">&gt;</span> 
+                  <span className="text-cyan-400">&gt;</span> 
                   <span className="ml-2">Portfolio.initialize()</span>
                   <motion.span
-                    className="text-cyan-600 ml-1"
+                    className="text-cyan-400 ml-1"
                     animate={{ opacity: [1, 0, 1] }}
                     transition={{ duration: 1, repeat: Infinity }}
                   >
@@ -131,13 +134,13 @@ const Index = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.4, duration: 0.6 }}
-              className="font-mono text-base md:text-lg text-gray-600 mb-8"
+              className="font-mono text-base md:text-lg text-muted-foreground mb-8"
             >
               Loading enhanced experience...
             </motion.div>
             
             <motion.div
-              className="relative w-80 h-2 bg-gray-200 rounded-full mx-auto overflow-hidden"
+              className="relative w-80 h-2 bg-dark-300 rounded-full mx-auto overflow-hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.8 }}
@@ -166,6 +169,9 @@ const Index = () => {
           </motion.div>
         </motion.div>
       )}
+
+      {/* Enhanced background system */}
+      <BackgroundGradientOrbs />
 
       <Navbar />
 

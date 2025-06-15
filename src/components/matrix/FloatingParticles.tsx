@@ -7,150 +7,142 @@ interface FloatingParticlesProps {
 }
 
 const FloatingParticles = ({ particleCount }: FloatingParticlesProps) => {
-  // Optimized DNA vertex particles with connections
+  // Memoize particle configurations for better performance
   const particles = useMemo(() => {
-    // Limit particles for better performance
-    const count = Math.min(particleCount, 15);
+    const colors = [
+      "#8B5CF6", "#1EAEDB", "#D946EF", "#50E3C2", 
+      "#6366f1", "#a21caf", "#0ea5e9", "#10b981",
+      "#f59e0b", "#ef4444", "#06b6d4", "#8b5cf6"
+    ];
     
-    return Array.from({ length: count }).map((_, i) => {
-      const size = Math.random() * 3 + 2;
+    return Array.from({ length: Math.min(particleCount, 50) }).map((_, i) => {
+      const size = Math.random() * 8 + 3;
+      const color = colors[i % colors.length];
       
-      // DNA double helix positioning
-      const t = (i / count) * Math.PI * 2.5;
-      const radius = 20;
-      const baseLeft = 50 + Math.cos(t) * radius;
-      const baseTop = 30 + (i / count) * 40;
+      // Use fibonacci spiral for better distribution
+      const phi = (1 + Math.sqrt(5)) / 2;
+      const angle = i * 2 * Math.PI / phi;
+      const radius = Math.sqrt(i) * 12;
+      
+      const baseLeft = 50 + Math.cos(angle) * (radius % 40);
+      const baseTop = 50 + Math.sin(angle) * (radius % 40);
+      
+      // Enhanced movement patterns
+      const movementType = i % 4;
+      let movementPattern = {};
+      
+      switch (movementType) {
+        case 0: // Sine wave
+          movementPattern = {
+            x: Array.from({ length: 6 }, (_, j) => Math.sin(j * Math.PI / 3) * 30),
+            y: Array.from({ length: 6 }, (_, j) => Math.cos(j * Math.PI / 3) * 20),
+          };
+          break;
+        case 1: // Figure-8
+          movementPattern = {
+            x: Array.from({ length: 8 }, (_, j) => Math.sin(j * Math.PI / 4) * 25),
+            y: Array.from({ length: 8 }, (_, j) => Math.sin(j * Math.PI / 2) * 15),
+          };
+          break;
+        case 2: // Spiral
+          movementPattern = {
+            x: Array.from({ length: 10 }, (_, j) => Math.cos(j * Math.PI / 5) * (j * 2)),
+            y: Array.from({ length: 10 }, (_, j) => Math.sin(j * Math.PI / 5) * (j * 2)),
+          };
+          break;
+        default: // Random drift
+          movementPattern = {
+            x: [0, Math.random() * 40 - 20, 0, Math.random() * 30 - 15, 0],
+            y: [0, Math.random() * 40 - 20, 0, Math.random() * 30 - 15, 0],
+          };
+      }
       
       return {
         id: i,
         size,
-        left: Math.max(15, Math.min(85, baseLeft)),
-        top: Math.max(15, Math.min(85, baseTop)),
+        color,
+        left: Math.max(5, Math.min(95, baseLeft)),
+        top: Math.max(5, Math.min(95, baseTop)),
+        blur: Math.random() > 0.7 ? Math.random() * 2 + 1 : 0,
+        glow: Math.random() > 0.6,
+        glowIntensity: Math.random() * 20 + 10,
+        duration: 15 + Math.random() * 15,
+        delay: i * 0.3,
         opacity: Math.random() * 0.6 + 0.4,
-        intensity: Math.random() * 0.5 + 0.3,
-        duration: 18 + Math.random() * 8,
-        delay: i * 0.8,
-        helix: t,
-        glowSize: Math.random() * 10 + 8,
+        movementPattern,
+        rotationSpeed: Math.random() * 360 + 180,
       };
     });
   }, [particleCount]);
 
-  // Connection lines between particles
-  const connections = useMemo(() => {
-    const lines = [];
-    for (let i = 0; i < particles.length - 1; i++) {
-      const start = particles[i];
-      const end = particles[i + 1];
-      const distance = Math.sqrt(
-        Math.pow(end.left - start.left, 2) + Math.pow(end.top - start.top, 2)
-      );
-      
-      // Only connect nearby particles to avoid visual clutter
-      if (distance < 25) {
-        lines.push({
-          id: `connection-${i}`,
-          x1: start.left,
-          y1: start.top,
-          x2: end.left,
-          y2: end.top,
-          opacity: 0.2 + Math.random() * 0.1,
-        });
-      }
-    }
-    return lines;
-  }, [particles]);
-
   return (
     <>
-      {/* DNA connection lines */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none">
-        {connections.map((connection) => (
-          <motion.line
-            key={connection.id}
-            x1={`${connection.x1}%`}
-            y1={`${connection.y1}%`}
-            x2={`${connection.x2}%`}
-            y2={`${connection.y2}%`}
-            stroke="rgba(255, 255, 255, 0.2)"
-            strokeWidth="1"
-            strokeDasharray="2,3"
-            animate={{
-              opacity: [0, connection.opacity, 0],
-              strokeDashoffset: [0, -10, 0],
-            }}
-            transition={{
-              duration: 12,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: Math.random() * 3,
-            }}
-          />
-        ))}
-      </svg>
-
-      {/* DNA vertex particles */}
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
-          className="absolute rounded-full pointer-events-none z-0 bg-white"
+          className="absolute rounded-full pointer-events-none z-0"
           style={{
             width: `${particle.size}px`,
             height: `${particle.size}px`,
+            background: `radial-gradient(circle, ${particle.color}, ${particle.color}80)`,
             opacity: particle.opacity,
             left: `${particle.left}%`,
             top: `${particle.top}%`,
-            boxShadow: `0 0 ${particle.glowSize}px ${particle.glowSize/4}px rgba(255, 255, 255, 0.4), 
-                       0 0 ${particle.size * 2}px 1px rgba(255, 255, 255, 0.6),
-                       inset 0 0 ${particle.size}px rgba(255, 255, 255, 0.8)`,
+            filter: `blur(${particle.blur}px)`,
+            boxShadow: particle.glow 
+              ? `0 0 ${particle.glowIntensity}px ${particle.glowIntensity/2}px ${particle.color}60, inset 0 0 ${particle.size}px ${particle.color}40` 
+              : 'none',
           }}
           initial={{ 
             opacity: 0,
             scale: 0,
+            rotate: 0
           }}
           animate={{
-            opacity: [0, particle.opacity, particle.opacity * 1.2, particle.opacity],
-            scale: [0.5, 1, 1.1, 1],
-            x: [0, Math.cos(particle.helix) * 10, 0],
-            y: [0, Math.sin(particle.helix) * 8, 0],
+            opacity: [0, particle.opacity, particle.opacity * 1.5, particle.opacity, 0.3],
+            scale: [0.5, 1, 1.4, 1, 0.8],
+            rotate: [0, particle.rotationSpeed],
+            ...particle.movementPattern,
           }}
           transition={{
             duration: particle.duration,
             repeat: Infinity,
             ease: "easeInOut",
             delay: particle.delay,
+            times: [0, 0.2, 0.5, 0.8, 1],
           }}
           whileHover={{
             scale: 1.5,
-            opacity: 0.9,
+            opacity: 1,
             transition: { duration: 0.3 }
           }}
         />
       ))}
       
-      {/* Minimal ambient depth particles */}
-      {Array.from({ length: Math.min(particleCount / 10, 5) }).map((_, i) => (
+      {/* Enhanced ambient particles for depth */}
+      {Array.from({ length: Math.min(particleCount / 4, 15) }).map((_, i) => (
         <motion.div
           key={`ambient-${i}`}
-          className="absolute rounded-full pointer-events-none opacity-25 bg-white"
+          className="absolute rounded-full pointer-events-none opacity-20"
           style={{
-            width: `${Math.random() * 2 + 1}px`,
-            height: `${Math.random() * 2 + 1}px`,
-            left: `${Math.random() * 80 + 10}%`,
-            top: `${Math.random() * 80 + 10}%`,
+            width: `${Math.random() * 3 + 1}px`,
+            height: `${Math.random() * 3 + 1}px`,
+            background: "#ffffff",
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
             filter: "blur(0.5px)",
-            boxShadow: `0 0 ${Math.random() * 6 + 3}px 1px rgba(255, 255, 255, 0.2)`,
           }}
           animate={{
             opacity: [0.1, 0.4, 0.1],
-            scale: [0.8, 1.2, 0.8],
-            y: [0, -Math.random() * 20 - 5, 0],
+            scale: [0.5, 1.2, 0.5],
+            y: [0, -Math.random() * 50 - 20, 0],
+            x: [0, Math.random() * 30 - 15, 0],
           }}
           transition={{
-            duration: 20 + Math.random() * 10,
+            duration: 20 + Math.random() * 20,
             repeat: Infinity,
             ease: "linear",
-            delay: i * 3,
+            delay: i * 2,
           }}
         />
       ))}

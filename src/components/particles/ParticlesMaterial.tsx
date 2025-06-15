@@ -12,93 +12,104 @@ const ParticlesMaterial = ({ count, mousePosition }: ParticlesMaterialProps) => 
   const points = useRef<THREE.Points>(null!);
   const frameCount = useRef(0);
   
-  // Much more conservative particle count
-  const actualCount = Math.min(count, 200);
-  
-  // Create particles with better performance optimization
+  // Create particles with memoization for better performance
   const { positions, speeds, sizes, colors } = (() => {
-    const positions = new Float32Array(actualCount * 3);
-    const speeds = new Float32Array(actualCount);
-    const sizes = new Float32Array(actualCount);
-    const colors = new Float32Array(actualCount * 3);
+    const positions = new Float32Array(count * 3);
+    const speeds = new Float32Array(count);
+    const sizes = new Float32Array(count);
+    const colors = new Float32Array(count * 3);
     
-    // DNA helix pattern for vertex connections
-    for (let i = 0; i < actualCount; i++) {
-      const t = (i / actualCount) * Math.PI * 4;
-      const radius = 3;
+    // Setup more efficient grid pattern
+    for (let i = 0; i < count; i++) {
+      // Create more defined "columns" of particles
+      positions[i * 3] = (Math.floor(i / 50) * 0.2) - 10 + (Math.random() * 0.1);
+      // Stagger vertical positions
+      positions[i * 3 + 1] = ((i % 50) * 0.3) - 7 + (Math.random() * 0.05);
+      // Add some depth variation
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 5;
       
-      // DNA double helix positioning
-      positions[i * 3] = Math.cos(t) * radius;
-      positions[i * 3 + 1] = (i / actualCount) * 10 - 5;
-      positions[i * 3 + 2] = Math.sin(t) * radius;
+      // Varying speeds for natural flow
+      speeds[i] = 0.01 + Math.random() * 0.03;
+      // Varying sizes for visual interest - smaller for better performance
+      sizes[i] = Math.random() * 0.04 + 0.01;
       
-      // Consistent speeds for smoother movement
-      speeds[i] = 0.005 + Math.random() * 0.01;
-      // Smaller sizes for better performance
-      sizes[i] = Math.random() * 0.02 + 0.01;
-      
-      // White color variations
-      colors[i * 3] = 0.9 + Math.random() * 0.1;     // R
-      colors[i * 3 + 1] = 0.9 + Math.random() * 0.1; // G
-      colors[i * 3 + 2] = 0.95 + Math.random() * 0.05; // B
+      // Blue to purple color range
+      colors[i * 3] = 0.2 + Math.random() * 0.2;
+      colors[i * 3 + 1] = 0.3 + Math.random() * 0.3;
+      colors[i * 3 + 2] = 0.8 + Math.random() * 0.2;
     }
     
     return { positions, speeds, sizes, colors };
   })();
 
-  // Highly optimized animation - update fewer particles less frequently
+  // Optimized animation - process fewer particles per frame
   useFrame((state) => {
     if (!points.current) return;
     
     const time = state.clock.getElapsedTime();
     const positions = points.current.geometry.attributes.position.array as Float32Array;
     
-    // Only update every 5th frame for better performance
-    frameCount.current = (frameCount.current + 1) % 5;
-    if (frameCount.current !== 0) return;
+    // Only create ripples occasionally to save on processing
+    const createRipple = Math.random() > 0.998;
+    const rippleX = createRipple ? (Math.random() - 0.5) * 10 : 0;
+    const rippleY = createRipple ? (Math.random() - 0.5) * 10 : 0;
     
-    // Update only 1/4 of particles each frame
-    const batchSize = Math.floor(actualCount / 4);
-    const startIdx = (frameCount.current % 4) * batchSize;
-    const endIdx = Math.min(startIdx + batchSize, actualCount);
+    // Increment frame counter for staggered updates
+    frameCount.current = (frameCount.current + 1) % 3;
     
+    // Only update 1/3 of particles each frame for better performance
+    const startIdx = frameCount.current * (count / 3);
+    const endIdx = Math.min(startIdx + (count / 3), count);
+    
+    // Update only a subset of positions each frame
     for (let i = startIdx; i < endIdx; i++) {
       const i3 = i * 3;
       
-      // Simplified mouse influence - only for nearby particles
-      const dx = mousePosition.x * 5 - positions[i3];
-      const dy = mousePosition.y * 5 - positions[i3 + 1];
-      const distToMouse = dx * dx + dy * dy; // Skip sqrt for performance
+      // Simpler mouse influence with distance check first for performance
+      const dx = mousePosition.x * 10 - positions[i3];
+      const dy = mousePosition.y * 10 - positions[i3 + 1];
+      const distToMouse = Math.sqrt(dx * dx + dy * dy);
       
-      if (distToMouse < 25) { // Squared distance check
-        const mouseInfluence = 0.0003;
-        positions[i3] -= dx * mouseInfluence;
-        positions[i3 + 1] -= dy * mouseInfluence;
+      // Only apply mouse influence to nearby particles
+      if (distToMouse < 5) {
+        const mouseInfluence = 0.0005;
+        positions[i3] -= dx * mouseInfluence * 2;
+        positions[i3 + 1] -= dy * mouseInfluence * 2;
       }
       
-      // Simple downward movement with DNA helix motion
-      positions[i3 + 1] -= speeds[i];
-      
-      // DNA helix movement - only calculate for some particles
-      if (i % 3 === 0) {
-        const helixT = time * 0.2 + i * 0.1;
-        positions[i3] += Math.sin(helixT) * 0.001;
-        positions[i3 + 2] += Math.cos(helixT) * 0.001;
+      // Skip ripple effect calculations if no ripple is happening
+      if (createRipple) {
+        const dx = positions[i3] - rippleX;
+        const dy = positions[i3 + 1] - rippleY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < 3) {
+          // Push particles away from ripple center
+          positions[i3] += (dx / dist) * 0.04;
+          positions[i3 + 1] += (dy / dist) * 0.04;
+        }
       }
       
-      // Reset particle when it goes off screen
-      if (positions[i3 + 1] < -5) {
-        positions[i3 + 1] = 5;
-        const resetT = (i / actualCount) * Math.PI * 4;
-        positions[i3] = Math.cos(resetT) * 3;
-        positions[i3 + 2] = Math.sin(resetT) * 3;
+      // Move particles downward with slight wobble - simplified calculation
+      positions[i3 + 1] -= speeds[i] * (1 + 0.05 * Math.sin(time + i));
+      
+      // Add simplified horizontal drift
+      if (i % 5 === 0) { // Only calculate sine for 20% of particles
+        positions[i3] += Math.sin(time * 0.5 + i * 0.1) * 0.002;
+      }
+      
+      // Reset particles when they go off screen
+      if (positions[i3 + 1] < -7) {
+        positions[i3 + 1] = 7;
+        positions[i3] = (Math.floor(i / 50) * 0.2) - 10 + (Math.random() * 0.1);
       }
     }
     
     points.current.geometry.attributes.position.needsUpdate = true;
     
-    // Much slower rotation for subtlety
-    points.current.rotation.y = Math.sin(time * 0.02) * 0.02;
+    // Slower rotation for better performance
+    points.current.rotation.y = Math.sin(time * 0.05) * 0.05;
+    points.current.rotation.x = Math.cos(time * 0.05) * 0.03;
   });
 
   return (
@@ -107,27 +118,27 @@ const ParticlesMaterial = ({ count, mousePosition }: ParticlesMaterialProps) => 
         <bufferAttribute
           attach="attributes-position"
           array={positions}
-          count={actualCount}
+          count={count}
           itemSize={3}
         />
         <bufferAttribute
           attach="attributes-color"
           array={colors}
-          count={actualCount}
+          count={count}
           itemSize={3}
         />
         <bufferAttribute
           attach="attributes-size"
           array={sizes}
-          count={actualCount}
+          count={count}
           itemSize={1}
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.03}
+        size={0.05}
         sizeAttenuation={true}
         transparent={true}
-        opacity={0.6}
+        opacity={0.8}
         depthWrite={false}
         vertexColors={true}
         blending={THREE.AdditiveBlending}
