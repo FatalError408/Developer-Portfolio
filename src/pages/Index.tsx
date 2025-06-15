@@ -13,9 +13,6 @@ const Experience = lazy(() => import("@/components/Experience"));
 const Contact = lazy(() => import("@/components/Contact"));
 const Footer = lazy(() => import("@/components/Footer"));
 
-// New animated code background
-import AnimatedCodeBackground from "@/components/AnimatedCodeBackground";
-
 // Optimized loading component
 const SectionLoading = () => (
   <div className="w-full h-[50vh] flex items-center justify-center">
@@ -169,9 +166,6 @@ const Index = () => {
           </motion.div>
         </motion.div>
       )}
-
-      {/* Animated Code Background */}
-      <AnimatedCodeBackground />
 
       <Navbar />
 
