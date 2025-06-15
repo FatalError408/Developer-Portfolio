@@ -23,10 +23,10 @@ const SectionLoading = () => (
       transition={{ duration: 0.3 }}
     >
       <div className="relative">
-        <div className="w-12 h-12 rounded-full border-4 border-blue/20 border-t-blue animate-spin" />
-        <div className="absolute inset-0 w-12 h-12 rounded-full border-4 border-transparent border-r-cyan-400 animate-ping" />
+        <div className="w-12 h-12 rounded-full border-4 border-blue-500/20 border-t-blue-500 animate-spin" />
+        <div className="absolute inset-0 w-12 h-12 rounded-full border-4 border-transparent border-r-blue-400 animate-ping" />
       </div>
-      <div className="text-muted-foreground text-sm font-medium">Loading content...</div>
+      <div className="text-gray-600 text-sm font-medium">Loading content...</div>
     </motion.div>
   </div>
 );
@@ -90,7 +90,7 @@ const Index = () => {
 
   return (
     <motion.div
-      className="min-h-screen bg-white text-dark-500 overflow-hidden relative"
+      className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 text-gray-900 overflow-hidden relative"
       initial="hidden"
       animate="visible"
       variants={fadeIn}
@@ -98,7 +98,7 @@ const Index = () => {
       {/* Enhanced welcome effect */}
       {showWelcomeEffect && (
         <motion.div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-white pointer-events-none"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-white via-blue-50/20 to-white pointer-events-none"
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -108,7 +108,7 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <div className="font-mono text-2xl md:text-4xl lg:text-5xl text-dark-400 mb-6">
+            <div className="font-mono text-2xl md:text-4xl lg:text-5xl text-gray-800 mb-6">
               <motion.div
                 className="overflow-hidden inline-block"
                 variants={typingEffect}
@@ -169,9 +169,9 @@ const Index = () => {
 
       <Navbar />
 
-      <main className="relative z-10 bg-white">
+      <main className="relative z-10">
         <motion.section 
-          className="pt-4 pb-16 md:pb-24 bg-white"
+          className="pt-4 pb-16 md:pb-24 bg-gradient-to-b from-blue-50/30 via-white to-gray-50/50"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: showWelcomeEffect ? 3.5 : 0, duration: 0.8 }}
@@ -179,33 +179,33 @@ const Index = () => {
           <Hero />
         </motion.section>
         
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50/50 via-white to-blue-50/20">
           <About />
         </section>
         
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-blue-50/20 via-white to-gray-50/30">
           <Skills />
         </section>
         
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50/30 via-white to-blue-50/20">
           <Suspense fallback={<SectionLoading />}>
             <Projects />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-blue-50/20 via-white to-gray-50/30">
           <Suspense fallback={<SectionLoading />}>
             <GitHubRepositories />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50/30 via-white to-blue-50/20">
           <Suspense fallback={<SectionLoading />}>
             <Experience />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-blue-50/20 via-white to-gray-50/20">
           <Suspense fallback={<SectionLoading />}>
             <Contact />
           </Suspense>
