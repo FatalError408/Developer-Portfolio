@@ -1,4 +1,3 @@
-
 import { motion, useAnimation } from "framer-motion";
 import { Github, Linkedin, Twitter, Mail, MapPin, Phone, ChevronUp, Code } from "lucide-react";
 import ScrollRevealWrapper from "./ScrollRevealWrapper";
@@ -10,12 +9,27 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [isAvailableForWork, setIsAvailableForWork] = useState(true);
   
-  // Load availability status from localStorage
+  // Only load status, don't allow toggle in footer, listen for dashboard changes
   useEffect(() => {
     const savedStatus = localStorage.getItem("availability_status");
-    if (savedStatus) {
-      setIsAvailableForWork(savedStatus === "available");
-    }
+    setIsAvailableForWork(!savedStatus || savedStatus === "available");
+    const onChange = (e: StorageEvent) => {
+      if (e.key === "availability_status") {
+        setIsAvailableForWork(!e.newValue || e.newValue === "available");
+      }
+    };
+    window.addEventListener("storage", onChange);
+    // Custom event for intra-tab updates
+    const onCustom = (e: any) => {
+      if (e.detail?.key === "availability_status") {
+        setIsAvailableForWork(e.detail.value === "available");
+      }
+    };
+    window.addEventListener("availabilityStatusChange", onCustom);
+    return () => {
+      window.removeEventListener("storage", onChange);
+      window.removeEventListener("availabilityStatusChange", onCustom);
+    };
   }, []);
   
   const scrollToTop = () => {
@@ -54,6 +68,7 @@ const Footer = () => {
                 A passionate software engineer specializing in creating exceptional digital experiences with expertise in modern web technologies.
               </p>
               <div className="flex items-center mt-4 space-x-2">
+                {/* Switch is not clickable here, purely UI */}
                 <Switch 
                   checked={isAvailableForWork}
                   disabled={true}
