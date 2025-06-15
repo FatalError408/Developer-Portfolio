@@ -1,10 +1,10 @@
-
 import { useEffect, useState, lazy, Suspense, useCallback } from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Skills from "@/components/Skills";
+import ParticleNetworkWrapper from "@/components/particles/ParticleNetworkWrapper";
 
 // Lazy load components for better performance
 const Projects = lazy(() => import("@/components/Projects"));
@@ -179,27 +179,57 @@ const Index = () => {
           <Hero />
         </motion.section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-800/50 via-gray-100 to-white">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-800/50 via-gray-100 to-white relative">
+          <ParticleNetworkWrapper 
+            particleCount={40}
+            connectionDistance={100}
+            mouseRadius={80}
+            colors={['#3A36E0', '#6E42CA', '#8B5CF6', '#4F46E5']}
+          />
           <About />
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-white via-gray-50 to-slate-100">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-white via-gray-50 to-slate-100 relative">
+          <ParticleNetworkWrapper 
+            particleCount={35}
+            connectionDistance={110}
+            mouseRadius={90}
+            colors={['#FF7B5C', '#8B5CF6', '#3A36E0', '#6E42CA']}
+          />
           <Skills />
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-100 via-gray-100 to-slate-200">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-100 via-gray-100 to-slate-200 relative">
+          <ParticleNetworkWrapper 
+            particleCount={45}
+            connectionDistance={95}
+            mouseRadius={85}
+            colors={['#4F46E5', '#3A36E0', '#8B5CF6', '#6E42CA']}
+          />
           <Suspense fallback={<SectionLoading />}>
             <Projects />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-200 via-gray-200 to-slate-300">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-200 via-gray-200 to-slate-300 relative">
+          <ParticleNetworkWrapper 
+            particleCount={40}
+            connectionDistance={105}
+            mouseRadius={95}
+            colors={['#6E42CA', '#FF7B5C', '#4F46E5', '#3A36E0']}
+          />
           <Suspense fallback={<SectionLoading />}>
             <GitHubRepositories />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-300 via-gray-300 to-slate-400">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-300 via-gray-300 to-slate-400 relative">
+          <ParticleNetworkWrapper 
+            particleCount={35}
+            connectionDistance={100}
+            mouseRadius={80}
+            colors={['#8B5CF6', '#3A36E0', '#6E42CA', '#4F46E5']}
+          />
           <Suspense fallback={<SectionLoading />}>
             <Experience />
           </Suspense>
