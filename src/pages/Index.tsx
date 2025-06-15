@@ -13,8 +13,8 @@ const Experience = lazy(() => import("@/components/Experience"));
 const Contact = lazy(() => import("@/components/Contact"));
 const Footer = lazy(() => import("@/components/Footer"));
 
-// Enhanced background component
-import BackgroundGradientOrbs from "@/components/BackgroundGradientOrbs";
+// New animated code background
+import AnimatedCodeBackground from "@/components/AnimatedCodeBackground";
 
 // Optimized loading component
 const SectionLoading = () => (
@@ -93,7 +93,7 @@ const Index = () => {
 
   return (
     <motion.div
-      className="min-h-screen bg-dark-500 text-white overflow-hidden"
+      className="min-h-screen bg-white text-dark-500 overflow-hidden relative"
       initial="hidden"
       animate="visible"
       variants={fadeIn}
@@ -101,7 +101,7 @@ const Index = () => {
       {/* Enhanced welcome effect */}
       {showWelcomeEffect && (
         <motion.div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-dark-500 via-dark-400 to-dark-500 pointer-events-none"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-white pointer-events-none"
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -111,16 +111,16 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <div className="font-mono text-2xl md:text-4xl lg:text-5xl text-blue-light mb-6">
+            <div className="font-mono text-2xl md:text-4xl lg:text-5xl text-dark-400 mb-6">
               <motion.div
                 className="overflow-hidden inline-block"
                 variants={typingEffect}
               >
                 <span className="block whitespace-nowrap">
-                  <span className="text-cyan-400">&gt;</span> 
+                  <span className="text-blue-600">&gt;</span> 
                   <span className="ml-2">Portfolio.initialize()</span>
                   <motion.span
-                    className="text-cyan-400 ml-1"
+                    className="text-blue-600 ml-1"
                     animate={{ opacity: [1, 0, 1] }}
                     transition={{ duration: 1, repeat: Infinity }}
                   >
@@ -134,19 +134,19 @@ const Index = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.4, duration: 0.6 }}
-              className="font-mono text-base md:text-lg text-muted-foreground mb-8"
+              className="font-mono text-base md:text-lg text-gray-600 mb-8"
             >
               Loading enhanced experience...
             </motion.div>
             
             <motion.div
-              className="relative w-80 h-2 bg-dark-300 rounded-full mx-auto overflow-hidden"
+              className="relative w-80 h-2 bg-gray-200 rounded-full mx-auto overflow-hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.8 }}
             >
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 rounded-full"
+                className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 rounded-full"
                 initial={{ x: "-100%" }}
                 animate={{ x: "100%" }}
                 transition={{ 
@@ -156,7 +156,7 @@ const Index = () => {
                 }}
               />
               <motion.div
-                className="h-full bg-blue-500 rounded-full shadow-lg shadow-blue-500/50"
+                className="h-full bg-blue-500 rounded-full shadow-lg shadow-blue-500/30"
                 initial={{ width: "0%" }}
                 animate={{ width: "100%" }}
                 transition={{ 
@@ -170,8 +170,8 @@ const Index = () => {
         </motion.div>
       )}
 
-      {/* Enhanced background system */}
-      <BackgroundGradientOrbs />
+      {/* Animated Code Background */}
+      <AnimatedCodeBackground />
 
       <Navbar />
 
