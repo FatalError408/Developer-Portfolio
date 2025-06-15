@@ -13,7 +13,7 @@ const ProfileImageSection = () => {
   const [tempImageUrl, setTempImageUrl] = useState("");
   const { toast } = useToast();
 
-  const defaultImageUrl = "https://photos.fife.usercontent.google.com/pw/AP1GczP1HwibmE7-e2Pq4WoVnZreEtPyeb6xXbB5xtuY1mypr72SA1sYs5yM=w696-h928-s-no-gm?authuser=0";
+  const defaultImageUrl = "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-1170x780.jpg";
 
   useEffect(() => {
     const savedImageUrl = localStorage.getItem('profile_image_url') || defaultImageUrl;

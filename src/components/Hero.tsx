@@ -18,9 +18,20 @@ const Hero = () => {
     if (savedImageUrl) {
       setProfileImageUrl(savedImageUrl);
     } else {
-      // Default to your Google Photos URL
-      setProfileImageUrl("https://photos.fife.usercontent.google.com/pw/AP1GczP1HwibmE7-e2Pq4WoVnZreEtPyeb6xXbB5xtuY1mypr72SA1sYs5yM=w696-h928-s-no-gm?authuser=0");
+      // Updated default image
+      setProfileImageUrl("https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-1170x780.jpg");
     }
+
+    // Listen for profile image updates
+    const handleProfileImageUpdate = (event: CustomEvent) => {
+      setProfileImageUrl(event.detail);
+    };
+
+    window.addEventListener('profileImageUpdated', handleProfileImageUpdate as EventListener);
+    
+    return () => {
+      window.removeEventListener('profileImageUpdated', handleProfileImageUpdate as EventListener);
+    };
   }, []);
 
   // Check for mobile viewport
