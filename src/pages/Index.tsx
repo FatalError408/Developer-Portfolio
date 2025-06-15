@@ -90,7 +90,7 @@ const Index = () => {
 
   return (
     <motion.div
-      className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 text-gray-900 overflow-hidden relative"
+      className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden relative"
       initial="hidden"
       animate="visible"
       variants={fadeIn}
@@ -98,7 +98,7 @@ const Index = () => {
       {/* Enhanced welcome effect */}
       {showWelcomeEffect && (
         <motion.div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-white via-blue-50/20 to-white pointer-events-none"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900/90 to-slate-900 pointer-events-none"
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -108,16 +108,16 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <div className="font-mono text-2xl md:text-4xl lg:text-5xl text-gray-800 mb-6">
+            <div className="font-mono text-2xl md:text-4xl lg:text-5xl text-white mb-6">
               <motion.div
                 className="overflow-hidden inline-block"
                 variants={typingEffect}
               >
                 <span className="block whitespace-nowrap">
-                  <span className="text-blue-600">&gt;</span> 
+                  <span className="text-blue-400">&gt;</span> 
                   <span className="ml-2">Portfolio.initialize()</span>
                   <motion.span
-                    className="text-blue-600 ml-1"
+                    className="text-blue-400 ml-1"
                     animate={{ opacity: [1, 0, 1] }}
                     transition={{ duration: 1, repeat: Infinity }}
                   >
@@ -131,13 +131,13 @@ const Index = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.4, duration: 0.6 }}
-              className="font-mono text-base md:text-lg text-gray-600 mb-8"
+              className="font-mono text-base md:text-lg text-gray-300 mb-8"
             >
               Loading enhanced experience...
             </motion.div>
             
             <motion.div
-              className="relative w-80 h-2 bg-gray-200 rounded-full mx-auto overflow-hidden"
+              className="relative w-80 h-2 bg-gray-700 rounded-full mx-auto overflow-hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.8 }}
@@ -171,7 +171,7 @@ const Index = () => {
 
       <main className="relative z-10">
         <motion.section 
-          className="pt-4 pb-16 md:pb-24 bg-gradient-to-b from-blue-50/30 via-white to-gray-50/50"
+          className="pt-4 pb-16 md:pb-24 bg-gradient-to-b from-slate-900 via-purple-900/80 to-slate-800/50"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: showWelcomeEffect ? 3.5 : 0, duration: 0.8 }}
@@ -179,33 +179,33 @@ const Index = () => {
           <Hero />
         </motion.section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50/50 via-white to-blue-50/20">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-800/50 via-gray-100 to-white">
           <About />
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-blue-50/20 via-white to-gray-50/30">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-white via-gray-50 to-slate-100">
           <Skills />
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50/30 via-white to-blue-50/20">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-100 via-gray-100 to-slate-200">
           <Suspense fallback={<SectionLoading />}>
             <Projects />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-blue-50/20 via-white to-gray-50/30">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-200 via-gray-200 to-slate-300">
           <Suspense fallback={<SectionLoading />}>
             <GitHubRepositories />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50/30 via-white to-blue-50/20">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-300 via-gray-300 to-slate-400">
           <Suspense fallback={<SectionLoading />}>
             <Experience />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-blue-50/20 via-white to-gray-50/20">
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-400 via-slate-500 to-slate-600">
           <Suspense fallback={<SectionLoading />}>
             <Contact />
           </Suspense>
