@@ -1,4 +1,3 @@
-
 import { useEffect, useState, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
@@ -129,7 +128,7 @@ const Index = () => {
         </div>
       )}
 
-      {/* Ultra-fast, beautiful background */}
+      {/* Only use ultra-fast, beautiful background gradients, NO matrix/particle/canvas */}
       <BackgroundGradientOrbs />
 
       <Navbar />
