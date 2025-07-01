@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Skills from "@/components/Skills";
-import ParticleNetworkWrapper from "@/components/particles/ParticleNetworkWrapper";
 
 // Lazy load components for better performance
 const Projects = lazy(() => import("@/components/Projects"));
@@ -171,7 +170,7 @@ const Index = () => {
       <Navbar />
 
       <main className="relative z-10">
-        {/* Hero Section - Dark gradient foundation */}
+        {/* Hero Section */}
         <motion.section 
           className="pt-4 pb-16 md:pb-24 bg-gradient-to-b from-slate-900 via-purple-900/90 to-slate-800/60 relative overflow-hidden"
           initial={{ opacity: 0 }}
@@ -182,78 +181,48 @@ const Index = () => {
           <Hero />
         </motion.section>
         
-        {/* About Section - Transitioning to light */}
+        {/* About Section */}
         <section className="py-16 md:py-24 bg-gradient-to-b from-slate-800/60 via-slate-700/40 to-slate-600/30 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-transparent via-blue-50/5 to-purple-50/10" />
           <div className="absolute inset-0 backdrop-blur-[1px]" />
-          <ParticleNetworkWrapper 
-            particleCount={45}
-            connectionDistance={120}
-            mouseRadius={100}
-            colors={['#3A36E0', '#6E42CA', '#8B5CF6', '#4F46E5']}
-          />
           <About />
         </section>
         
-        {/* Skills Section - Light blend */}
+        {/* Skills Section */}
         <section className="py-16 md:py-24 bg-gradient-to-b from-slate-600/30 via-slate-500/20 to-slate-400/15 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/10 via-white/15 to-purple-50/20" />
           <div className="absolute inset-0 backdrop-blur-[2px]" />
-          <ParticleNetworkWrapper 
-            particleCount={40}
-            connectionDistance={110}
-            mouseRadius={90}
-            colors={['#FF7B5C', '#8B5CF6', '#3A36E0', '#6E42CA']}
-          />
           <Skills />
         </section>
         
-        {/* Projects Section - Balanced light */}
+        {/* Projects Section */}
         <section className="py-16 md:py-24 bg-gradient-to-b from-slate-400/15 via-slate-300/20 to-slate-200/25 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-blue-50/25 to-purple-50/30" />
           <div className="absolute inset-0 backdrop-blur-[1px]" />
-          <ParticleNetworkWrapper 
-            particleCount={50}
-            connectionDistance={100}
-            mouseRadius={95}
-            colors={['#4F46E5', '#3A36E0', '#8B5CF6', '#6E42CA']}
-          />
           <Suspense fallback={<SectionLoading />}>
             <Projects />
           </Suspense>
         </section>
         
-        {/* GitHub Repositories Section - Continuing light theme */}
+        {/* GitHub Repositories Section */}
         <section className="py-16 md:py-24 bg-gradient-to-b from-slate-200/25 via-slate-100/30 to-gray-100/40 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-purple-50/35 via-white/30 to-blue-50/35" />
           <div className="absolute inset-0 backdrop-blur-[1px]" />
-          <ParticleNetworkWrapper 
-            particleCount={45}
-            connectionDistance={115}
-            mouseRadius={100}
-            colors={['#6E42CA', '#FF7B5C', '#4F46E5', '#3A36E0']}
-          />
           <Suspense fallback={<SectionLoading />}>
             <GitHubRepositories />
           </Suspense>
         </section>
         
-        {/* Experience Section - Peak light */}
+        {/* Experience Section */}
         <section className="py-16 md:py-24 bg-gradient-to-b from-gray-100/40 via-gray-50/50 to-white/60 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/40 via-white/50 to-purple-50/45" />
           <div className="absolute inset-0 backdrop-blur-[1px]" />
-          <ParticleNetworkWrapper 
-            particleCount={40}
-            connectionDistance={105}
-            mouseRadius={85}
-            colors={['#8B5CF6', '#3A36E0', '#6E42CA', '#4F46E5']}
-          />
           <Suspense fallback={<SectionLoading />}>
             <Experience />
           </Suspense>
         </section>
         
-        {/* Contact Section - Transitioning back to dark */}
+        {/* Contact Section */}
         <section className="py-16 md:py-24 bg-gradient-to-b from-white/60 via-slate-100/40 to-slate-300/30 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-purple-50/45 via-slate-100/30 to-blue-900/20" />
           <div className="absolute inset-0 backdrop-blur-[2px]" />
