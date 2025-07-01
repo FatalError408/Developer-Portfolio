@@ -172,60 +172,54 @@ const Index = () => {
       <main className="relative z-10">
         {/* Hero Section */}
         <motion.section 
-          className="pt-4 pb-16 md:pb-24 bg-gradient-to-b from-slate-900 via-purple-900/90 to-slate-800/60 relative overflow-hidden"
+          className="pt-4 pb-16 md:pb-24 bg-gradient-to-b from-slate-900 via-purple-900/90 to-slate-800/80 relative overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: showWelcomeEffect ? 3.5 : 0, duration: 0.8 }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-transparent to-purple-900/20" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 via-transparent to-purple-900/10" />
           <Hero />
         </motion.section>
         
         {/* About Section */}
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-800/60 via-slate-700/40 to-slate-600/30 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-blue-50/5 to-purple-50/10" />
-          <div className="absolute inset-0 backdrop-blur-[1px]" />
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-800/80 via-slate-700/60 to-slate-600/50 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-blue-50/3 to-purple-50/5" />
           <About />
         </section>
         
-        {/* Skills Section */}
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-600/30 via-slate-500/20 to-slate-400/15 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/10 via-white/15 to-purple-50/20" />
-          <div className="absolute inset-0 backdrop-blur-[2px]" />
+        {/* Skills Section - Fixed blur/whitewash issue */}
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-600/50 via-slate-500/40 to-slate-400/30 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/5 via-white/8 to-purple-50/10" />
           <Skills />
         </section>
         
         {/* Projects Section */}
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-400/15 via-slate-300/20 to-slate-200/25 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-blue-50/25 to-purple-50/30" />
-          <div className="absolute inset-0 backdrop-blur-[1px]" />
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-400/30 via-slate-300/25 to-slate-200/20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-blue-50/12 to-purple-50/15" />
           <Suspense fallback={<SectionLoading />}>
             <Projects />
           </Suspense>
         </section>
         
         {/* GitHub Repositories Section */}
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-200/25 via-slate-100/30 to-gray-100/40 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-50/35 via-white/30 to-blue-50/35" />
-          <div className="absolute inset-0 backdrop-blur-[1px]" />
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-200/20 via-slate-100/25 to-gray-100/30 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-50/20 via-white/15 to-blue-50/20" />
           <Suspense fallback={<SectionLoading />}>
             <GitHubRepositories />
           </Suspense>
         </section>
         
         {/* Experience Section */}
-        <section className="py-16 md:py-24 bg-gradient-to-b from-gray-100/40 via-gray-50/50 to-white/60 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/40 via-white/50 to-purple-50/45" />
-          <div className="absolute inset-0 backdrop-blur-[1px]" />
+        <section className="py-16 md:py-24 bg-gradient-to-b from-gray-100/30 via-gray-50/35 to-white/40 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/25 via-white/25 to-purple-50/25" />
           <Suspense fallback={<SectionLoading />}>
             <Experience />
           </Suspense>
         </section>
         
         {/* Contact Section */}
-        <section className="py-16 md:py-24 bg-gradient-to-b from-white/60 via-slate-100/40 to-slate-300/30 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-50/45 via-slate-100/30 to-blue-900/20" />
-          <div className="absolute inset-0 backdrop-blur-[2px]" />
+        <section className="py-16 md:py-24 bg-gradient-to-b from-white/40 via-slate-100/25 to-slate-300/20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-50/25 via-slate-100/15 to-blue-900/10" />
           <Suspense fallback={<SectionLoading />}>
             <Contact />
           </Suspense>
