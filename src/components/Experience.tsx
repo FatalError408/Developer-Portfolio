@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Calendar, MapPin, Building, GraduationCap, Code, Award, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,81 +8,44 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 const PROFESSIONAL_EXPERIENCE = [
   {
     id: 1,
-    title: "Senior Software Engineer",
-    company: "Tech Innovations Inc.",
-    location: "San Francisco, CA",
-    dates: "2021-Present",
+    title: "Founder and Creative Entrepreneur",
+    company: "JBLinx Studio (Self-employed)",
+    location: "South Africa",
+    dates: "2018-Present",
     type: "professional",
     description: [
-      "Led the development of a scalable e-commerce platform using microservices architecture",
-      "Implemented advanced analytics and real-time inventory management systems",
-      "Managed a team of 5 engineers, ensuring high-quality code and on-time delivery"
+      "Established and managed an independent creative studio, with a focus on digital art, software game applications, 3D models, eBook's, articles and integration of AI technology for automated work processes",
+      "Showcased artistic talent and technical expertise through visually stunning and immersive game applications and digital artwork",
+      "Leveraged various online platforms, including Etsy, ArtStation, and Itch.io, to market and sell products to a global audience",
+      "Built a strong online presence through social media marketing and collaborations with influencers, expanding brand recognition",
+      "Actively sought out and collaborated with clients on custom commissions, delivering personalized and captivating visual experiences"
     ],
-    technologies: ["React", "Node.js", "MongoDB", "AWS", "Docker", "Kubernetes"],
+    technologies: ["Unity", "Unreal Engine", "Blender", "C#", "Python", "AI Integration", "Digital Marketing"],
     achievements: [
-      "Improved system scalability by 40%",
-      "Reduced deployment time by 60%",
-      "Implemented real-time inventory tracking"
+      "Successfully launched multiple indie games with dedicated player bases",
+      "Secured funding and led team in creating innovative software products",
+      "Established profitable e-commerce operations selling digital products",
+      "Received industry recognition for outstanding game development",
+      "Published collection of e-books on technical and business topics"
     ]
   },
   {
     id: 2,
-    title: "Software Engineer",
-    company: "DataSphere Solutions",
-    location: "New York, NY",
-    dates: "2019-2021",
+    title: "Electrical Technician",
+    company: "A&D Power Analog and Digital Electronics CC",
+    location: "South Africa",
+    dates: "2016-2018",
     type: "professional",
     description: [
-      "Designed and built a comprehensive project management platform with Kanban boards",
-      "Integrated real-time collaboration features using Socket.io and Redis",
-      "Developed advanced reporting features for enterprise clients"
+      "Demonstrated proficiency in handling electrical components and conducting thorough testing to ensure quality and reliability",
+      "Collaborated with cross-functional teams to troubleshoot technical issues and optimize production processes",
+      "Maintained high standards of safety and precision in electrical component testing and assembly"
     ],
-    technologies: ["Vue.js", "Express", "PostgreSQL", "Socket.io", "Redis", "GraphQL"],
+    technologies: ["Electrical Testing", "Component Analysis", "Quality Assurance", "Team Collaboration"],
     achievements: [
-      "Supported 500+ concurrent users",
-      "Integrated with 15+ third-party APIs",
-      "Achieved 99.9% uptime"
-    ]
-  }
-];
-
-const FREELANCE_EXPERIENCE = [
-  {
-    id: 3,
-    title: "Full-Stack Web Developer",
-    company: "Freelance",
-    location: "Remote",
-    dates: "2018-Present",
-    type: "freelance",
-    description: [
-      "Developed custom web applications for various clients, including e-commerce sites and SaaS platforms",
-      "Provided ongoing maintenance and support for existing web applications",
-      "Collaborated with designers and project managers to deliver high-quality solutions"
-    ],
-    technologies: ["React", "Node.js", "JavaScript", "HTML", "CSS", "WordPress"],
-    achievements: [
-      "Increased client satisfaction by 90%",
-      "Delivered projects on time and within budget",
-      "Received positive feedback for code quality and communication"
-    ]
-  },
-  {
-    id: 4,
-    title: "Web Development Consultant",
-    company: "Consulting",
-    location: "Remote",
-    dates: "2022-Present",
-    type: "freelance",
-    description: [
-      "Provided expert advice and guidance to clients on web development best practices",
-      "Conducted code reviews and performance audits to identify areas for improvement",
-      "Developed and delivered training programs on web development technologies"
-    ],
-    technologies: ["React", "Node.js", "JavaScript", "Performance Optimization", "Security"],
-    achievements: [
-      "Improved website performance by 50%",
-      "Reduced security vulnerabilities by 75%",
-      "Increased client knowledge and skills in web development"
+      "Improved testing processes efficiency by 25%",
+      "Maintained 99.5% quality standards in component testing",
+      "Contributed to process optimization initiatives"
     ]
   }
 ];
@@ -89,45 +53,64 @@ const FREELANCE_EXPERIENCE = [
 const EDUCATION_CERTIFICATIONS = [
   {
     id: 1,
-    title: "Computer Science Degree",
-    company: "University of Technology", // Changed from institution to company
-    location: "California, USA",
-    dates: "2018-2022",
+    title: "Higher Certificate in Information Systems and Software Engineering",
+    company: "CTI (Computer Training Institute)",
+    location: "Port Elizabeth, South Africa",
+    dates: "2018-2020",
     type: "education",
     description: [
-      "Bachelor's degree in Computer Science with focus on Software Engineering", // Changed from focus to description array
-      "Specialized in web development, algorithms, and database systems",
-      "Graduated Magna Cum Laude with 3.8 GPA"
+      "Comprehensive software engineering program focusing on modern development practices and methodologies",
+      "Specialized in software development, system design, and project management",
+      "Completed advanced coursework in programming, database management, and software architecture"
     ],
-    technologies: ["Java", "Python", "C++", "JavaScript", "SQL", "Data Structures"],
+    technologies: ["Software Engineering", "System Design", "Database Management", "Project Management"],
     achievements: [
-      "Dean's List for 6 consecutive semesters",
-      "Led university hackathon team to first place",
-      "Published research paper on web optimization"
+      "Completed comprehensive software engineering curriculum",
+      "Developed strong foundation in modern programming practices",
+      "Applied learning to real-world project implementations"
     ]
   },
   {
     id: 2,
-    title: "AWS Certified Solutions Architect",
-    company: "Amazon Web Services", // Changed from institution to company
+    title: "High School Matriculation Certificate",
+    company: "DF Malherbe High School",
+    location: "Port Elizabeth, South Africa",
+    dates: "2010-2014",
+    type: "education",
+    description: [
+      "Completed high school education with focus on technology and business subjects",
+      "Specialized in Computer Applications Technology (CAT) and Information Technology (IT)",
+      "Strong foundation in Business Studies providing entrepreneurial knowledge"
+    ],
+    technologies: ["Computer Applications", "Information Technology", "Business Studies"],
+    achievements: [
+      "Graduated with Matriculation Certificate in 2014",
+      "Excelled in technology-focused subjects",
+      "Built foundation for future software engineering studies"
+    ]
+  },
+  {
+    id: 3,
+    title: "Online Courses",
+    company: "Codecademy",
     location: "Online",
-    dates: "2023",
+    dates: "2015-Ongoing",
     type: "certification",
     description: [
-      "Professional certification demonstrating expertise in AWS cloud architecture", // Changed from focus to description array
-      "Covers designing distributed systems on AWS platform",
-      "Validates knowledge of security, scalability, and cost optimization"
+      "Continuous professional development through online programming courses",
+      "Advanced skills in web development, game development, and software engineering",
+      "Stay current with latest technologies and industry best practices"
     ],
-    technologies: ["AWS", "EC2", "S3", "Lambda", "CloudFormation", "VPC"],
+    technologies: ["Web Development", "Programming", "Software Engineering", "Continuous Learning"],
     achievements: [
-      "Scored 920/1000 on certification exam",
-      "Completed advanced cloud architecture projects",
-      "Recognized as AWS community contributor"
+      "Completed multiple advanced programming courses",
+      "Maintained continuous learning and skill development",
+      "Applied new technologies to professional projects"
     ]
   }
 ];
 
-const ALL_EXPERIENCES = [...PROFESSIONAL_EXPERIENCE, ...FREELANCE_EXPERIENCE, ...EDUCATION_CERTIFICATIONS];
+const ALL_EXPERIENCES = [...PROFESSIONAL_EXPERIENCE, ...EDUCATION_CERTIFICATIONS];
 
 const Experience = () => {
   const [activeTab, setActiveTab] = useState("all");
@@ -136,7 +119,6 @@ const Experience = () => {
   const getFilteredExperiences = () => {
     switch (activeTab) {
       case "professional": return PROFESSIONAL_EXPERIENCE;
-      case "freelance": return FREELANCE_EXPERIENCE;
       case "education": return EDUCATION_CERTIFICATIONS;
       default: return ALL_EXPERIENCES;
     }
@@ -153,7 +135,6 @@ const Experience = () => {
   const getTabColor = (tab: string) => {
     const colors = {
       professional: "text-blue-400",
-      freelance: "text-purple-400",
       education: "text-green-400",
     };
     return colors[tab] || "text-gray-400";
@@ -162,7 +143,6 @@ const Experience = () => {
   const getIconForType = (type: string) => {
     switch (type) {
       case "professional": return <Building className="w-4 h-4 mr-1" />;
-      case "freelance": return <Code className="w-4 h-4 mr-1" />;
       case "education": return <GraduationCap className="w-4 h-4 mr-1" />;
       case "certification": return <Award className="w-4 h-4 mr-1" />;
       default: return null;
@@ -176,19 +156,16 @@ const Experience = () => {
           My Experience & Education
         </h2>
         <p className="text-lg text-gray-700 text-center mb-12 max-w-3xl mx-auto">
-          A detailed overview of my professional journey, freelance projects, and academic achievements.
+          A journey through my professional experience as a creative entrepreneur and my educational background in software engineering.
         </p>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto mb-8 bg-white/80 backdrop-blur-sm">
+          <TabsList className="grid grid-cols-3 w-full max-w-xl mx-auto mb-8 bg-white/80 backdrop-blur-sm">
             <TabsTrigger value="all" className="data-[state=active]:bg-gray-800 data-[state=active]:text-white">
               All ({ALL_EXPERIENCES.length})
             </TabsTrigger>
             <TabsTrigger value="professional" className={`data-[state=active]:bg-blue-600 data-[state=active]:text-white ${getTabColor('professional')}`}>
               Professional ({PROFESSIONAL_EXPERIENCE.length})
-            </TabsTrigger>
-            <TabsTrigger value="freelance" className={`data-[state=active]:bg-purple-600 data-[state=active]:text-white ${getTabColor('freelance')}`}>
-              Freelance ({FREELANCE_EXPERIENCE.length})
             </TabsTrigger>
             <TabsTrigger value="education" className={`data-[state=active]:bg-green-600 data-[state=active]:text-white ${getTabColor('education')}`}>
               Education ({EDUCATION_CERTIFICATIONS.length})
@@ -215,7 +192,7 @@ const Experience = () => {
 
                     <div className="flex items-center mb-3 text-gray-600">
                       {getIconForType(item.type)}
-                      <span className="text-sm">{item.company}</span>
+                      <span className="text-sm font-medium">{item.company}</span>
                     </div>
 
                     <div className="flex items-center mb-3 text-gray-600">
@@ -231,7 +208,7 @@ const Experience = () => {
                       <div className="mb-4">
                         {item.description.slice(1, isExpanded(item.id) ? undefined : 3).map((desc, index) => (
                           <p key={index} className="text-gray-700 text-sm mb-1">
-                            - {desc}
+                            • {desc}
                           </p>
                         ))}
                         {item.description.length > 3 && !isExpanded(item.id) && (
@@ -255,11 +232,11 @@ const Experience = () => {
 
                     {item.achievements && item.achievements.length > 0 && (
                       <div className="mb-4">
-                        <h4 className="text-md font-semibold text-gray-800 mb-2">Achievements:</h4>
+                        <h4 className="text-md font-semibold text-gray-800 mb-2">Key Achievements:</h4>
                         <ul>
                           {item.achievements.slice(0, isExpanded(item.id) ? undefined : 3).map((achievement, index) => (
                             <li key={index} className="text-gray-700 text-sm mb-1">
-                              - {achievement}
+                              • {achievement}
                             </li>
                           ))}
                           {item.achievements.length > 3 && !isExpanded(item.id) && (

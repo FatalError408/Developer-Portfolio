@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { Code, Briefcase, Trophy, Bookmark, Star, Heart } from "lucide-react";
+import { Code, Briefcase, Trophy, Bookmark, Star, Heart, Gamepad2, Palette, Rocket } from "lucide-react";
 import ScrollRevealWrapper from "./ScrollRevealWrapper";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
@@ -18,12 +18,12 @@ const About = () => {
   }, []);
   
   const bulletPoints = [
-    "Building responsive and accessible web applications",
-    "Developing RESTful and GraphQL APIs",
-    "Implementing database design and optimization",
-    "Creating custom UI/UX components and animations",
-    "Optimizing applications for maximum performance",
-    "Mentoring junior developers and conducting code reviews"
+    "Developing and launching indie games with dedicated player bases",
+    "Creating stunning 2D/3D artwork featured in industry publications",
+    "Building responsive web applications with modern frameworks",
+    "Managing end-to-end project lifecycles from concept to delivery",
+    "Integrating AI technology to enhance creative processes",
+    "Publishing and selling e-books on technical and business topics"
   ];
 
   return (
@@ -51,26 +51,26 @@ const About = () => {
             </div>
           </div>
           <p className="section-subtitle">
-            I'm a passionate software engineer with a focus on creating efficient, scalable, and user-friendly applications.
+            Hi, I'm Brendon Julian Lightfoot - a passionate Game Developer, Software Engineer, 2D/3D Artist, and Tech Entrepreneur. I bring captivating visuals, immersive gaming experiences, and innovative services to life.
           </p>
         </ScrollRevealWrapper>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
           {[
             { 
-              icon: <Code />, 
-              title: "Full Stack Developer",
-              description: "I craft responsive and performant web applications with modern JavaScript frameworks and backend technologies."
+              icon: <Gamepad2 />, 
+              title: "Game Developer & Software Engineer",
+              description: "Proficient in multiple game engines like Unity and Unreal Engine, with expertise in C#, Python, C++, and JavaScript. Successfully launched indie games with dedicated player bases."
             },
             {
-              icon: <Briefcase />,
-              title: "5+ Years Experience",
-              description: "I've worked on a diverse range of projects, from small startups to large enterprise applications."
+              icon: <Palette />,
+              title: "2D/3D Artist & Designer",
+              description: "Master of digital art creation using Photoshop, Illustrator, Blender, and Maya. Creating stunning artwork featured in industry publications and art galleries."
             },
             {
-              icon: <Trophy />,
-              title: "Problem Solver",
-              description: "I enjoy tackling complex challenges and finding elegant solutions that balance technical and user needs."
+              icon: <Rocket />,
+              title: "Tech Entrepreneur",
+              description: "Founded and managed JBLinx Studio, securing funding and leading teams in creating innovative software products. Successfully established e-commerce operations."
             }
           ].map((card, idx) => (
             <ScrollRevealWrapper key={idx} delay={idx * 0.2}>
@@ -104,10 +104,13 @@ const About = () => {
                   <Bookmark className="mr-2 text-blue" /> My Journey
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  I began my coding journey at the age of 14, tinkering with HTML and CSS to create simple websites. This early passion evolved into a career in software engineering after completing my Computer Science studies.
+                  I'm a driven individual with a knack for problem-solving and a passion for bringing art to life. My journey began with a love for technology and creativity, leading me to pursue Software Engineering at CTI in Port Elizabeth, South Africa.
+                </p>
+                <p className="text-muted-foreground mb-4">
+                  As a passionate creative and tech enthusiast, I specialize in art, game development, and coding. I'm dedicated to inspiring creativity, empowering individuals, and making a positive impact through innovative technology solutions.
                 </p>
                 <p className="text-muted-foreground">
-                  Based in South Africa, I work remotely with clients globally, building everything from e-commerce platforms to complex enterprise systems. I'm constantly learning and adapting to new technologies to deliver the best solutions.
+                  Based in South Africa, I push boundaries, embrace innovation, and deliver meaningful content that resonates with users worldwide. My work spans from indie game development to AI integration and e-commerce solutions.
                 </p>
                 
                 <motion.div 
@@ -124,13 +127,13 @@ const About = () => {
                     </h4>
                     <ul className="space-y-2 text-sm">
                       <li className="flex items-start">
-                        <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> Coffee enthusiast with a home brewing station
+                        <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> Founder of JBLinx Studio creative enterprise
                       </li>
                       <li className="flex items-start">
-                        <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> Running JBLinx Studio for freelance development
+                        <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> Published author of technical e-books
                       </li>
                       <li className="flex items-start">
-                        <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> Contributing to open source projects in my free time
+                        <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> AI technology integration specialist
                       </li>
                     </ul>
                   </div>
@@ -172,17 +175,20 @@ const About = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   <div className="relative">
                     <h4 className="text-lg font-semibold mb-2 flex items-center">
-                      <Trophy className="w-4 h-4 mr-2 text-yellow" /> Professional Highlights
+                      <Trophy className="w-4 h-4 mr-2 text-yellow" /> Biggest Achievements
                     </h4>
                     <ul className="space-y-2 text-sm">
                       <li className="flex items-start">
-                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Working with global clients from South Africa
+                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Successfully launched multiple indie games with dedicated player bases
                       </li>
                       <li className="flex items-start">
-                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Remote work specialist with excellent communication
+                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Founded and secured funding for tech startup
                       </li>
                       <li className="flex items-start">
-                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Founded JBLinx Studio for freelance development
+                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Artwork featured in industry publications and galleries
+                      </li>
+                      <li className="flex items-start">
+                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Received industry recognition and awards
                       </li>
                     </ul>
                   </div>
