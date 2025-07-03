@@ -5,124 +5,124 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const GAME_PROJECTS = [
+const PROFESSIONAL_PROJECTS = [
   {
     id: 1,
-    title: "Casino Game Application",
-    company: "JBLinx Studio",
-    period: "2022-2023",
-    description: "Developed an engaging casino game application featuring multiple game modes, real-time multiplayer functionality, and sophisticated betting mechanics. Built with Java and Android Studio with Firebase backend integration.",
-    image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Casino+Game",
-    tags: ["Java", "Android Studio", "Firebase", "Game Development", "Multiplayer"],
+    title: "E-Commerce Platform",
+    company: "Tech Innovations Inc.",
+    period: "2021-2023",
+    description: "Led the development of a full-featured e-commerce platform with microservices architecture, handling 10K+ daily transactions with advanced analytics and inventory management.",
+    image: "https://placehold.co/600x400/1e1e1e/cccccc?text=E-Commerce+Platform",
+    tags: ["React", "Node.js", "MongoDB", "Stripe", "Docker", "AWS"],
     achievements: [
-      "Implemented real-time multiplayer gaming",
-      "Integrated secure payment systems",
-      "Achieved smooth 60fps gameplay performance"
+      "Improved system scalability by 40%",
+      "Reduced deployment time by 60%",
+      "Implemented real-time inventory tracking"
     ],
     liveUrl: "https://example.com",
-    githubUrl: "https://github.com/JBLinx-Studio",
-    type: "game",
+    githubUrl: "https://github.com",
+    type: "professional",
     featured: true,
   },
   {
     id: 2,
-    title: "Top-Down RTS Game",
-    company: "JBLinx Studio",
-    period: "2021-2022",
-    description: "Created a strategic real-time strategy game with complex AI systems, resource management, and tactical combat mechanics. Features advanced pathfinding and dynamic battlefield scenarios.",
-    image: "https://placehold.co/600x400/1e1e1e/cccccc?text=RTS+Game",
-    tags: ["Unity", "C#", "AI Systems", "Strategy", "Real-time"],
+    title: "Task Management Suite",
+    company: "DataSphere Solutions",
+    period: "2020-2021",
+    description: "Designed and built a comprehensive project management platform with Kanban boards, real-time collaboration, and advanced reporting features for enterprise clients.",
+    image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Task+Management",
+    tags: ["Vue.js", "Express", "PostgreSQL", "Socket.io", "Redis"],
     achievements: [
-      "Advanced AI behavior systems",
-      "Complex resource management mechanics",
-      "Optimized performance for large battles"
+      "Supported 500+ concurrent users",
+      "Integrated with 15+ third-party APIs",
+      "Achieved 99.9% uptime"
     ],
     liveUrl: "https://example.com",
-    githubUrl: "https://github.com/JBLinx-Studio",
-    type: "game",
+    githubUrl: "https://github.com",
+    type: "professional",
     featured: true,
-  },
+  }
+];
+
+const JBLINX_PROJECTS = [
   {
     id: 3,
-    title: "Survival Game Application",
+    title: "Portfolio Platform",
     company: "JBLinx Studio",
-    period: "2020-2021",
-    description: "Developed an immersive survival game with crafting systems, dynamic weather, day/night cycles, and procedural world generation. Focus on player progression and environmental storytelling.",
-    image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Survival+Game",
-    tags: ["Unreal Engine", "C++", "Procedural Generation", "Survival Mechanics"],
+    period: "2023-Present",
+    description: "Modern portfolio website with advanced animations, GitHub integration, and dynamic content management. Features responsive design and optimized performance.",
+    image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Portfolio+Platform",
+    tags: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "GitHub API"],
     achievements: [
-      "Procedural world generation system",
-      "Complex crafting and progression mechanics",
-      "Dynamic weather and environment systems"
+      "Dynamic GitHub repository integration",
+      "Performance score of 95+",
+      "Fully responsive design"
     ],
     liveUrl: "https://example.com",
     githubUrl: "https://github.com/JBLinx-Studio",
-    type: "game",
+    type: "jblinx",
     featured: true,
+  },
+  {
+    id: 4,
+    title: "Client Dashboard",
+    company: "JBLinx Studio",
+    period: "2023",
+    description: "Comprehensive client management dashboard with project tracking, invoicing, and communication tools. Built for small to medium agencies.",
+    image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Client+Dashboard",
+    tags: ["React", "Node.js", "MongoDB", "Chart.js", "Material-UI"],
+    achievements: [
+      "Automated invoicing system",
+      "Real-time project tracking",
+      "Multi-client support"
+    ],
+    liveUrl: "https://example.com",
+    githubUrl: "https://github.com/JBLinx-Studio",
+    type: "jblinx",
+    featured: false,
   }
 ];
 
-const WEB_PROJECTS = [
+const PERSONAL_PROJECTS = [
   {
-    id: 4,
-    title: "E-commerce Web Application",
-    company: "JBLinx Studio",
-    period: "2023",
-    description: "Built a comprehensive e-commerce platform with secure payment integration, product catalog management, shopping cart functionality, and admin dashboard for inventory management.",
-    image: "https://placehold.co/600x400/1e1e1e/cccccc?text=E-commerce+Platform",
-    tags: ["HTML5", "CSS3", "JavaScript", "PHP", "MySQL", "Payment Gateway"],
+    id: 5,
+    title: "Weather Analytics",
+    company: "Personal Project",
+    period: "2022",
+    description: "Interactive weather dashboard with historical data analysis, forecasting, and beautiful data visualizations. Features machine learning predictions.",
+    image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Weather+Analytics",
+    tags: ["JavaScript", "D3.js", "Python", "TensorFlow", "API Integration"],
     achievements: [
-      "Secure payment processing integration",
-      "Responsive design for all devices",
-      "Advanced inventory management system"
+      "ML-powered weather predictions",
+      "Interactive data visualizations",
+      "Historical trend analysis"
     ],
     liveUrl: "https://example.com",
-    githubUrl: "https://github.com/JBLinx-Studio",
-    type: "web",
+    githubUrl: "https://github.com",
+    type: "personal",
     featured: false,
   },
   {
-    id: 5,
-    title: "AI Text-to-Speech Service Integration",
-    company: "JBLinx Studio",
-    period: "2023",
-    description: "Integrated advanced AI text-to-speech technology into existing website platform, providing dynamic content narration and accessibility features for users.",
-    image: "https://placehold.co/600x400/1e1e1e/cccccc?text=AI+TTS+Service",
-    tags: ["AI Integration", "Web APIs", "JavaScript", "Accessibility", "Voice Synthesis"],
-    achievements: [
-      "Seamless AI service integration",
-      "Improved website accessibility",
-      "Enhanced user experience with voice features"
-    ],
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com/JBLinx-Studio",
-    type: "web",
-    featured: false,
-  }
-];
-
-const AUTOMATION_PROJECTS = [
-  {
     id: 6,
-    title: "Software Testing Automation Tool",
-    company: "JBLinx Studio",
-    period: "2022",
-    description: "Led development of comprehensive automation testing tool utilizing Selenium and JUnit frameworks for efficient software testing processes. Managed team and project lifecycle from concept to delivery.",
-    image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Testing+Automation",
-    tags: ["Python", "Selenium", "JUnit", "Test Automation", "Project Management"],
+    title: "Crypto Portfolio Tracker",
+    company: "Personal Project",
+    period: "2021",
+    description: "Real-time cryptocurrency portfolio tracking with price alerts, profit/loss calculations, and market analysis tools.",
+    image: "https://placehold.co/600x400/1e1e1e/cccccc?text=Crypto+Tracker",
+    tags: ["React", "WebSocket", "CoinGecko API", "Chart.js", "Local Storage"],
     achievements: [
-      "Reduced testing time by 70%",
-      "Improved test coverage and reliability",
-      "Successfully managed development team"
+      "Real-time price tracking",
+      "Portfolio performance analytics",
+      "Custom alert system"
     ],
     liveUrl: "https://example.com",
-    githubUrl: "https://github.com/JBLinx-Studio",
-    type: "automation",
+    githubUrl: "https://github.com",
+    type: "personal",
     featured: false,
   }
 ];
 
-const ALL_PROJECTS = [...GAME_PROJECTS, ...WEB_PROJECTS, ...AUTOMATION_PROJECTS];
+const ALL_PROJECTS = [...PROFESSIONAL_PROJECTS, ...JBLINX_PROJECTS, ...PERSONAL_PROJECTS];
 
 const Projects = () => {
   const [activeTab, setActiveTab] = useState("all");
@@ -130,9 +130,9 @@ const Projects = () => {
   
   const getFilteredProjects = () => {
     switch (activeTab) {
-      case "games": return GAME_PROJECTS;
-      case "web": return WEB_PROJECTS;
-      case "automation": return AUTOMATION_PROJECTS;
+      case "professional": return PROFESSIONAL_PROJECTS;
+      case "jblinx": return JBLINX_PROJECTS;
+      case "personal": return PERSONAL_PROJECTS;
       case "featured": return ALL_PROJECTS.filter(p => p.featured);
       default: return ALL_PROJECTS;
     }
@@ -140,9 +140,9 @@ const Projects = () => {
 
   const getTabColor = (tab: string) => {
     const colors = {
-      games: "text-purple-400",
-      web: "text-blue-400",
-      automation: "text-green-400",
+      professional: "text-blue-400",
+      jblinx: "text-purple-400",
+      personal: "text-green-400",
       featured: "text-yellow-400"
     };
     return colors[tab] || "text-gray-400";
@@ -152,10 +152,10 @@ const Projects = () => {
     <section id="projects" className="py-20 bg-gradient-to-b from-slate-200 via-gray-200 to-slate-300">
       <div className="section-container">
         <h2 className="text-4xl font-bold text-center mb-4 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-          My Projects & Creations
+          My Work & Projects
         </h2>
         <p className="text-lg text-gray-700 text-center mb-12 max-w-3xl mx-auto">
-          A showcase of my game development projects, web applications, and automation tools. From indie games to AI integrations, each project represents innovation and technical excellence.
+          A comprehensive showcase of my professional work, studio projects, and personal innovations across different domains and technologies.
         </p>
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -163,14 +163,14 @@ const Projects = () => {
             <TabsTrigger value="all" className="data-[state=active]:bg-gray-800 data-[state=active]:text-white">
               All ({ALL_PROJECTS.length})
             </TabsTrigger>
-            <TabsTrigger value="games" className={`data-[state=active]:bg-purple-600 data-[state=active]:text-white ${getTabColor('games')}`}>
-              Games ({GAME_PROJECTS.length})
+            <TabsTrigger value="professional" className={`data-[state=active]:bg-blue-600 data-[state=active]:text-white ${getTabColor('professional')}`}>
+              Professional ({PROFESSIONAL_PROJECTS.length})
             </TabsTrigger>
-            <TabsTrigger value="web" className={`data-[state=active]:bg-blue-600 data-[state=active]:text-white ${getTabColor('web')}`}>
-              Web ({WEB_PROJECTS.length})
+            <TabsTrigger value="jblinx" className={`data-[state=active]:bg-purple-600 data-[state=active]:text-white ${getTabColor('jblinx')}`}>
+              JBLinx Studio ({JBLINX_PROJECTS.length})
             </TabsTrigger>
-            <TabsTrigger value="automation" className={`data-[state=active]:bg-green-600 data-[state=active]:text-white ${getTabColor('automation')}`}>
-              Tools ({AUTOMATION_PROJECTS.length})
+            <TabsTrigger value="personal" className={`data-[state=active]:bg-green-600 data-[state=active]:text-white ${getTabColor('personal')}`}>
+              Personal ({PERSONAL_PROJECTS.length})
             </TabsTrigger>
             <TabsTrigger value="featured" className={`data-[state=active]:bg-yellow-600 data-[state=active]:text-white ${getTabColor('featured')}`}>
               Featured
@@ -208,13 +208,13 @@ const Projects = () => {
                       <Badge 
                         variant="secondary" 
                         className={`
-                          ${project.type === 'game' ? 'bg-purple-600 text-white' : ''}
-                          ${project.type === 'web' ? 'bg-blue-600 text-white' : ''}
-                          ${project.type === 'automation' ? 'bg-green-600 text-white' : ''}
+                          ${project.type === 'professional' ? 'bg-blue-600 text-white' : ''}
+                          ${project.type === 'jblinx' ? 'bg-purple-600 text-white' : ''}
+                          ${project.type === 'personal' ? 'bg-green-600 text-white' : ''}
                         `}
                       >
-                        {project.type === 'game' ? 'Game' : 
-                         project.type === 'web' ? 'Web App' : 'Automation'}
+                        {project.type === 'professional' ? 'Professional' : 
+                         project.type === 'jblinx' ? 'JBLinx Studio' : 'Personal'}
                       </Badge>
                     </div>
                   </div>

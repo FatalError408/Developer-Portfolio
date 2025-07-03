@@ -34,37 +34,29 @@ const Skills = () => {
   };
   
   const skills = {
-    "Game Development": [
-      { name: "Unity", level: "Expert", color: "bg-gray-700" },
-      { name: "Unreal Engine", level: "Advanced", color: "bg-gray-800" },
-      { name: "C#", level: "Expert", color: "bg-purple-600" },
-      { name: "C++", level: "Advanced", color: "bg-blue-600" },
-      { name: "Python", level: "Expert", color: "bg-yellow-500" },
-      { name: "JavaScript", level: "Expert", color: "bg-yellow-400" },
-    ],
-    "3D Design & Art": [
-      { name: "Blender", level: "Expert", color: "bg-orange-500" },
-      { name: "Autodesk Maya", level: "Advanced", color: "bg-teal-500" },
-      { name: "Photoshop", level: "Expert", color: "bg-blue-500" },
-      { name: "Illustrator", level: "Advanced", color: "bg-orange-400" },
-      { name: "Procreate", level: "Advanced", color: "bg-pink-500" },
-      { name: "3D Modeling", level: "Expert", color: "bg-green-600" },
-    ],
-    "Web Development": [
+    "Frontend": [
       { name: "React", level: "Expert", color: "bg-blue-500" },
-      { name: "Angular", level: "Advanced", color: "bg-red-500" },
-      { name: "Vue.js", level: "Advanced", color: "bg-green-500" },
+      { name: "TypeScript", level: "Expert", color: "bg-blue-600" },
+      { name: "Next.js", level: "Advanced", color: "bg-gray-700" },
+      { name: "Tailwind CSS", level: "Expert", color: "bg-cyan-500" },
+      { name: "JavaScript", level: "Expert", color: "bg-yellow-500" },
       { name: "HTML/CSS", level: "Expert", color: "bg-orange-500" },
-      { name: "PHP", level: "Intermediate", color: "bg-purple-500" },
-      { name: "MySQL", level: "Advanced", color: "bg-blue-700" },
     ],
-    "Tools & Technologies": [
-      { name: "Android Studio", level: "Advanced", color: "bg-green-600" },
-      { name: "Firebase", level: "Advanced", color: "bg-yellow-600" },
-      { name: "Selenium", level: "Intermediate", color: "bg-green-500" },
-      { name: "GitHub", level: "Expert", color: "bg-gray-800" },
-      { name: "AI Integration", level: "Advanced", color: "bg-purple-600" },
-      { name: "Project Management", level: "Expert", color: "bg-blue-600" },
+    "Backend": [
+      { name: "Node.js", level: "Advanced", color: "bg-green-600" },
+      { name: "Python", level: "Intermediate", color: "bg-blue-400" },
+      { name: "PostgreSQL", level: "Intermediate", color: "bg-blue-700" },
+      { name: "MongoDB", level: "Advanced", color: "bg-green-500" },
+      { name: "Express.js", level: "Advanced", color: "bg-gray-600" },
+      { name: "GraphQL", level: "Intermediate", color: "bg-pink-500" },
+    ],
+    "Tools": [
+      { name: "Git", level: "Expert", color: "bg-red-500" },
+      { name: "Docker", level: "Intermediate", color: "bg-blue-500" },
+      { name: "AWS", level: "Intermediate", color: "bg-orange-400" },
+      { name: "CI/CD", level: "Advanced", color: "bg-purple-500" },
+      { name: "Webpack", level: "Intermediate", color: "bg-blue-400" },
+      { name: "Testing", level: "Advanced", color: "bg-red-400" },
     ]
   };
 
@@ -87,10 +79,10 @@ const Skills = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
-            Technical Skills & Expertise
+            Technical Skills
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            A comprehensive overview of my technical skills spanning game development, 3D art, web development, and emerging technologies
+            Technologies I work with to bring ideas to life
           </p>
         </motion.div>
         
@@ -98,7 +90,7 @@ const Skills = () => {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
         >
           {Object.entries(skills).map(([category, categorySkills]) => (
             <motion.div 
@@ -133,7 +125,7 @@ const Skills = () => {
           ))}
         </motion.div>
 
-        {/* Enhanced stats section */}
+        {/* Simple stats section */}
         <motion.div 
           className="mt-16 text-center"
           initial={{ opacity: 0, y: 20 }}
@@ -143,10 +135,10 @@ const Skills = () => {
           <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-100 max-w-4xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
-                { value: "10+", label: "Years Experience" },
-                { value: "50+", label: "Projects Completed" },
-                { value: "20+", label: "Technologies Mastered" },
-                { value: "100%", label: "Passion & Dedication" }
+                { value: "5+", label: "Years Experience" },
+                { value: "50+", label: "Projects" },
+                { value: "18+", label: "Technologies" },
+                { value: "100%", label: "Dedication" }
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="text-3xl font-bold text-blue-600 mb-2">
