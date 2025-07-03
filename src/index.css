@@ -77,69 +77,30 @@
     @apply text-base sm:text-lg text-muted-foreground max-w-2xl mb-8 sm:mb-10;
   }
   
-  /* Enhanced Card Styles with Adaptive Backgrounds */
   .card-highlight {
-    @apply relative backdrop-blur-md rounded-xl p-6 transition-all duration-500
-    border border-white/10 hover:border-blue-400/30
-    bg-gradient-to-br from-white/5 via-white/10 to-white/5
-    hover:from-white/10 hover:via-white/15 hover:to-white/10
-    shadow-lg hover:shadow-xl hover:shadow-blue-500/10;
-  }
-
-  .card-highlight::before {
-    @apply absolute inset-0 rounded-xl opacity-0 transition-opacity duration-500;
-    content: '';
-    background: linear-gradient(135deg, 
-      rgba(99, 102, 241, 0.1) 0%,
-      rgba(139, 92, 246, 0.05) 50%,
-      rgba(168, 85, 247, 0.1) 100%);
-  }
-
-  .card-highlight:hover::before {
-    @apply opacity-100;
-  }
-
-  /* Dark Section Cards */
-  .card-dark {
-    @apply relative backdrop-blur-sm rounded-xl p-6 transition-all duration-500
-    border border-slate-700/50 hover:border-purple-400/40
-    bg-gradient-to-br from-slate-800/60 via-slate-700/40 to-slate-800/60
-    hover:from-slate-700/70 hover:via-slate-600/50 hover:to-slate-700/70
-    shadow-lg hover:shadow-xl hover:shadow-purple-500/20;
-  }
-
-  /* Light Section Cards */
-  .card-light {
-    @apply relative backdrop-blur-md rounded-xl p-6 transition-all duration-500
-    border border-white/20 hover:border-blue-400/40
-    bg-gradient-to-br from-white/20 via-white/30 to-white/20
-    hover:from-white/30 hover:via-white/40 hover:to-white/30
-    shadow-lg hover:shadow-xl hover:shadow-blue-500/15;
+    @apply bg-gradient-to-b from-dark-200 to-dark-300 backdrop-blur-sm 
+    border border-dark-100 rounded-lg p-6 transition-all duration-300 
+    hover:border-blue/40 hover:shadow-glow;
   }
   
   .button-primary {
-    @apply bg-gradient-to-r from-blue-600 to-purple-600 rounded-md px-5 py-2.5 text-sm font-medium text-white 
-    shadow-lg hover:shadow-xl hover:shadow-blue-500/25 
-    hover:from-blue-500 hover:to-purple-500 
-    focus:outline-none focus:ring-2 focus:ring-blue-400/50 transition-all duration-300;
+    @apply bg-blue rounded-md px-5 py-2.5 text-sm font-medium text-white shadow-sm 
+    hover:bg-blue-dark focus:outline-none focus:ring-2 focus:ring-blue transition-all duration-200;
   }
   
   .button-secondary {
-    @apply bg-gradient-to-r from-slate-600/80 to-slate-700/80 rounded-md px-5 py-2.5 text-sm font-medium text-white 
-    border border-white/20 backdrop-blur-sm
-    hover:from-slate-500/80 hover:to-slate-600/80 hover:border-blue-400/30 
-    focus:outline-none focus:ring-2 focus:ring-blue-400/50 transition-all duration-300;
+    @apply bg-dark-300 rounded-md px-5 py-2.5 text-sm font-medium text-white border border-dark-100
+    hover:border-blue/30 focus:outline-none focus:ring-2 focus:ring-blue transition-all duration-200;
   }
   
   .button-outline {
-    @apply bg-white/5 backdrop-blur-sm border border-blue-400/40 rounded-md px-5 py-2.5 text-sm font-medium text-white
-    hover:border-blue-400 hover:bg-blue-400/10 hover:backdrop-blur-md
-    focus:outline-none focus:ring-2 focus:ring-blue-400/50 transition-all duration-300;
+    @apply bg-transparent border border-blue/40 rounded-md px-5 py-2.5 text-sm font-medium text-white
+    hover:border-blue hover:bg-blue/10 focus:outline-none focus:ring-2 focus:ring-blue transition-all duration-200;
   }
   
   .nav-link {
-    @apply relative px-3 py-2 text-sm font-medium text-muted-foreground hover:text-white transition-all duration-300
-    after:absolute after:left-0 after:right-0 after:bottom-0 after:h-[2px] after:bg-gradient-to-r after:from-blue-400 after:to-purple-400
+    @apply relative px-3 py-2 text-sm font-medium text-muted-foreground hover:text-white transition-colors
+    after:absolute after:left-0 after:right-0 after:bottom-0 after:h-[2px] after:bg-blue 
     after:origin-center after:scale-x-0 after:transition-transform after:duration-300
     hover:after:scale-x-100;
   }
@@ -148,72 +109,28 @@
     @apply text-white after:scale-x-100;
   }
   
-  /* Enhanced Glass Effects */
   .glass-card {
-    @apply relative backdrop-blur-lg rounded-xl border border-white/10
-    bg-gradient-to-br from-white/10 via-white/5 to-white/10
-    shadow-lg hover:shadow-xl transition-all duration-500;
-  }
-
-  .glass-card::before {
-    @apply absolute inset-0 rounded-xl opacity-0 transition-opacity duration-500;
-    content: '';
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.1) 0%,
-      rgba(255, 255, 255, 0.05) 50%,
-      rgba(255, 255, 255, 0.1) 100%);
-  }
-
-  .glass-card:hover::before {
-    @apply opacity-100;
+    @apply bg-dark-400/50 backdrop-blur-sm border border-dark-200/50 rounded-xl;
   }
   
   .code-block {
-    @apply font-mono text-sm bg-slate-900/80 backdrop-blur-md p-4 rounded-lg border border-slate-600/50
-    shadow-lg hover:shadow-xl hover:border-blue-400/30 transition-all duration-300;
+    @apply font-mono text-sm bg-dark-500 p-4 rounded-md border border-dark-200;
   }
   
-  /* Enhanced Gradient Borders */
   .gradient-border {
-    @apply relative rounded-xl p-[1px] bg-gradient-to-r from-blue-500/60 via-purple-500/40 to-blue-500/60;
-    background-size: 200% 200%;
-    animation: gradient-shift 3s ease infinite;
-  }
-
-  .gradient-border::before {
-    @apply absolute inset-[1px] rounded-xl;
-    content: '';
-    background: inherit;
-    z-index: -1;
+    @apply relative rounded-lg p-[1px] bg-gradient-to-r from-blue/50 via-transparent to-yellow/50 animate-gradient-shift;
   }
   
   .glass-panel {
-    @apply relative backdrop-blur-xl rounded-xl shadow-2xl
-    bg-gradient-to-br from-white/10 via-white/5 to-white/10
-    border border-white/20 hover:border-white/30
-    transition-all duration-500;
-  }
-
-  .glass-panel::after {
-    @apply absolute inset-0 rounded-xl opacity-0 transition-opacity duration-500;
-    content: '';
-    background: linear-gradient(135deg, 
-      rgba(99, 102, 241, 0.1) 0%,
-      transparent 50%,
-      rgba(168, 85, 247, 0.1) 100%);
-  }
-
-  .glass-panel:hover::after {
-    @apply opacity-100;
+    @apply bg-dark-400/30 backdrop-blur-md border border-white/5 rounded-xl shadow-soft;
   }
   
   .hover-lift {
-    @apply transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] 
-    hover:shadow-2xl hover:shadow-blue-500/20;
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-glow;
   }
   
   .floating {
-    animation: floating 6s ease-in-out infinite;
+    animation: floating 3s ease-in-out infinite;
   }
   
   .text-shadow {
@@ -225,43 +142,28 @@
   }
   
   .shadow-glow {
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.3), 0 0 60px rgba(59, 130, 246, 0.15);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.25), 0 0 8px rgba(59, 130, 246, 0.15);
   }
   
   .shadow-soft {
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  }
-
-  /* Adaptive Background Overlays */
-  .bg-adaptive-dark {
-    @apply bg-gradient-to-br from-slate-900/90 via-slate-800/70 to-slate-900/90;
-  }
-
-  .bg-adaptive-light {
-    @apply bg-gradient-to-br from-white/20 via-white/30 to-white/20 backdrop-blur-sm;
-  }
-
-  .bg-adaptive-transition {
-    @apply bg-gradient-to-br from-slate-600/40 via-slate-400/30 to-white/40 backdrop-blur-md;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   }
 }
 
 @keyframes floating {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-12px) rotate(1deg); }
-  66% { transform: translateY(-8px) rotate(-1deg); }
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
 }
 
 @keyframes glow {
   0%, 100% { 
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5),
-                0 0 20px rgba(59, 130, 246, 0.3),
-                0 0 30px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5),
+                0 0 15px rgba(59, 130, 246, 0.3);
   }
   50% { 
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.8),
-                0 0 40px rgba(59, 130, 246, 0.5),
-                0 0 60px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.8),
+                0 0 25px rgba(59, 130, 246, 0.5);
   }
 }
 
@@ -280,7 +182,7 @@
 
 /* Performance-optimized animations */
 .animate-glow {
-  animation: glow 4s infinite;
+  animation: glow 3s infinite;
   will-change: box-shadow;
 }
 
@@ -290,12 +192,12 @@
 }
 
 .animate-pulse-slow {
-  animation: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   will-change: opacity, transform;
 }
 
 .animate-gradient-shift {
-  animation: gradient-shift 8s ease infinite;
+  animation: gradient-shift 15s ease infinite;
   background-size: 200% 200%;
   will-change: background-position;
 }
@@ -326,16 +228,17 @@
 
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(0.98); }
+  50% { opacity: 0.7; transform: scale(0.95); }
 }
 
-/* Enhanced GPU acceleration */
+/* GPU accelerated for smoother animations */
 .matrix-bg {
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   perspective: 1000px;
 }
 
+/* Add will-change for animations that need it */
 .will-change-transform {
   will-change: transform;
 }
@@ -344,9 +247,9 @@
   will-change: opacity;
 }
 
-/* Smooth background transitions */
+/* Optimize background transitions */
 .bg-transition {
-  transition: background-color 0.6s ease-in-out, backdrop-filter 0.6s ease-in-out;
+  transition: background-color 0.3s ease-in-out;
 }
 
 /* Matrix code styles */
@@ -356,32 +259,10 @@
   text-shadow: 0 0 5px #0f0;
 }
 
-/* Enhanced parallax effect */
+/* Parallax effect for backgrounds */
 .parallax {
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  will-change: transform;
-}
-
-/* Responsive enhancements */
-@media (max-width: 768px) {
-  .card-highlight, .card-light, .card-dark {
-    @apply p-4;
-  }
-  
-  .glass-card, .glass-panel {
-    @apply backdrop-blur-md;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .floating, .animate-glow, .animate-pulse-slow {
-    animation: none;
-  }
-  
-  .hover-lift {
-    @apply hover:transform-none;
-  }
 }

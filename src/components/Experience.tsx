@@ -1,6 +1,6 @@
+
 import { useState } from "react";
-import { Calendar, MapPin, Building, GraduationCap, Code, Award, ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Calendar, MapPin, Building, Award, TrendingUp, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -10,162 +10,178 @@ const PROFESSIONAL_EXPERIENCE = [
     title: "Senior Software Engineer",
     company: "Tech Innovations Inc.",
     location: "San Francisco, CA",
-    dates: "2021-Present",
-    type: "professional",
+    dates: "Jan 2021 - Present",
+    type: "Full-time",
     description: [
-      "Led the development of a scalable e-commerce platform using microservices architecture",
-      "Implemented advanced analytics and real-time inventory management systems",
-      "Managed a team of 5 engineers, ensuring high-quality code and on-time delivery"
+      "Led the development of a microservices architecture that improved system scalability by 40%",
+      "Mentored junior developers and conducted code reviews to maintain high code quality",
+      "Implemented CI/CD pipelines that reduced deployment time by 60%",
+      "Optimized database queries, resulting in a 30% performance improvement",
+      "Spearheaded migration to cloud infrastructure (AWS) serving 100K+ users"
     ],
-    technologies: ["React", "Node.js", "MongoDB", "AWS", "Docker", "Kubernetes"],
+    technologies: ["React", "Node.js", "PostgreSQL", "Docker", "AWS", "Kubernetes"],
     achievements: [
-      "Improved system scalability by 40%",
-      "Reduced deployment time by 60%",
-      "Implemented real-time inventory tracking"
+      "Employee of the Quarter Q3 2022",
+      "Led team of 5 developers",
+      "Reduced system downtime by 75%"
     ]
   },
   {
     id: 2,
-    title: "Software Engineer",
+    title: "Full Stack Developer",
     company: "DataSphere Solutions",
-    location: "New York, NY",
-    dates: "2019-2021",
-    type: "professional",
+    location: "Boston, MA",
+    dates: "Mar 2018 - Dec 2020",
+    type: "Full-time",
     description: [
-      "Designed and built a comprehensive project management platform with Kanban boards",
-      "Integrated real-time collaboration features using Socket.io and Redis",
-      "Developed advanced reporting features for enterprise clients"
+      "Developed and maintained multiple client-facing web applications",
+      "Designed and implemented RESTful APIs consumed by web and mobile applications",
+      "Collaborated with UX/UI team to implement responsive designs",
+      "Migrated legacy systems to modern tech stacks, improving performance and user experience",
+      "Integrated third-party APIs and payment gateways for e-commerce solutions"
     ],
-    technologies: ["Vue.js", "Express", "PostgreSQL", "Socket.io", "Redis", "GraphQL"],
+    technologies: ["JavaScript", "Vue.js", "Express", "MongoDB", "AWS", "Stripe"],
     achievements: [
-      "Supported 500+ concurrent users",
-      "Integrated with 15+ third-party APIs",
-      "Achieved 99.9% uptime"
+      "Delivered 15+ client projects",
+      "99.9% client satisfaction rate",
+      "Reduced page load times by 50%"
+    ]
+  },
+  {
+    id: 3,
+    title: "Frontend Developer",
+    company: "WebCraft Agency",
+    location: "Seattle, WA",
+    dates: "Jun 2016 - Feb 2018",
+    type: "Full-time",
+    description: [
+      "Built interactive UI components for various client websites",
+      "Implemented responsive designs following best practices",
+      "Worked with backend team to integrate frontend with APIs",
+      "Optimized website performance and loading times",
+      "Created custom WordPress themes and plugins"
+    ],
+    technologies: ["HTML/CSS", "JavaScript", "jQuery", "Bootstrap", "Sass", "WordPress"],
+    achievements: [
+      "Improved website speed by 40%",
+      "Created 20+ custom themes",
+      "Perfect accessibility scores"
     ]
   }
 ];
 
-const FREELANCE_EXPERIENCE = [
+const FREELANCE_WORK = [
   {
-    id: 3,
-    title: "Full-Stack Web Developer",
-    company: "Freelance",
+    id: 4,
+    title: "Freelance Full Stack Developer",
+    company: "JBLinx Studio",
     location: "Remote",
-    dates: "2018-Present",
-    type: "freelance",
+    dates: "2019 - Present",
+    type: "Freelance",
     description: [
-      "Developed custom web applications for various clients, including e-commerce sites and SaaS platforms",
-      "Provided ongoing maintenance and support for existing web applications",
-      "Collaborated with designers and project managers to deliver high-quality solutions"
+      "Founded and operate independent development studio specializing in modern web applications",
+      "Deliver end-to-end solutions for small to medium businesses",
+      "Provide consulting services on technology stack selection and architecture",
+      "Maintain long-term client relationships with ongoing support and feature development",
+      "Specialize in React ecosystems and cloud deployment strategies"
     ],
-    technologies: ["React", "Node.js", "JavaScript", "HTML", "CSS", "WordPress"],
+    technologies: ["React", "TypeScript", "Node.js", "MongoDB", "AWS", "Vercel"],
     achievements: [
-      "Increased client satisfaction by 90%",
-      "Delivered projects on time and within budget",
-      "Received positive feedback for code quality and communication"
+      "30+ successful projects delivered",
+      "Average project rating: 4.9/5",
+      "100% client retention rate"
     ]
   },
   {
-    id: 4,
-    title: "Web Development Consultant",
-    company: "Consulting",
+    id: 5,
+    title: "Technical Consultant",
+    company: "Various Startups",
     location: "Remote",
-    dates: "2022-Present",
-    type: "freelance",
+    dates: "2020 - 2023",
+    type: "Contract",
     description: [
-      "Provided expert advice and guidance to clients on web development best practices",
-      "Conducted code reviews and performance audits to identify areas for improvement",
-      "Developed and delivered training programs on web development technologies"
+      "Provided technical guidance for early-stage startups",
+      "Conducted code reviews and architecture assessments",
+      "Helped teams establish development workflows and best practices",
+      "Advised on technology choices and scalability planning",
+      "Mentored junior developers and provided training sessions"
     ],
-    technologies: ["React", "Node.js", "JavaScript", "Performance Optimization", "Security"],
+    technologies: ["React", "Vue.js", "Node.js", "Python", "Docker", "AWS"],
     achievements: [
-      "Improved website performance by 50%",
-      "Reduced security vulnerabilities by 75%",
-      "Increased client knowledge and skills in web development"
+      "Consulted for 12 startups",
+      "Improved development velocity by avg 35%",
+      "Successful funding for 8/12 clients"
     ]
   }
 ];
 
 const EDUCATION_CERTIFICATIONS = [
   {
-    id: 1,
-    title: "Computer Science Degree",
-    company: "University of Technology", // Changed from institution to company
+    id: 6,
+    title: "Bachelor of Science in Computer Science",
+    institution: "University of Technology",
     location: "California, USA",
-    dates: "2018-2022",
-    type: "education",
-    description: [
-      "Bachelor's degree in Computer Science with focus on Software Engineering", // Changed from focus to description array
-      "Specialized in web development, algorithms, and database systems",
-      "Graduated Magna Cum Laude with 3.8 GPA"
-    ],
-    technologies: ["Java", "Python", "C++", "JavaScript", "SQL", "Data Structures"],
-    achievements: [
-      "Dean's List for 6 consecutive semesters",
-      "Led university hackathon team to first place",
-      "Published research paper on web optimization"
-    ]
+    dates: "2012 - 2016",
+    type: "Education",
+    description: "Graduated with honors (GPA: 3.8/4.0). Specialized in web development, data structures, and software engineering principles.",
+    focus: ["Web Development", "Data Structures", "Software Engineering", "Database Systems"],
+    achievements: ["Dean's List 2014-2016", "Outstanding Student Award", "Computer Science Society President"]
   },
   {
-    id: 2,
-    title: "AWS Certified Solutions Architect",
-    company: "Amazon Web Services", // Changed from institution to company
+    id: 7,
+    title: "AWS Solutions Architect",
+    institution: "Amazon Web Services",
     location: "Online",
-    dates: "2023",
-    type: "certification",
-    description: [
-      "Professional certification demonstrating expertise in AWS cloud architecture", // Changed from focus to description array
-      "Covers designing distributed systems on AWS platform",
-      "Validates knowledge of security, scalability, and cost optimization"
-    ],
-    technologies: ["AWS", "EC2", "S3", "Lambda", "CloudFormation", "VPC"],
-    achievements: [
-      "Scored 920/1000 on certification exam",
-      "Completed advanced cloud architecture projects",
-      "Recognized as AWS community contributor"
-    ]
+    dates: "2022",
+    type: "Certification",
+    description: "Comprehensive certification covering cloud architecture, security, and best practices for scalable applications.",
+    focus: ["Cloud Architecture", "Security", "Scalability", "Cost Optimization"],
+    achievements: ["Scored 890/1000", "Valid until 2025"]
+  },
+  {
+    id: 8,
+    title: "Full Stack Web Development Bootcamp",
+    institution: "Tech Academy",
+    location: "Seattle, WA",
+    dates: "2016",
+    type: "Certification",
+    description: "Intensive 12-week bootcamp focused on modern web technologies and agile development practices.",
+    focus: ["React", "Node.js", "MongoDB", "Agile Methodology"],
+    achievements: ["Top 5% of cohort", "Capstone project featured", "Job placement within 2 weeks"]
   }
 ];
 
-const ALL_EXPERIENCES = [...PROFESSIONAL_EXPERIENCE, ...FREELANCE_EXPERIENCE, ...EDUCATION_CERTIFICATIONS];
-
 const Experience = () => {
-  const [activeTab, setActiveTab] = useState("all");
-  const [expandedItems, setExpandedItems] = useState<number[]>([]);
+  const [activeTab, setActiveTab] = useState("professional");
+  const [selectedExperience, setSelectedExperience] = useState(PROFESSIONAL_EXPERIENCE[0]);
 
-  const getFilteredExperiences = () => {
+  const getTabData = () => {
     switch (activeTab) {
-      case "professional": return PROFESSIONAL_EXPERIENCE;
-      case "freelance": return FREELANCE_EXPERIENCE;
+      case "freelance": return FREELANCE_WORK;
       case "education": return EDUCATION_CERTIFICATIONS;
-      default: return ALL_EXPERIENCES;
+      default: return PROFESSIONAL_EXPERIENCE;
     }
   };
 
-  const toggleExpand = (id: number) => {
-    setExpandedItems((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
-  };
-
-  const isExpanded = (id: number) => expandedItems.includes(id);
-
-  const getTabColor = (tab: string) => {
-    const colors = {
-      professional: "text-blue-400",
-      freelance: "text-purple-400",
-      education: "text-green-400",
-    };
-    return colors[tab] || "text-gray-400";
-  };
-
-  const getIconForType = (type: string) => {
+  const getTypeIcon = (type: string) => {
     switch (type) {
-      case "professional": return <Building className="w-4 h-4 mr-1" />;
-      case "freelance": return <Code className="w-4 h-4 mr-1" />;
-      case "education": return <GraduationCap className="w-4 h-4 mr-1" />;
-      case "certification": return <Award className="w-4 h-4 mr-1" />;
-      default: return null;
+      case "Full-time": return <Building className="w-4 h-4 text-blue-500" />;
+      case "Freelance": return <Users className="w-4 h-4 text-purple-500" />;
+      case "Contract": return <TrendingUp className="w-4 h-4 text-green-500" />;
+      case "Education": return <Award className="w-4 h-4 text-orange-500" />;
+      case "Certification": return <Award className="w-4 h-4 text-red-500" />;
+      default: return <Building className="w-4 h-4 text-gray-500" />;
+    }
+  };
+
+  const getTypeColor = (type: string) => {
+    switch (type) {
+      case "Full-time": return "bg-blue-100 text-blue-700 border-blue-200";
+      case "Freelance": return "bg-purple-100 text-purple-700 border-purple-200";
+      case "Contract": return "bg-green-100 text-green-700 border-green-200";
+      case "Education": return "bg-orange-100 text-orange-700 border-orange-200";
+      case "Certification": return "bg-red-100 text-red-700 border-red-200";
+      default: return "bg-gray-100 text-gray-700 border-gray-200";
     }
   };
 
@@ -173,122 +189,137 @@ const Experience = () => {
     <section id="experience" className="py-20 bg-gradient-to-b from-slate-300 via-gray-300 to-slate-400">
       <div className="section-container">
         <h2 className="text-4xl font-bold text-center mb-4 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-          My Experience & Education
+          Professional Journey
         </h2>
         <p className="text-lg text-gray-700 text-center mb-12 max-w-3xl mx-auto">
-          A detailed overview of my professional journey, freelance projects, and academic achievements.
+          My comprehensive professional experience across different roles, companies, and learning opportunities.
         </p>
-
+        
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto mb-8 bg-white/80 backdrop-blur-sm">
-            <TabsTrigger value="all" className="data-[state=active]:bg-gray-800 data-[state=active]:text-white">
-              All ({ALL_EXPERIENCES.length})
-            </TabsTrigger>
-            <TabsTrigger value="professional" className={`data-[state=active]:bg-blue-600 data-[state=active]:text-white ${getTabColor('professional')}`}>
+          <TabsList className="grid grid-cols-3 w-full max-w-lg mx-auto mb-8 bg-white/80 backdrop-blur-sm">
+            <TabsTrigger value="professional" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
               Professional ({PROFESSIONAL_EXPERIENCE.length})
             </TabsTrigger>
-            <TabsTrigger value="freelance" className={`data-[state=active]:bg-purple-600 data-[state=active]:text-white ${getTabColor('freelance')}`}>
-              Freelance ({FREELANCE_EXPERIENCE.length})
+            <TabsTrigger value="freelance" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">
+              Freelance ({FREELANCE_WORK.length})
             </TabsTrigger>
-            <TabsTrigger value="education" className={`data-[state=active]:bg-green-600 data-[state=active]:text-white ${getTabColor('education')}`}>
+            <TabsTrigger value="education" className="data-[state=active]:bg-orange-600 data-[state=active]:text-white">
               Education ({EDUCATION_CERTIFICATIONS.length})
             </TabsTrigger>
           </TabsList>
-
+          
           <TabsContent value={activeTab} className="mt-8">
-            <div className="grid grid-cols-1 gap-8">
-              {getFilteredExperiences().map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
-                >
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-xl font-bold text-gray-900">
-                        {item.title}
-                      </h3>
-                      <div className="flex items-center text-sm text-gray-500">
-                        <Calendar className="w-4 h-4 mr-1" />
-                        {item.dates}
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="lg:w-1/3">
+                <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200">
+                  {getTabData().map((exp, index) => (
+                    <button
+                      key={exp.id}
+                      className={`w-full text-left p-4 border-l-4 transition-all hover:bg-gray-50 ${
+                        selectedExperience?.id === exp.id
+                          ? "border-blue-500 bg-blue-50"
+                          : "border-transparent"
+                      }`}
+                      onClick={() => setSelectedExperience(exp)}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="font-semibold text-gray-900 text-sm">
+                          {exp.company || exp.institution}
+                        </div>
+                        {getTypeIcon(exp.type)}
+                      </div>
+                      <div className="text-sm text-gray-600 mb-1">{exp.title}</div>
+                      <div className="text-xs text-gray-500">{exp.dates}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="lg:w-2/3">
+                {selectedExperience && (
+                  <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
+                      <div>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                          {selectedExperience.title}
+                        </h3>
+                        <div className="flex items-center text-blue-600 font-semibold mb-2">
+                          <Building className="w-5 h-5 mr-2" />
+                          {selectedExperience.company || selectedExperience.institution}
+                        </div>
+                      </div>
+                      <Badge 
+                        variant="outline" 
+                        className={`${getTypeColor(selectedExperience.type)} font-medium`}
+                      >
+                        {selectedExperience.type}
+                      </Badge>
+                    </div>
+                    
+                    <div className="flex flex-col sm:flex-row gap-4 mb-6 text-sm text-gray-600">
+                      <div className="flex items-center">
+                        <Calendar className="w-4 h-4 mr-2" />
+                        {selectedExperience.dates}
+                      </div>
+                      <div className="flex items-center">
+                        <MapPin className="w-4 h-4 mr-2" />
+                        {selectedExperience.location}
                       </div>
                     </div>
-
-                    <div className="flex items-center mb-3 text-gray-600">
-                      {getIconForType(item.type)}
-                      <span className="text-sm">{item.company}</span>
-                    </div>
-
-                    <div className="flex items-center mb-3 text-gray-600">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      <span className="text-sm">{item.location}</span>
-                    </div>
-
-                    <p className="text-gray-700 text-sm mb-4">
-                      {item.description[0]}
-                    </p>
-
-                    {item.description.length > 1 && (
-                      <div className="mb-4">
-                        {item.description.slice(1, isExpanded(item.id) ? undefined : 3).map((desc, index) => (
-                          <p key={index} className="text-gray-700 text-sm mb-1">
-                            - {desc}
-                          </p>
-                        ))}
-                        {item.description.length > 3 && !isExpanded(item.id) && (
-                          <p className="text-gray-700 text-sm">...</p>
-                        )}
-                      </div>
-                    )}
-
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {item.technologies.slice(0, 4).map((tech) => (
-                        <Badge key={tech} variant="outline" className="text-xs border-gray-300 text-gray-600">
-                          {tech}
-                        </Badge>
-                      ))}
-                      {item.technologies.length > 4 && (
-                        <Badge variant="outline" className="text-xs border-gray-300 text-gray-600">
-                          +{item.technologies.length - 4}
-                        </Badge>
-                      )}
-                    </div>
-
-                    {item.achievements && item.achievements.length > 0 && (
-                      <div className="mb-4">
-                        <h4 className="text-md font-semibold text-gray-800 mb-2">Achievements:</h4>
-                        <ul>
-                          {item.achievements.slice(0, isExpanded(item.id) ? undefined : 3).map((achievement, index) => (
-                            <li key={index} className="text-gray-700 text-sm mb-1">
-                              - {achievement}
+                    
+                    <div className="mb-6">
+                      <p className="text-gray-700 mb-4">
+                        {Array.isArray(selectedExperience.description) 
+                          ? selectedExperience.description[0] 
+                          : selectedExperience.description}
+                      </p>
+                      
+                      {Array.isArray(selectedExperience.description) && selectedExperience.description.length > 1 && (
+                        <ul className="space-y-2">
+                          {selectedExperience.description.slice(1).map((item, index) => (
+                            <li key={index} className="flex items-start text-gray-700">
+                              <span className="text-blue-500 mr-3 mt-1">•</span>
+                              <span>{item}</span>
                             </li>
                           ))}
-                          {item.achievements.length > 3 && !isExpanded(item.id) && (
-                            <li className="text-gray-700 text-sm">...</li>
-                          )}
+                        </ul>
+                      )}
+                    </div>
+                    
+                    {(selectedExperience.technologies || selectedExperience.focus) && (
+                      <div className="mb-6">
+                        <h4 className="font-semibold text-gray-900 mb-3">
+                          {selectedExperience.technologies ? "Technologies Used" : "Focus Areas"}
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {(selectedExperience.technologies || selectedExperience.focus)?.map((tech) => (
+                            <Badge key={tech} variant="secondary" className="bg-gray-100 text-gray-700">
+                              {tech}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {selectedExperience.achievements && (
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+                          <Award className="w-4 h-4 mr-2 text-yellow-500" />
+                          Key Achievements
+                        </h4>
+                        <ul className="space-y-2">
+                          {selectedExperience.achievements.map((achievement, index) => (
+                            <li key={index} className="flex items-start text-gray-700">
+                              <span className="text-yellow-500 mr-3 mt-1">★</span>
+                              <span>{achievement}</span>
+                            </li>
+                          ))}
                         </ul>
                       </div>
                     )}
-
-                    {item.description.length > 3 || (item.achievements && item.achievements.length > 3) ? (
-                      <Button
-                        variant="secondary"
-                        onClick={() => toggleExpand(item.id)}
-                        className="w-full justify-center"
-                      >
-                        {isExpanded(item.id) ? (
-                          <>
-                            Show Less <ChevronUp className="ml-2 h-4 w-4" />
-                          </>
-                        ) : (
-                          <>
-                            Show More <ChevronDown className="ml-2 h-4 w-4" />
-                          </>
-                        )}
-                      </Button>
-                    ) : null}
                   </div>
-                </div>
-              ))}
+                )}
+              </div>
             </div>
           </TabsContent>
         </Tabs>
