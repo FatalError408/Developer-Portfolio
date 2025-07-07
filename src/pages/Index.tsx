@@ -98,7 +98,7 @@ const Index = () => {
       {/* Enhanced welcome effect */}
       {showWelcomeEffect && (
         <motion.div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900/90 to-slate-900 pointer-events-none"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900/95 to-slate-900 pointer-events-none"
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -170,42 +170,56 @@ const Index = () => {
       <Navbar />
 
       <main className="relative z-10">
+        {/* Hero Section */}
         <motion.section 
-          className="pt-4 pb-16 md:pb-24 bg-gradient-to-b from-slate-900 via-purple-900/80 to-slate-800/50"
+          className="pt-4 pb-16 md:pb-24 bg-gradient-to-b from-slate-900 via-purple-900/90 to-slate-800/80 relative overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: showWelcomeEffect ? 3.5 : 0, duration: 0.8 }}
         >
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 via-transparent to-purple-900/10" />
           <Hero />
         </motion.section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-800/50 via-gray-100 to-white">
+        {/* About Section */}
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-800/80 via-slate-700/60 to-slate-600/50 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-blue-50/3 to-purple-50/5" />
           <About />
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-white via-gray-50 to-slate-100">
+        {/* Skills Section - Fixed blur/whitewash issue */}
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-600/50 via-slate-500/40 to-slate-400/30 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/5 via-white/8 to-purple-50/10" />
           <Skills />
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-100 via-gray-100 to-slate-200">
+        {/* Projects Section */}
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-400/30 via-slate-300/25 to-slate-200/20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-blue-50/12 to-purple-50/15" />
           <Suspense fallback={<SectionLoading />}>
             <Projects />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-200 via-gray-200 to-slate-300">
+        {/* GitHub Repositories Section */}
+        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-200/20 via-slate-100/25 to-gray-100/30 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-50/20 via-white/15 to-blue-50/20" />
           <Suspense fallback={<SectionLoading />}>
             <GitHubRepositories />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-300 via-gray-300 to-slate-400">
+        {/* Experience Section */}
+        <section className="py-16 md:py-24 bg-gradient-to-b from-gray-100/30 via-gray-50/35 to-white/40 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/25 via-white/25 to-purple-50/25" />
           <Suspense fallback={<SectionLoading />}>
             <Experience />
           </Suspense>
         </section>
         
-        <section className="py-16 md:py-24 bg-gradient-to-b from-slate-400 via-slate-500 to-slate-600">
+        {/* Contact Section */}
+        <section className="py-16 md:py-24 bg-gradient-to-b from-white/40 via-slate-100/25 to-slate-300/20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-50/25 via-slate-100/15 to-blue-900/10" />
           <Suspense fallback={<SectionLoading />}>
             <Contact />
           </Suspense>
