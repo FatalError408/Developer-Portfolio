@@ -1,15 +1,12 @@
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown, Github, Linkedin, Twitter, Code2, Sparkles, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { useRef, useState, useEffect } from "react";
-import { Command, CommandInput, CommandList, CommandGroup, CommandItem } from "@/components/ui/command";
 import { Badge } from "@/components/ui/badge";
+import { useRef, useState, useEffect } from "react";
 
 const Hero = () => {
   const [isMobile, setIsMobile] = useState(false);
-  const [isCommandOpen, setIsCommandOpen] = useState(false);
-  const [isAvailable, setIsAvailable] = useState(true);
   const [profileImageUrl, setProfileImageUrl] = useState("");
   
   // Load profile image from localStorage
@@ -18,7 +15,6 @@ const Hero = () => {
     if (savedImageUrl) {
       setProfileImageUrl(savedImageUrl);
     } else {
-      // Updated default image
       setProfileImageUrl("https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-1170x780.jpg");
     }
 
@@ -45,47 +41,36 @@ const Hero = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Handle keyboard shortcut for command menu
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        setIsCommandOpen(prev => !prev);
-      }
-      if (e.key === 'Escape' && isCommandOpen) {
-        setIsCommandOpen(false);
-      }
-    };
-    
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isCommandOpen]);
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3
+        staggerChildren: 0.15,
+        delayChildren: 0.2
       }
     }
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 30, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.5, ease: "easeOut" }
+      transition: { duration: 0.6, ease: "easeOut" }
     }
   };
 
-  const quickNavLinks = [
-    { name: "Projects", icon: "💼", href: "#projects" },
-    { name: "Skills", icon: "🛠️", href: "#skills" },
-    { name: "Contact", icon: "📧", href: "#contact" }
-  ];
+  const floatingVariants = {
+    animate: {
+      y: [-5, 5, -5],
+      transition: {
+        duration: 3,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
+    }
+  };
 
   const imgRef = useRef<HTMLDivElement>(null);
   
@@ -97,279 +82,224 @@ const Hero = () => {
         behavior: 'smooth'
       });
     }
-    setIsCommandOpen(false);
   };
 
-  // Coding symbols for floating animation
-  const codingSymbols = ['<>', '//', '{}', '()', '[];', '/*', '*/', '&&', '||', '===', '!=', '=>', '<html>', '</div>', 'npm', 'git', 'css', 'js'];
-  
   return (
-    <section className="relative min-h-[90vh] flex items-center pt-16 overflow-hidden bg-dark-500" id="home">
-      <div className="absolute inset-0 opacity-20 bg-noise mix-blend-overlay pointer-events-none"></div>
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-full filter blur-3xl opacity-30 animate-pulse-glow"></div>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden" id="home">
+      {/* Enhanced Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-card"></div>
       
-      <div className="container mx-auto px-4 sm:px-6 z-10">
+      {/* Animated Background Orbs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }}></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-primary/10 rounded-full blur-2xl animate-pulse" style={{ animationDelay: "4s" }}></div>
+
+      {/* Grid Pattern Overlay */}
+      <div className="absolute inset-0 opacity-[0.02] bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+
+      <div className="container mx-auto px-4 sm:px-6 z-10 pt-20">
         <motion.div 
-          className="flex flex-col md:flex-row items-center justify-between gap-8 max-w-6xl mx-auto"
+          className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          <div className="w-full md:w-7/12 space-y-6 md:space-y-8">
+          {/* Content Column */}
+          <motion.div className="space-y-8 text-center lg:text-left" variants={itemVariants}>
+            {/* Status Badge */}
             <motion.div
-              variants={itemVariants}
-              className="space-y-2"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm mb-4">
-                <span className="animate-pulse mr-1">●</span> Software Engineer & Web Developer
-              </div>
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-                Hi, I'm <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Brendon Julian Lightfoot</span>
-              </h1>
-              <div className="flex flex-wrap items-center gap-2 mt-2">
-                <span className="text-2xl md:text-3xl font-medium text-white/90">Software Engineer, 28</span>
-                <Badge variant={isAvailable ? "default" : "outline"} className={`ml-2 ${isAvailable ? "bg-green-500" : "text-muted-foreground"}`}>
-                  {isAvailable ? "Available for work" : "Currently unavailable"}
-                </Badge>
-              </div>
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium text-primary">Available for hire</span>
             </motion.div>
-            
+
+            {/* Main Heading */}
+            <div className="space-y-4">
+              <motion.h1 
+                className="text-5xl md:text-6xl xl:text-7xl font-bold leading-tight tracking-tight"
+                variants={itemVariants}
+              >
+                <span className="block text-foreground">Hi, I'm</span>
+                <span className="block bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text text-transparent">
+                  Brendon Julian
+                </span>
+                <span className="block text-foreground">Lightfoot</span>
+              </motion.h1>
+              
+              <motion.div className="flex flex-wrap gap-3 justify-center lg:justify-start" variants={itemVariants}>
+                <Badge variant="secondary" className="px-3 py-1 text-sm font-medium">
+                  <Code2 className="w-4 h-4 mr-1" />
+                  Software Engineer
+                </Badge>
+                <Badge variant="outline" className="px-3 py-1 text-sm font-medium">
+                  <Sparkles className="w-4 h-4 mr-1" />
+                  Game Developer
+                </Badge>
+              </motion.div>
+            </div>
+
+            {/* Description */}
             <motion.p 
-              className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed"
+              className="text-xl md:text-2xl text-muted-foreground max-w-2xl leading-relaxed"
               variants={itemVariants}
             >
-              Passionate software engineer transforming complex challenges into elegant, user-friendly solutions. Let's build something amazing together.
+              Passionate creator crafting immersive digital experiences through code, art, and innovation. 
+              Let's build something extraordinary together.
             </motion.p>
 
+            {/* CTA Buttons */}
             <motion.div 
-              className="flex flex-wrap gap-4"
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
               variants={itemVariants}
             >
               <Button 
-                className="bg-gradient-to-r from-blue-500 to-purple-500 hover:opacity-90 shadow-lg shadow-blue-500/20 transition-all duration-300 text-base py-6"
+                size="lg"
+                className="group bg-gradient-to-r from-primary to-primary-glow hover:from-primary-dark hover:to-primary shadow-lg hover:shadow-primary/25 transition-all duration-300"
                 onClick={() => navigateTo('projects')}
               >
-                View My Work <ArrowRight className="ml-2 h-4 w-4" />
+                <span>View My Work</span>
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
+              
               <Button 
+                size="lg" 
                 variant="outline" 
-                className="border-blue-400/30 hover:border-blue-400/80 shadow-lg shadow-purple-500/10 transition-all duration-300 text-base py-6"
+                className="border-primary/30 hover:border-primary/60 hover:bg-primary/5 transition-all duration-300"
                 onClick={() => window.open('/resume.pdf', '_blank')}
               >
+                <Download className="mr-2 h-5 w-5" />
                 Download CV
-              </Button>
-              <Button
-                variant="ghost"
-                className="text-muted-foreground hover:text-white hover:bg-dark-300/50 hidden md:flex"
-                onClick={() => setIsCommandOpen(true)}
-              >
-                Press <kbd className="px-2 py-0.5 text-xs bg-dark-300 rounded-md mx-1">⌘ K</kbd> to explore
               </Button>
             </motion.div>
 
+            {/* Social Links */}
             <motion.div 
-              className="flex flex-wrap gap-4 pt-4"
+              className="flex gap-4 justify-center lg:justify-start"
               variants={itemVariants}
             >
-              {quickNavLinks.map((link) => (
+              {[
+                { icon: Github, href: "https://github.com/JulianArtisan408", label: "GitHub" },
+                { icon: Linkedin, href: "https://linkedin.com/in/julianartisan408", label: "LinkedIn" },
+                { icon: Twitter, href: "https://twitter.com/julianartisan408", label: "Twitter" }
+              ].map(({ icon: Icon, href, label }) => (
                 <motion.a
-                  key={link.name}
-                  href={link.href}
-                  className="flex items-center gap-2 px-4 py-2 bg-dark-400/50 rounded-lg hover:bg-dark-300 transition-all duration-300 backdrop-blur-sm"
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-lg bg-card border border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
                   whileHover={{ y: -3, scale: 1.05 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <span>{link.icon}</span>
-                  <span>{link.name}</span>
+                  <Icon className="w-5 h-5" />
+                  <span className="sr-only">{label}</span>
                 </motion.a>
               ))}
             </motion.div>
-          </div>
+          </motion.div>
           
+          {/* Image Column */}
           <motion.div 
-            className="w-full md:w-5/12 flex justify-center relative"
+            className="flex justify-center lg:justify-end"
             variants={itemVariants}
             ref={imgRef}
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
           >
-            <div className="relative">
-              <motion.div 
-                className={`w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-blue-500/30 relative ${!isMobile ? 'hover:border-blue-400' : ''}`}
-                animate={{
-                  boxShadow: [
-                    "0 0 0 rgba(59, 130, 246, 0.4)",
-                    "0 0 40px rgba(59, 130, 246, 0.4)",
-                    "0 0 0 rgba(59, 130, 246, 0.4)"
-                  ]
-                }}
-                transition={{
-                  duration: 2.5,
-                  repeat: Infinity,
-                  repeatType: "reverse"
-                }}
-              >
-                <Avatar className="w-full h-full">
-                  <AvatarImage 
-                    src={profileImageUrl} 
-                    alt="Brendon Julian Lightfoot"
-                    className="w-full h-full object-cover"
-                    onError={() => {
-                      console.log('Image failed to load, using fallback');
-                      // You could set a fallback image here if needed
-                    }}
-                  />
-                  <AvatarFallback className="text-4xl bg-gradient-to-br from-blue-900 to-purple-900">BJL</AvatarFallback>
-                </Avatar>
-                
-                {/* Animated coding symbols floating over the image */}
-                {codingSymbols.map((symbol, index) => (
-                  <motion.div
-                    key={`${symbol}-${index}`}
-                    className="absolute text-blue-400/70 font-mono text-sm pointer-events-none"
-                    style={{
-                      left: `${15 + (index * 7) % 70}%`,
-                      top: `${10 + (index * 11) % 80}%`,
-                    }}
-                    animate={{
-                      y: [-5, 5, -5],
-                      x: [-3, 3, -3],
-                      opacity: [0.3, 0.8, 0.3],
-                      scale: [0.8, 1.1, 0.8],
-                    }}
-                    transition={{
-                      duration: 3 + (index % 3),
-                      repeat: Infinity,
-                      delay: index * 0.2,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    {symbol}
-                  </motion.div>
-                ))}
-                
-                {/* Enhanced animated decorative elements */}
-                <motion.div 
-                  className="absolute -top-4 -right-4 w-10 h-10 bg-blue-500 rounded-full opacity-80"
-                  animate={{
-                    scale: [1, 1.3, 1],
-                    opacity: [0.8, 1, 0.8],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                />
-                <motion.div 
-                  className="absolute -bottom-3 -left-3 w-8 h-8 bg-purple-500 rounded-full opacity-70"
-                  animate={{
-                    scale: [1, 1.4, 1],
-                    opacity: [0.7, 0.9, 0.7],
-                  }}
-                  transition={{ duration: 2.5, delay: 0.5, repeat: Infinity }}
-                />
-                <motion.div 
-                  className="absolute top-5 -left-4 w-6 h-6 bg-yellow-400 rounded-full opacity-70"
-                  animate={{
-                    scale: [1, 1.5, 1],
-                    opacity: [0.7, 0.9, 0.7],
-                  }}
-                  transition={{ duration: 4, delay: 1, repeat: Infinity }}
-                />
-                
-                {/* Add gleam effect */}
-                <motion.div 
-                  className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/40 to-transparent pointer-events-none"
-                  animate={{
-                    opacity: [0, 0.5, 0],
-                    rotate: [0, 15, 0],
-                    scale: [0.85, 1.1, 0.85],
-                  }}
-                  transition={{ duration: 10, repeat: Infinity }}
-                />
-              </motion.div>
-
-              {/* Enhanced profile stats */}
-              <motion.div 
-                className="absolute -bottom-4 -right-4 px-4 py-2 bg-dark-300/90 backdrop-blur-md rounded-lg border border-blue-500/30"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 }}
-              >
-                <div className="text-sm font-medium text-blue-400">5+ years experience</div>
-              </motion.div>
+            <motion.div 
+              className="relative"
+              variants={floatingVariants}
+              animate="animate"
+            >
+              {/* Glow Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/30 to-accent/30 rounded-full blur-2xl scale-110 opacity-50"></div>
               
+              {/* Main Image Container */}
               <motion.div 
-                className="absolute -top-6 -left-6 px-4 py-2 bg-dark-300/90 backdrop-blur-md rounded-lg border border-purple-500/30"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4 }}
+                className="relative w-80 h-80 md:w-96 md:h-96"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
               >
-                <div className="text-sm font-medium text-purple-400">Full-Stack Developer</div>
+                <div className="w-full h-full rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl">
+                  <Avatar className="w-full h-full">
+                    <AvatarImage 
+                      src={profileImageUrl} 
+                      alt="Brendon Julian Lightfoot"
+                      className="w-full h-full object-cover"
+                    />
+                    <AvatarFallback className="text-4xl bg-gradient-to-br from-primary to-accent text-primary-foreground">
+                      BJL
+                    </AvatarFallback>
+                  </Avatar>
+                </div>
+                
+                {/* Floating Elements */}
+                <motion.div 
+                  className="absolute -top-4 -right-4 w-12 h-12 bg-primary rounded-full flex items-center justify-center shadow-lg"
+                  animate={{
+                    rotate: [0, 360],
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                >
+                  <Code2 className="w-6 h-6 text-primary-foreground" />
+                </motion.div>
+                
+                <motion.div 
+                  className="absolute -bottom-4 -left-4 w-10 h-10 bg-accent rounded-full flex items-center justify-center shadow-lg"
+                  animate={{
+                    rotate: [360, 0],
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                >
+                  <Sparkles className="w-5 h-5 text-accent-foreground" />
+                </motion.div>
+                
+                {/* Stats */}
+                <motion.div 
+                  className="absolute -bottom-6 -right-6 bg-card/90 backdrop-blur-md rounded-lg p-3 border border-border shadow-lg"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.5 }}
+                >
+                  <div className="text-sm font-bold text-primary">5+ Years</div>
+                  <div className="text-xs text-muted-foreground">Experience</div>
+                </motion.div>
+                
+                <motion.div 
+                  className="absolute -top-6 -left-6 bg-card/90 backdrop-blur-md rounded-lg p-3 border border-border shadow-lg"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.7 }}
+                >
+                  <div className="text-sm font-bold text-accent">50+</div>
+                  <div className="text-xs text-muted-foreground">Projects</div>
+                </motion.div>
               </motion.div>
-            </div>
+            </motion.div>
           </motion.div>
         </motion.div>
         
+        {/* Scroll Indicator */}
         <motion.div 
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
-          animate={{
-            y: [0, 10, 0],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            repeatType: "reverse"
-          }}
-        >
-          <span className="text-sm text-muted-foreground mb-2">Explore More</span>
-          <ChevronDown className="w-5 h-5 text-purple-400" />
-        </motion.div>
-      </div>
-
-      {/* Command Dialog */}
-      {isCommandOpen && (
-        <motion.div 
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setIsCommandOpen(false)}
+          transition={{ delay: 2 }}
         >
-          <motion.div 
-            className="w-full max-w-md bg-dark-400/95 border border-dark-200 rounded-lg shadow-2xl overflow-hidden"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -20, opacity: 0 }}
-            onClick={(e) => e.stopPropagation()}
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="cursor-pointer"
+            onClick={() => navigateTo('about')}
           >
-            <Command className="border-none bg-transparent">
-              <CommandInput placeholder="Search sections..." />
-              <CommandList>
-                <CommandGroup heading="Navigate">
-                  {['home', 'about', 'skills', 'projects', 'experience', 'contact'].map((section) => (
-                    <CommandItem 
-                      key={section}
-                      onSelect={() => navigateTo(section)}
-                      className="cursor-pointer"
-                    >
-                      {section.charAt(0).toUpperCase() + section.slice(1)}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-                <CommandGroup heading="Actions">
-                  <CommandItem 
-                    onSelect={() => {
-                      window.open('/resume.pdf', '_blank');
-                      setIsCommandOpen(false);
-                    }}
-                    className="cursor-pointer"
-                  >
-                    Download Resume
-                  </CommandItem>
-                </CommandGroup>
-              </CommandList>
-            </Command>
+            <span className="text-sm text-muted-foreground mb-2 block">Scroll to explore</span>
+            <ChevronDown className="w-6 h-6 text-primary mx-auto" />
           </motion.div>
         </motion.div>
-      )}
+      </div>
     </section>
   );
 };

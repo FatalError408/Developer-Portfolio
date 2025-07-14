@@ -1,9 +1,7 @@
-
 import { motion } from "framer-motion";
-import { Code, Briefcase, Trophy, Bookmark, Star, Heart, Gamepad2, Palette, Rocket } from "lucide-react";
-import ScrollRevealWrapper from "./ScrollRevealWrapper";
-import { Switch } from "@/components/ui/switch";
+import { Code, Briefcase, Trophy, Star, Heart, Gamepad2, Palette, Rocket, Award, Users, Target } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { useState, useEffect } from "react";
 
 const About = () => {
@@ -16,187 +14,207 @@ const About = () => {
       setIsAvailableForWork(savedStatus === "available");
     }
   }, []);
-  
-  const bulletPoints = [
-    "Developing and launching indie games with dedicated player bases",
-    "Creating stunning 2D/3D artwork featured in industry publications",
-    "Building responsive web applications with modern frameworks",
-    "Managing end-to-end project lifecycles from concept to delivery",
-    "Integrating AI technology to enhance creative processes",
-    "Publishing and selling e-books on technical and business topics"
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  };
+
+  const achievements = [
+    { icon: <Award className="w-5 h-5" />, text: "Successfully launched multiple indie games with dedicated player bases", color: "text-yellow-400" },
+    { icon: <Users className="w-5 h-5" />, text: "Founded and secured funding for tech startup", color: "text-blue-400" },
+    { icon: <Target className="w-5 h-5" />, text: "Artwork featured in industry publications and galleries", color: "text-green-400" },
+    { icon: <Trophy className="w-5 h-5" />, text: "Received industry recognition and awards", color: "text-purple-400" }
+  ];
+
+  const stats = [
+    { value: "5+", label: "Years Experience", icon: <Code className="w-6 h-6" /> },
+    { value: "50+", label: "Projects Completed", icon: <Briefcase className="w-6 h-6" /> },
+    { value: "3", label: "Startups Founded", icon: <Rocket className="w-6 h-6" /> },
+    { value: "100%", label: "Passion & Dedication", icon: <Heart className="w-6 h-6" /> }
   ];
 
   return (
-    <section id="about" className="py-20 bg-dark-400 relative overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute inset-0 opacity-10 bg-noise mix-blend-overlay pointer-events-none"></div>
-      <div className="absolute left-0 top-0 w-full h-20 bg-gradient-to-b from-dark-500 to-transparent"></div>
-      <div className="absolute right-0 bottom-0 w-96 h-96 bg-blue/10 rounded-full filter blur-3xl opacity-20"></div>
+    <section id="about" className="py-20 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-card to-background"></div>
       
-      <div className="section-container relative z-10">
-        <ScrollRevealWrapper>
-          <div className="flex justify-between items-center">
-            <h2 className="section-title">
-              About <span className="text-gradient-blue">Me</span>
-            </h2>
-            <div className="flex items-center space-x-2">
-              <Switch 
-                checked={isAvailableForWork}
-                disabled={true}
-                id="available-mode"
-              />
-              <Badge variant={isAvailableForWork ? "default" : "outline"} className={isAvailableForWork ? "bg-green-500" : "text-muted-foreground"}>
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="max-w-6xl mx-auto"
+        >
+          {/* Header */}
+          <motion.div variants={itemVariants} className="text-center mb-16">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold">
+                About <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Me</span>
+              </h2>
+              <Badge 
+                variant={isAvailableForWork ? "default" : "outline"} 
+                className={`${isAvailableForWork ? "bg-green-500 text-white" : "text-muted-foreground"} px-3 py-1`}
+              >
                 {isAvailableForWork ? "Available for work" : "Currently unavailable"}
               </Badge>
             </div>
-          </div>
-          <p className="section-subtitle">
-            Hi, I'm Brendon Julian Lightfoot - a passionate Game Developer, Software Engineer, 2D/3D Artist, and Tech Entrepreneur. I bring captivating visuals, immersive gaming experiences, and innovative services to life.
-          </p>
-        </ScrollRevealWrapper>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
-          {[
-            { 
-              icon: <Gamepad2 />, 
-              title: "Game Developer & Software Engineer",
-              description: "Proficient in multiple game engines like Unity and Unreal Engine, with expertise in C#, Python, C++, and JavaScript. Successfully launched indie games with dedicated player bases."
-            },
-            {
-              icon: <Palette />,
-              title: "2D/3D Artist & Designer",
-              description: "Master of digital art creation using Photoshop, Illustrator, Blender, and Maya. Creating stunning artwork featured in industry publications and art galleries."
-            },
-            {
-              icon: <Rocket />,
-              title: "Tech Entrepreneur",
-              description: "Founded and managed JBLinx Studio, securing funding and leading teams in creating innovative software products. Successfully established e-commerce operations."
-            }
-          ].map((card, idx) => (
-            <ScrollRevealWrapper key={idx} delay={idx * 0.2}>
-              <motion.div 
-                className="card-highlight group"
-                whileHover={{ y: -5 }}
-              >
-                <div className="bg-dark-400/80 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center mb-4 group-hover:bg-blue/10 transition-colors">
-                  <motion.div 
-                    className="text-blue"
-                    animate={{ rotate: [0, 5, 0, -5, 0] }}
-                    transition={{ duration: 5, repeat: Infinity, repeatType: "reverse" }}
-                  >
-                    {card.icon}
-                  </motion.div>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">{card.title}</h3>
-                <p className="text-muted-foreground">
-                  {card.description}
-                </p>
-              </motion.div>
-            </ScrollRevealWrapper>
-          ))}
-        </div>
-        
-        <ScrollRevealWrapper className="mt-16" delay={0.4}>
-          <div className="card-highlight bg-dark-300/50 backdrop-blur-md">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-2xl font-semibold mb-4 flex items-center">
-                  <Bookmark className="mr-2 text-blue" /> My Journey
-                </h3>
-                <p className="text-muted-foreground mb-4">
-                  I'm a driven individual with a knack for problem-solving and a passion for bringing art to life. My journey began with a love for technology and creativity, leading me to pursue Software Engineering at CTI in Port Elizabeth, South Africa.
-                </p>
-                <p className="text-muted-foreground mb-4">
-                  As a passionate creative and tech enthusiast, I specialize in art, game development, and coding. I'm dedicated to inspiring creativity, empowering individuals, and making a positive impact through innovative technology solutions.
-                </p>
-                <p className="text-muted-foreground">
-                  Based in South Africa, I push boundaries, embrace innovation, and deliver meaningful content that resonates with users worldwide. My work spans from indie game development to AI integration and e-commerce solutions.
-                </p>
-                
-                <motion.div 
-                  className="mt-8 p-4 bg-dark-400/80 backdrop-blur-sm rounded-lg border border-dark-200 relative overflow-hidden"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.6 }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue/5 to-transparent"></div>
-                  <div className="relative">
-                    <h4 className="text-lg font-semibold mb-2 flex items-center">
-                      <Star className="w-4 h-4 mr-2 text-yellow" /> Fun Facts
-                    </h4>
-                    <ul className="space-y-2 text-sm">
-                      <li className="flex items-start">
-                        <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> Founder of JBLinx Studio creative enterprise
-                      </li>
-                      <li className="flex items-start">
-                        <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> Published author of technical e-books
-                      </li>
-                      <li className="flex items-start">
-                        <Heart className="w-3 h-3 text-red-400 mt-1 mr-2" /> AI technology integration specialist
-                      </li>
-                    </ul>
-                  </div>
-                </motion.div>
-              </div>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Hi, I'm Brendon Julian Lightfoot - a passionate Game Developer, Software Engineer, 2D/3D Artist, and Tech Entrepreneur. 
+              I bring captivating visuals, immersive gaming experiences, and innovative services to life.
+            </p>
+          </motion.div>
+
+          {/* Main Content Grid */}
+          <div className="grid lg:grid-cols-2 gap-12 mb-16">
+            {/* Expertise Cards */}
+            <motion.div variants={itemVariants} className="space-y-6">
+              <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <Palette className="w-6 h-6 text-primary" />
+                My Expertise
+              </h3>
               
-              <div>
-                <h3 className="text-2xl font-semibold mb-4 flex items-center">
-                  <Code className="mr-2 text-blue" /> What I Do
-                </h3>
-                <ul className="space-y-3">
-                  {bulletPoints.map((item, index) => (
-                    <motion.li 
-                      key={index} 
-                      className="flex items-start"
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.2 + index * 0.1 }}
-                    >
-                      <motion.span 
-                        className="text-blue mr-2 text-xl"
-                        animate={{ scale: [1, 1.2, 1] }}
-                        transition={{ duration: 2, delay: index * 0.5, repeat: Infinity }}
-                      >•</motion.span>
-                      <span>{item}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-                
-                <motion.div 
-                  className="mt-8 p-4 bg-gradient-to-br from-dark-400/80 to-dark-300/80 backdrop-blur-sm rounded-lg border border-dark-200 relative overflow-hidden group"
-                  whileHover={{ scale: 1.02 }}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.8 }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-yellow/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  <div className="relative">
-                    <h4 className="text-lg font-semibold mb-2 flex items-center">
-                      <Trophy className="w-4 h-4 mr-2 text-yellow" /> Biggest Achievements
-                    </h4>
-                    <ul className="space-y-2 text-sm">
-                      <li className="flex items-start">
-                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Successfully launched multiple indie games with dedicated player bases
-                      </li>
-                      <li className="flex items-start">
-                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Founded and secured funding for tech startup
-                      </li>
-                      <li className="flex items-start">
-                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Artwork featured in industry publications and galleries
-                      </li>
-                      <li className="flex items-start">
-                        <Star className="w-3 h-3 text-yellow mt-1 mr-2" /> Received industry recognition and awards
-                      </li>
-                    </ul>
-                  </div>
-                </motion.div>
+              <div className="space-y-4">
+                {[
+                  { 
+                    icon: <Gamepad2 className="w-6 h-6" />, 
+                    title: "Game Developer & Software Engineer",
+                    description: "Proficient in Unity and Unreal Engine, with expertise in C#, Python, C++, and JavaScript. Successfully launched indie games with dedicated player bases.",
+                    color: "bg-blue-500/10 border-blue-500/20"
+                  },
+                  {
+                    icon: <Palette className="w-6 h-6" />,
+                    title: "2D/3D Artist & Designer",
+                    description: "Master of digital art creation using Photoshop, Illustrator, Blender, and Maya. Creating stunning artwork featured in industry publications.",
+                    color: "bg-purple-500/10 border-purple-500/20"
+                  },
+                  {
+                    icon: <Rocket className="w-6 h-6" />,
+                    title: "Tech Entrepreneur",
+                    description: "Founded and managed JBLinx Studio, securing funding and leading teams in creating innovative software products.",
+                    color: "bg-green-500/10 border-green-500/20"
+                  }
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    variants={itemVariants}
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <Card className={`${item.color} border transition-all duration-300 hover:shadow-lg`}>
+                      <CardContent className="p-6">
+                        <div className="flex items-start gap-4">
+                          <div className="p-2 rounded-lg bg-background/50">
+                            {item.icon}
+                          </div>
+                          <div>
+                            <h4 className="text-lg font-semibold mb-2">{item.title}</h4>
+                            <p className="text-muted-foreground">{item.description}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
               </div>
-            </div>
+            </motion.div>
+
+            {/* Journey & Achievements */}
+            <motion.div variants={itemVariants} className="space-y-6">
+              <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <Star className="w-6 h-6 text-primary" />
+                My Journey
+              </h3>
+              
+              <Card className="border-primary/20 bg-primary/5">
+                <CardContent className="p-6">
+                  <p className="text-muted-foreground mb-4">
+                    I'm a driven individual with a knack for problem-solving and a passion for bringing art to life. 
+                    My journey began with a love for technology and creativity, leading me to pursue Software Engineering 
+                    at CTI in Port Elizabeth, South Africa.
+                  </p>
+                  <p className="text-muted-foreground mb-4">
+                    As a passionate creative and tech enthusiast, I specialize in art, game development, and coding. 
+                    I'm dedicated to inspiring creativity, empowering individuals, and making a positive impact through 
+                    innovative technology solutions.
+                  </p>
+                  <p className="text-muted-foreground">
+                    Based in South Africa, I push boundaries, embrace innovation, and deliver meaningful content that 
+                    resonates with users worldwide. My work spans from indie game development to AI integration and 
+                    e-commerce solutions.
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Achievements */}
+              <Card className="border-accent/20 bg-accent/5">
+                <CardContent className="p-6">
+                  <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Trophy className="w-5 h-5 text-accent" />
+                    Key Achievements
+                  </h4>
+                  <div className="space-y-3">
+                    {achievements.map((achievement, index) => (
+                      <motion.div
+                        key={index}
+                        className="flex items-start gap-3"
+                        variants={itemVariants}
+                        whileHover={{ x: 5 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <div className={`${achievement.color} mt-1`}>
+                          {achievement.icon}
+                        </div>
+                        <span className="text-sm text-muted-foreground">{achievement.text}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
-        </ScrollRevealWrapper>
+
+          {/* Stats Section */}
+          <motion.div variants={itemVariants} className="text-center">
+            <h3 className="text-2xl font-bold mb-8">By the Numbers</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  whileHover={{ y: -5, scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5 hover:shadow-lg transition-all duration-300">
+                    <CardContent className="p-6 text-center">
+                      <div className="text-primary mb-2 flex justify-center">
+                        {stat.icon}
+                      </div>
+                      <div className="text-3xl font-bold text-primary mb-1">{stat.value}</div>
+                      <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
